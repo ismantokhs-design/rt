@@ -1,20 +1,21 @@
 {
   "name": "Aplikasi RT-Ku",
   "short_name": "RT-Ku",
-  "start_url": "./index.html",
+  "start_url": "/rt/index.html",
+  "scope": "/rt/",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#059669",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "assets/icons/icon-192.png",
+      "src": "/rt/assets/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "assets/icons/icon-512.png",
+      "src": "/rt/assets/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
