@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Beranda - Aplikasi RT-Ku</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none !important;
+            width: 0px !important;
+            height: 0px !important;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 font-['Inter'] flex justify-center items-center h-screen overflow-hidden m-0">
+
+    <!-- Container HP Frame -->
+    <div class="w-full h-screen sm:max-w-[400px] sm:h-[92vh] sm:max-h-[820px] bg-slate-50 sm:rounded-[35px] shadow-2xl flex flex-col justify-between relative overflow-hidden sm:border-[6px] sm:border-slate-800">
+        
+        <!-- Tombol Logout Melayang -->
+        <button type="button" id="btnLogout" class="absolute top-4 right-4 bg-red-600 hover:bg-red-700 text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center space-x-1 cursor-pointer transition-all z-50">
+            <i class="fa-solid fa-power-off"></i>
+            <span>Keluar</span>
+        </button>
+
+        <!-- Header / Top Section -->
+        <div class="bg-gradient-to-b from-emerald-600 to-emerald-700 text-white px-5 pt-5 pb-9 sm:rounded-b-[28px] shrink-0 relative">
+            <div class="flex items-center space-x-3 mb-3">
+                <div class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white backdrop-blur-sm">
+                    <i class="fa-solid fa-house-chimney text-xs"></i>
+                </div>
+                <div class="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-md">
+                    <span class="text-emerald-700 font-bold text-xs">RT</span>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <h1 class="text-sm font-bold tracking-wide">Aplikasi RT-Ku (RT 05)</h1>
+                <p id="userEmailDisplay" class="text-emerald-100 text-[11px] mt-0.5">Memuat akun...</p>
+            </div>
+        </div>
+
+        <!-- Main Content Scrollable -->
+        <div class="px-4 -mt-4 flex-1 overflow-y-auto no-scrollbar pb-28 space-y-4 relative z-10">
+            
+            <!-- Banner / Hero Image Card -->
+            <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-slate-200/60 mt-4">
+                <div class="h-32 w-full relative">
+                    <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=600&q=80" alt="Balai Warga" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-3">
+                        <span class="text-white text-[10px] font-semibold bg-emerald-600 px-2.5 py-0.5 rounded-full">Balai Warga RT 05</span>
+                    </div>
+                </div>
+                <div class="p-3.5">
+                    <a href="pages/absensi.html" class="block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 px-4 rounded-xl shadow-md shadow-emerald-600/30 transition-all text-center text-xs">
+                        <i class="fa-solid fa-qrcode mr-1.5"></i> Mulai Absensi Sekarang
+                    </a>
+                </div>
+            </div>
+
+            <!-- Rapat Hari Ini Card -->
+            <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-200/60 flex items-start space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 text-base">
+                    <i class="fa-solid fa-users-rectangle"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-bold text-slate-800 text-xs">Rapat Hari Ini: Musyawarah RT</h3>
+                        <span class="text-[9px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-bold">Aktif</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-0.5">Pembahasan kebersihan & keamanan lingkungan.</p>
+                    <div class="mt-2 grid grid-cols-2 gap-2 text-[11px] text-slate-600 bg-slate-50 p-2 rounded-xl">
+                        <div><span class="text-slate-400 block text-[10px]">Tanggal:</span> <b>12 April 2026</b></div>
+                        <div><span class="text-slate-400 block text-[10px]">Waktu:</span> <b>19.00 WIB</b></div>
+                    </div>
+                    <div class="mt-2">
+                        <span class="inline-block bg-emerald-50 text-emerald-700 text-[10px] font-semibold px-2.5 py-1 rounded-lg border border-emerald-100">
+                            <i class="fa-solid fa-location-dot mr-1"></i> Lokasi: Balai RW 05
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Menus -->
+            <div>
+                <h3 class="font-bold text-slate-800 text-xs mb-2.5 px-1">Menu Cepat (Quick Menus)</h3>
+                <div class="space-y-2">
+                    <a href="pages/absensi.html" class="flex items-center justify-between p-3 bg-white rounded-xl shadow-sm border border-slate-200/60 hover:border-emerald-500 transition-all group">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all text-xs">
+                                <i class="fa-regular fa-calendar-check"></i>
+                            </div>
+                            <span class="font-medium text-slate-700 text-xs">Cek Kehadiran</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i>
+                    </a>
+
+                    <a href="pages/rapat.html" class="flex items-center justify-between p-3 bg-white rounded-xl shadow-sm border border-slate-200/60 hover:border-emerald-500 transition-all group">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all text-xs">
+                                <i class="fa-solid fa-file-lines"></i>
+                            </div>
+                            <span class="font-medium text-slate-700 text-xs">Riwayat & Hasil Rapat</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i>
+                    </a>
+
+                    <a href="pages/keuangan.html" class="flex items-center justify-between p-3 bg-white rounded-xl shadow-sm border border-slate-200/60 hover:border-emerald-500 transition-all group">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all text-xs">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+                            <span class="font-medium text-slate-700 text-xs">Kas & Keuangan RT</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Tempat Include Bottom Navigation -->
+        <div id="nav-container"></div>
+
+        <!-- POPUP MODAL MENU MORE -->
+        <div id="morePopupModal" class="absolute inset-0 bg-black/50 backdrop-blur-[2px] z-50 flex items-end justify-center hidden transition-all duration-300">
+            <div class="w-full bg-white rounded-t-[28px] p-4 shadow-2xl transform translate-y-full transition-transform duration-300" id="popupModalContent">
+                
+                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-6 h-6 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-[10px]">
+                            <i class="fa-solid fa-sliders"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-xs">Menu Lainnya (More)</h3>
+                    </div>
+                    <button type="button" onclick="closeMorePopup()" class="w-6 h-6 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center text-[10px] transition-all cursor-pointer">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 pb-2">
+                    <button type="button" onclick="alert('Buka menu Pengaturan')" class="flex items-center p-2.5 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200/60 transition-all text-left cursor-pointer">
+                        <div class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs mr-2 shrink-0">
+                            <i class="fa-solid fa-gear"></i>
+                        </div>
+                        <div class="overflow-hidden">
+                            <span class="block font-bold text-slate-800 text-[11px] truncate">Pengaturan</span>
+                            <span class="block text-[9px] text-slate-400 truncate">Konfigurasi akun</span>
+                        </div>
+                    </button>
+
+                    <button type="button" onclick="alert('Buka menu Manajemen Warga')" class="flex items-center p-2.5 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200/60 transition-all text-left cursor-pointer">
+                        <div class="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xs mr-2 shrink-0">
+                            <i class="fa-solid fa-users-gear"></i>
+                        </div>
+                        <div class="overflow-hidden">
+                            <span class="block font-bold text-slate-800 text-[11px] truncate">Manajemen</span>
+                            <span class="block text-[9px] text-slate-400 truncate">Data warga RT</span>
+                        </div>
+                    </button>
+
+                    <button type="button" onclick="alert('Proses Backup Data')" class="flex items-center p-2.5 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200/60 transition-all text-left cursor-pointer">
+                        <div class="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-xs mr-2 shrink-0">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                        </div>
+                        <div class="overflow-hidden">
+                            <span class="block font-bold text-slate-800 text-[11px] truncate">Backup</span>
+                            <span class="block text-[9px] text-slate-400 truncate">Simpan data RT</span>
+                        </div>
+                    </button>
+
+                    <button type="button" onclick="alert('Proses Restore Data')" class="flex items-center p-2.5 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200/60 transition-all text-left cursor-pointer">
+                        <div class="w-7 h-7 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center text-xs mr-2 shrink-0">
+                            <i class="fa-solid fa-cloud-arrow-down"></i>
+                        </div>
+                        <div class="overflow-hidden">
+                            <span class="block font-bold text-slate-800 text-[11px] truncate">Restore</span>
+                            <span class="block text-[9px] text-slate-400 truncate">Pulihkan data</span>
+                        </div>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Skrip Utama Beranda -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { renderNavigation } from "./assets/js/navigation.js";
+
+        // 1. Render Navigasi Bawah
+        document.getElementById('nav-container').innerHTML = renderNavigation('home', false);
+
+        // 2. Pop-up More
+        window.openMorePopup = function() {
+            const modal = document.getElementById('morePopupModal');
+            const content = document.getElementById('popupModalContent');
+            if (modal && content) {
+                modal.classList.remove('hidden');
+                setTimeout(() => content.classList.remove('translate-y-full'), 10);
+            }
+        };
+
+        window.closeMorePopup = function() {
+            const modal = document.getElementById('morePopupModal');
+            const content = document.getElementById('popupModalContent');
+            if (modal && content) {
+                content.classList.add('translate-y-full');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+        };
+
+        // 3. Konfigurasi Firebase & Proteksi Auth (Jika belum login, lempar balik ke index.html)
+        const firebaseConfig = {
+            apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+            authDomain: "erte-979ca.firebaseapp.com",
+            projectId: "erte-979ca",
+            storageBucket: "erte-979ca.firebasestorage.app",
+            messagingSenderId: "329513636032",
+            appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const emailDisplay = document.getElementById('userEmailDisplay');
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                emailDisplay.innerText = user.displayName ? `${user.displayName} (${user.email})` : user.email;
+            } else {
+                window.location.href = "index.html"; // Balik ke halaman login jika belum auth
+            }
+        });
+
+        // Tombol Logout
+        const btnLogout = document.getElementById('btnLogout');
+        if (btnLogout) {
+            btnLogout.addEventListener('click', () => {
+                signOut(auth).then(() => {
+                    window.location.href = "index.html";
+                }).catch((error) => {
+                    alert("Gagal keluar akun: " + error.message);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
