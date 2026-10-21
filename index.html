@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Aplikasi RT-Ku - RT 05 Harapan Jaya</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -27,8 +27,8 @@
 </head>
 <body class="bg-slate-900 font-['Inter'] flex justify-center items-center h-screen overflow-hidden m-0">
 
-    <!-- Container HP Frame -->
-    <div class="w-full max-w-[400px] h-[92vh] max-h-[820px] bg-slate-50 rounded-[35px] shadow-2xl flex flex-col justify-between relative overflow-hidden border-[6px] border-slate-800">
+    <!-- Container HP Frame (Full di HP, berbentuk frame jika di Laptop) -->
+    <div class="w-full h-screen sm:max-w-[400px] sm:h-[92vh] sm:max-h-[820px] bg-slate-50 sm:rounded-[35px] shadow-2xl flex flex-col justify-between relative overflow-hidden sm:border-[6px] sm:border-slate-800">
         
         <!-- Tombol Logout Melayang -->
         <button type="button" id="btnLogout" class="absolute top-4 right-4 bg-red-600 hover:bg-red-700 text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center space-x-1 cursor-pointer transition-all z-50">
@@ -37,7 +37,7 @@
         </button>
 
         <!-- Header / Top Section -->
-        <div class="bg-gradient-to-b from-emerald-600 to-emerald-700 text-white px-5 pt-5 pb-9 rounded-b-[28px] shrink-0 relative">
+        <div class="bg-gradient-to-b from-emerald-600 to-emerald-700 text-white px-5 pt-5 pb-9 sm:rounded-b-[28px] shrink-0 relative">
             <div class="flex items-center space-x-3 mb-3">
                 <div class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white backdrop-blur-sm">
                     <i class="fa-solid fa-house-chimney text-xs"></i>
@@ -135,7 +135,7 @@
         <!-- Tempat Include Bottom Navigation -->
         <div id="nav-container"></div>
 
-        <!-- POPUP MODAL MENU MORE (Terkunci Rapi di dalam Area HP Frame) -->
+        <!-- POPUP MODAL MENU MORE -->
         <div id="morePopupModal" class="absolute inset-0 bg-black/50 backdrop-blur-[2px] z-50 flex items-end justify-center hidden transition-all duration-300">
             <div class="w-full bg-white rounded-t-[28px] p-4 shadow-2xl transform translate-y-full transition-transform duration-300" id="popupModalContent">
                 
@@ -152,7 +152,7 @@
                     </button>
                 </div>
 
-                <!-- Daftar Menu Grid (Pas untuk Layar HP) -->
+                <!-- Daftar Menu Grid -->
                 <div class="grid grid-cols-2 gap-2 pb-2">
                     <button type="button" onclick="alert('Buka menu Pengaturan')" class="flex items-center p-2.5 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200/60 transition-all text-left cursor-pointer">
                         <div class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs mr-2 shrink-0">
@@ -200,7 +200,7 @@
 
     </div> <!-- Penutup Container HP Frame -->
 
-    <!-- Skrip Utama: Include Navigasi, Fungsi Popup, & Firebase Auth -->
+    <!-- Skrip Utama: Include Navigasi, Popup, Auth & Pendaftaran Service Worker PWA -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -232,7 +232,16 @@
             }
         };
 
-        // 3. Konfigurasi Firebase & Proteksi Auth
+        // 3. Pendaftaran Service Worker untuk PWA agar Bisa Di-install
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((reg) => console.log('Service Worker PWA berhasil didaftarkan:', reg.scope))
+                    .catch((err) => console.log('Gagal mendaftarkan Service Worker:', err));
+            });
+        }
+
+        // 4. Konfigurasi Firebase & Proteksi Auth
         const firebaseConfig = {
             apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
             authDomain: "erte-979ca.firebaseapp.com",
