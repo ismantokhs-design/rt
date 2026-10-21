@@ -1,5 +1,5 @@
 // sw.js (Di root folder utama)
-const CACHE_NAME = 'rt-ku-cache-v2';
+const CACHE_NAME = 'rt-ku-cache-v3';
 const urlsToCache = [
     '/rt/',
     '/rt/index.html',
