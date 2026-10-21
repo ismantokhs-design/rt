@@ -1,42 +1,37 @@
-// sw.js (Di root folder utama)
 const CACHE_NAME = 'rt-ku-cache-v3';
 const urlsToCache = [
-    '/rt/',
-    '/rt/index.html',
-    '/rt/pages/login.html',
-    '/rt/pages/absensi.html',
-    '/rt/pages/rapat.html',
-    '/rt/pages/keuangan.html',
-    '/rt/assets/css/style.css',
-    '/rt/assets/js/navigation.js',
-    '/rt/manifest.json',
-    '/rt/assets/icons/icon-192.png',
-    '/rt/assets/icons/icon-512.png'
+    './index.html',
+    './pages/login.html',
+    './pages/absensi.html',
+    './pages/rapat.html',
+    './pages/keuangan.html',
+    './assets/css/style.css',
+    './assets/js/navigation.js',
+    './assets/js/firebase-config.js',
+    './manifest.json',
+    './assets/icons/icon-192.png',
+    './assets/icons/icon-512.png'
 ];
 
-// Install Service Worker & Cache All Files
+// Install Service Worker
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
-                console.log('Cache RT-Ku berhasil dibuka');
+                console.log('Cache berhasil dibuka');
                 return cache.addAll(urlsToCache);
-            })
-            .catch((err) => {
-                console.error('Gagal melakukan caching saat install:', err);
             })
     );
     self.skipWaiting();
 });
 
-// Activate & Clean Old Caches
+// Activate Service Worker
 self.addEventListener('activate', (event) => {
     event.waitUntil(
         caches.keys().then((cacheNames) => {
             return Promise.all(
                 cacheNames.map((cacheName) => {
                     if (cacheName !== CACHE_NAME) {
-                        console.log('Menghapus cache lama:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
@@ -46,15 +41,12 @@ self.addEventListener('activate', (event) => {
     self.clients.claim();
 });
 
-// Fetch Strategy: Cache First, falling back to Network
+// Fetch Cache
 self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(event.request)
             .then((response) => {
                 return response || fetch(event.request);
-            })
-            .catch(() => {
-                // Opsional: Anda bisa menampilkan halaman offline khusus di sini jika diperlukan
             })
     );
 });
