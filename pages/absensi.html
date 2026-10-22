@@ -2,90 +2,97 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Absensi Kehadiran - RT 05</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none !important;
+            width: 0px !important;
+            height: 0px !important;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+    </style>
 </head>
-<body class="bg-slate-100 font-['Inter'] flex justify-center items-center min-h-screen">
+<body class="bg-slate-900 font-['Inter'] flex justify-center items-center h-screen overflow-hidden m-0">
 
-    <div class="w-full max-w-md bg-white min-h-screen shadow-2xl flex flex-col justify-between relative overflow-hidden">
+    <!-- Container HP Frame -->
+    <div class="w-full h-screen sm:max-w-[400px] sm:h-[92vh] sm:max-h-[820px] bg-slate-50 sm:rounded-[35px] shadow-2xl flex flex-col justify-between relative overflow-hidden sm:border-[6px] sm:border-slate-800">
         
         <!-- Header -->
-        <div class="bg-emerald-600 text-white p-6 rounded-b-[30px] flex items-center justify-between">
-            <a href="../index.html" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white">
-                <i class="fa-solid fa-arrow-left"></i>
+        <div class="bg-gradient-to-b from-emerald-600 to-emerald-700 text-white p-5 rounded-b-[28px] flex items-center justify-between shrink-0">
+            <a href="../home.html" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white backdrop-blur-sm transition-all hover:bg-white/20">
+                <i class="fa-solid fa-arrow-left text-xs"></i>
             </a>
-            <h1 class="font-bold text-base">Form Absensi Warga</h1>
-            <div class="w-10"></div>
+            <h1 class="font-bold text-sm tracking-wide">Form Absensi Warga</h1>
+            <div class="w-9"></div>
         </div>
 
-        <!-- Content -->
-        <div class="p-6 flex-1 overflow-y-auto pb-20">
-            <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-2xl mb-6">
-                <h2 class="font-bold text-emerald-800 text-sm">Musyawarah Rutin Bulanan</h2>
-                <p class="text-xs text-emerald-600 mt-1">Silakan isi data diri Anda untuk mencatat kehadiran rapat malam ini.</p>
+        <!-- Content (Scrollable) -->
+        <div class="p-4 flex-1 overflow-y-auto no-scrollbar pb-28 space-y-4">
+            
+            <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-2xl">
+                <h2 class="font-bold text-emerald-800 text-xs">Musyawarah Rutin Bulanan</h2>
+                <p class="text-[11px] text-emerald-600 mt-1">Silakan isi data diri Anda untuk mencatat kehadiran rapat malam ini.</p>
             </div>
 
-            <form id="formAbsen" class="space-y-4">
+            <form id="formAbsen" class="space-y-3 bg-white p-4 rounded-2xl border border-slate-200/60 shadow-sm">
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Lengkap Warga</label>
-                    <input type="text" id="namaWarga" required placeholder="Contoh: Budi Santoso" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-emerald-600 bg-slate-50">
+                    <input type="text" id="namaWarga" required placeholder="Contoh: Budi Santoso" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-emerald-600 bg-slate-50">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">Nomor Rumah / Blok</label>
-                    <input type="text" id="nomorRumah" required placeholder="Contoh: Blok B No. 12" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-emerald-600 bg-slate-50">
+                    <input type="text" id="nomorRumah" required placeholder="Contoh: Blok B No. 12" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-emerald-600 bg-slate-50">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">Status Kehadiran</label>
-                    <select id="statusHadir" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-emerald-600 bg-slate-50">
+                    <select id="statusHadir" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-emerald-600 bg-slate-50">
                         <option value="Hadir">Hadir di Lokasi</option>
                         <option value="Izin">Izin (Berhalangan)</option>
                         <option value="Sakit">Sakit</option>
                     </select>
                 </div>
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3.5 rounded-xl shadow-lg shadow-emerald-600/30 transition-all text-sm mt-4">
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl shadow-md shadow-emerald-600/35 transition-all text-xs mt-2 cursor-pointer">
                     Kirim Kehadiran
                 </button>
             </form>
 
-            <div class="mt-8">
-                <h3 class="font-bold text-slate-800 text-sm mb-3">Daftar Kehadiran Masuk</h3>
+            <div>
+                <h3 class="font-bold text-slate-800 text-xs mb-2.5 px-1">Daftar Kehadiran Masuk</h3>
                 <div id="listAbsen" class="space-y-2 text-xs">
-                    <!-- Data realtime dari Firebase akan muncul di sini -->
-                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 flex justify-between items-center">
+                    <!-- Data realtime atau statis dummy -->
+                    <div class="p-3 bg-white rounded-xl border border-slate-200/60 shadow-sm flex justify-between items-center">
                         <div>
-                            <span class="font-bold text-slate-700 block">Pak Joko (Blok A4)</span>
-                            <span class="text-slate-400">19:10 WIB</span>
+                            <span class="font-bold text-slate-800 text-xs block">Pak Joko (Blok A4)</span>
+                            <span class="text-slate-400 text-[10px]">19:10 WIB</span>
                         </div>
-                        <span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-full font-medium">Hadir</span>
+                        <span class="bg-emerald-100 text-emerald-700 text-[10px] px-2.5 py-1 rounded-full font-bold">Hadir</span>
                     </div>
                 </div>
             </div>
+
         </div>
 
-        <!-- Bottom Navigation -->
-        <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 py-3 px-6 flex justify-around items-center">
-            <a href="../index.html" class="text-slate-400 flex flex-col items-center text-xs">
-                <i class="fa-solid fa-house text-lg mb-1"></i>
-                <span>Home</span>
-            </a>
-            <a href="absensi.html" class="text-emerald-600 flex flex-col items-center text-xs font-semibold">
-                <i class="fa-solid fa-qrcode text-lg mb-1"></i>
-                <span>Absen</span>
-            </a>
-            <a href="rapat.html" class="text-slate-400 flex flex-col items-center text-xs">
-                <i class="fa-solid fa-book-open text-lg mb-1"></i>
-                <span>Rapat</span>
-            </a>
-            <a href="keuangan.html" class="text-slate-400 flex flex-col items-center text-xs">
-                <i class="fa-solid fa-wallet text-lg mb-1"></i>
-                <span>Kas</span>
-            </a>
-        </div>
+        <!-- Tempat Include Bottom Navigation (Otomatis dirender oleh navigation.js) -->
+        <div id="nav-container"></div>
 
     </div>
 
+    <!-- Skrip Integrasi Navigasi -->
+    <script type="module">
+        import { renderNavigation } from "../assets/js/navigation.js";
+
+        // Parameter 'absensi' menandakan halaman aktif, dan 'true' menandakan posisi di dalam folder pages/
+        document.getElementById('nav-container').innerHTML = renderNavigation('absensi', true);
+    </script>
 </body>
 </html>
