@@ -162,11 +162,14 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        let currentUser = null;
+        let currentNamaWarga = "Warga";
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                currentUser = user;
-                document.getElementById('namaWarga').value = user.displayName || "Warga";
+                currentNamaWarga = user.displayName || "Warga";
+                const inputNama = document.getElementById('namaWarga');
+                if (inputNama) inputNama.value = currentNamaWarga;
+            } else {
+                window.location.href = "../index.html";
             }
         });
 
@@ -202,8 +205,10 @@
                 { facingMode: "environment" },
                 { fps: 10, qrbox: { width: 200, height: 200 } },
                 async (decodedText) => {
-                    document.getElementById('scanStatus').innerText = `Berhasil Scan: ${decodedText}`;
-                    await simpanAbsensiDatabase(decodedText, "Hadir (Scan QR)");
+                    document.getElementById('scanStatus').innerText = `Berhasil Scan QR: ${decodedText}`;
+                    
+                    // Simpan otomatis ke database dengan menyertakan nama warga yang sedang login
+                    await simpanAbsensiDatabase(currentNamaWarga, "Hadir (Scan QR)");
                     stopScanner();
                 },
                 (errorMessage) => {}
@@ -249,7 +254,7 @@
         // Verifikasi Password Admin
         window.verifyAndSubmit = async function() {
             const passInput = document.getElementById('adminPasswordInput').value;
-            const correctPassword = "rt05jaya"; // Ganti password admin di sini jika perlu
+            const correctPassword = "rt05jaya"; // Password admin
 
             if (passInput === correctPassword) {
                 closeAdminModal();
@@ -258,6 +263,7 @@
 
                 await simpanAbsensiDatabase(nama, status);
                 formAbsen.reset();
+                document.getElementById('namaWarga').value = currentNamaWarga;
             } else {
                 document.getElementById('passwordError').classList.remove('hidden');
             }
