@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Profil Wilayah - Aplikasi RT-Ku</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none !important;
+            width: 0px !important;
+            height: 0px !important;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 font-['Inter'] flex justify-center items-center h-screen overflow-hidden m-0">
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-slate-900/95 border border-slate-700 text-white px-4 py-2.5 rounded-2xl shadow-2xl text-xs font-medium flex items-center space-x-2 z-50 transition-all duration-300 opacity-0 pointer-events-none translate-y-[-20px]">
+        <div class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] shadow">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <span id="toastText">Berhasil!</span>
+    </div>
+
+    <!-- Container HP Frame -->
+    <div class="w-full h-screen sm:max-w-[400px] sm:h-[92vh] sm:max-h-[820px] bg-slate-50 sm:rounded-[35px] shadow-2xl flex flex-col justify-between relative overflow-hidden sm:border-[6px] sm:border-slate-800">
+        
+        <!-- Header -->
+        <div class="bg-gradient-to-b from-emerald-600 to-emerald-700 text-white p-5 rounded-b-[28px] flex items-center justify-between shrink-0">
+            <a href="../home.html" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white backdrop-blur-sm transition-all hover:bg-white/20">
+                <i class="fa-solid fa-arrow-left text-xs"></i>
+            </a>
+            <h1 class="font-bold text-sm tracking-wide">Profil Wilayah RT</h1>
+            <div class="w-9"></div>
+        </div>
+
+        <!-- Content (Scrollable) -->
+        <div class="p-4 flex-1 overflow-y-auto no-scrollbar pb-28 space-y-4 text-xs">
+            
+            <!-- Info Card -->
+            <div class="bg-emerald-50 border border-emerald-200/60 rounded-2xl p-3.5 flex items-start space-x-3">
+                <div class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 text-xs shadow-md">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                </div>
+                <div>
+                    <h2 class="font-bold text-emerald-900 text-xs">Pengaturan Data Wilayah</h2>
+                    <p class="text-[11px] text-emerald-700 mt-0.5 leading-relaxed">Perbarui informasi identitas wilayah RT, pengurus, serta alamat sekretariat agar tersimpan di database.</p>
+                </div>
+            </div>
+
+            <!-- Form Profil Wilayah -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/65">
+                <form id="wilayahForm" class="space-y-3">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Nomor RT</label>
+                        <input type="text" id="rtNumber" required placeholder="Contoh: RT 05" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Nomor RW</label>
+                        <input type="text" id="rwNumber" required placeholder="Contoh: RW 05" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Kelurahan / Desa</label>
+                        <input type="text" id="kelurahan" required placeholder="Contoh: Harapan Jaya" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Kecamatan</label>
+                        <input type="text" id="kecamatan" required placeholder="Contoh: Sukajadi" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Kota / Kabupaten</label>
+                        <input type="text" id="kota" required placeholder="Contoh: Yogyakarta" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Nama Ketua RT</label>
+                        <input type="text" id="ketuaRt" required placeholder="Nama lengkap Ketua RT" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Alamat Sekretariat / Balai RT</label>
+                        <textarea id="alamatSekretariat" rows="2" placeholder="Alamat lengkap balai atau pos ronda RT" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl shadow-md shadow-emerald-600/35 transition-all text-xs mt-3 cursor-pointer">
+                        Simpan Perubahan Wilayah
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+        <!-- Tempat Include Bottom Navigation -->
+        <div id="nav-container"></div>
+
+    </div>
+
+    <!-- Skrip Utama Firestore -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { renderNavigation } from "../assets/js/navigation.js";
+
+        // Render Navigasi Bawah
+        document.getElementById('nav-container').innerHTML = renderNavigation('home', true);
+
+        // Toast Notification
+        window.showToast = function(message) {
+            const toast = document.getElementById('toastNotification');
+            const toastText = document.getElementById('toastText');
+            toastText.innerText = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            }, 1800);
+        }
+
+        // Konfigurasi Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+            authDomain: "erte-979ca.firebaseapp.com",
+            projectId: "erte-979ca",
+            storageBucket: "erte-979ca.firebasestorage.app",
+            messagingSenderId: "329513636032",
+            appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const wilayahForm = document.getElementById('wilayahForm');
+        const rtNumber = document.getElementById('rtNumber');
+        const rwNumber = document.getElementById('rwNumber');
+        const kelurahan = document.getElementById('kelurahan');
+        const kecamatan = document.getElementById('kecamatan');
+        const kota = document.getElementById('kota');
+        const ketuaRt = document.getElementById('ketuaRt');
+        const alamatSekretariat = document.getElementById('alamatSekretariat');
+
+        // Load Data Wilayah dari Firestore saat halaman dibuka
+        async function loadProfilWilayah() {
+            try {
+                const docRef = doc(db, "settings", "profilWilayah");
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    rtNumber.value = data.rtNumber || "";
+                    rwNumber.value = data.rwNumber || "";
+                    kelurahan.value = data.kelurahan || "";
+                    kecamatan.value = data.kecamatan || "";
+                    kota.value = data.kota || "";
+                    ketuaRt.value = data.ketuaRt || "";
+                    alamatSekretariat.value = data.alamatSekretariat || "";
+                }
+            } catch (error) {
+                console.error("Gagal memuat profil wilayah:", error);
+            }
+        }
+        loadProfilWilayah();
+
+        // Simpan Data Wilayah ke Firestore
+        wilayahForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                await setDoc(doc(db, "settings", "profilWilayah"), {
+                    rtNumber: rtNumber.value.trim(),
+                    rwNumber: rwNumber.value.trim(),
+                    kelurahan: kelurahan.value.trim(),
+                    kecamatan: kecamatan.value.trim(),
+                    kota: kota.value.trim(),
+                    ketuaRt: ketuaRt.value.trim(),
+                    alamatSekretariat: alamatSekretariat.value.trim(),
+                    updatedAt: new Date()
+                }, { merge: true });
+
+                showToast('Profil wilayah berhasil disimpan!');
+            } catch (error) {
+                alert("Gagal menyimpan profil wilayah: " + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

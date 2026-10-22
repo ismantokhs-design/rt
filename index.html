@@ -145,6 +145,7 @@
             updateProfile,
             onAuthStateChanged
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         
         // 1. Pendaftaran Service Worker PWA
         if ('serviceWorker' in navigator) {
@@ -168,6 +169,7 @@
         
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
 
         // Cek Sesi Auth & Hilangkan Splash Screen Awal
         onAuthStateChanged(auth, (user) => {
@@ -267,6 +269,15 @@
                     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                     await updateProfile(userCredential.user, { displayName: fullName });
                     
+                    // Simpan data ke Firestore koleksi "users" dengan role default "Warga"
+                    await setDoc(doc(db, "users", userCredential.user.uid), {
+                        name: fullName,
+                        email: email,
+                        phone: "",
+                        role: "Warga",
+                        createdAt: new Date()
+                    });
+
                     showToast('Pendaftaran berhasil!');
                     setTimeout(() => { window.location.href = "home.html"; }, 1000);
                 } else {

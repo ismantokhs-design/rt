@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kelola Notulen & Hasil Rapat - RT 05</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none !important;
+            width: 0px !important;
+            height: 0px !important;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+        /* Custom Editor Styles */
+        .editor-content:empty:before {
+            content: attr(placeholder);
+            color: #94a3b8;
+            pointer-events: none;
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 font-['Inter'] flex justify-center items-center h-screen overflow-hidden m-0">
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-slate-900/95 border border-slate-700 text-white px-4 py-2.5 rounded-2xl shadow-2xl text-xs font-medium flex items-center space-x-2 z-50 transition-all duration-300 opacity-0 pointer-events-none translate-y-[-20px]">
+        <div class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] shadow">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <span id="toastText">Berhasil!</span>
+    </div>
+
+    <!-- Container HP Frame -->
+    <div class="w-full h-screen sm:max-w-[400px] sm:h-[92vh] sm:max-h-[820px] bg-slate-50 sm:rounded-[35px] shadow-2xl flex flex-col justify-between relative overflow-hidden sm:border-[6px] sm:border-slate-800">
+        
+        <!-- Header -->
+        <div class="bg-gradient-to-b from-emerald-600 to-emerald-700 text-white p-5 rounded-b-[28px] flex items-center justify-between shrink-0">
+            <a href="manajemen.html" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white backdrop-blur-sm transition-all hover:bg-white/20">
+                <i class="fa-solid fa-arrow-left text-xs"></i>
+            </a>
+            <h1 class="font-bold text-sm tracking-wide">Notulen & Hasil Rapat</h1>
+            <div class="w-9"></div>
+        </div>
+
+        <!-- Content (Scrollable) -->
+        <div class="p-4 flex-1 overflow-y-auto no-scrollbar pb-28 space-y-4 text-xs">
+            
+            <!-- Form Input Notulen Rapat -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 space-y-3">
+                <h2 class="font-bold text-slate-800 text-xs flex items-center">
+                    <i class="fa-solid fa-file-pen text-emerald-600 mr-1.5"></i> Buat / Perbarui Hasil Rapat
+                </h2>
+
+                <form id="rapatForm" class="space-y-3">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Judul / Agenda Rapat</label>
+                        <input type="text" id="judulRapat" required placeholder="Contoh: Musyawarah Kebersihan RT 05" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-700 mb-1">Tanggal</label>
+                            <input type="date" id="tanggalRapat" required class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-700 mb-1">Lokasi / Tempat</label>
+                            <input type="text" id="lokasiRapat" required placeholder="Contoh: Balai Warga" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600">
+                        </div>
+                    </div>
+
+                    <!-- Editor Format Teks (Rich Text Toolbar) -->
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Isi Notulen & Keputusan</label>
+                        <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50">
+                            <!-- Toolbar Format -->
+                            <div class="bg-slate-100 border-b border-slate-200 p-1.5 flex flex-wrap gap-1 text-slate-600">
+                                <button type="button" onclick="formatText('bold')" class="w-7 h-7 rounded hover:bg-slate-200 flex items-center justify-center font-bold text-xs" title="Bold"><i class="fa-solid fa-bold"></i></button>
+                                <button type="button" onclick="formatText('italic')" class="w-7 h-7 rounded hover:bg-slate-200 flex items-center justify-center italic text-xs" title="Italic"><i class="fa-solid fa-italic"></i></button>
+                                <button type="button" onclick="formatText('underline')" class="w-7 h-7 rounded hover:bg-slate-200 flex items-center justify-center underline text-xs" title="Underline"><i class="fa-solid fa-underline"></i></button>
+                                <div class="w-[1px] bg-slate-300 mx-0.5"></div>
+                                <button type="button" onclick="formatText('insertUnorderedList')" class="w-7 h-7 rounded hover:bg-slate-200 flex items-center justify-center text-xs" title="Bullet List"><i class="fa-solid fa-list-ul"></i></button>
+                                <button type="button" onclick="formatText('insertOrderedList')" class="w-7 h-7 rounded hover:bg-slate-200 flex items-center justify-center text-xs" title="Numbered List"><i class="fa-solid fa-list-ol"></i></button>
+                                <div class="w-[1px] bg-slate-300 mx-0.5"></div>
+                                <button type="button" onclick="formatText('justifyLeft')" class="w-7 h-7 rounded hover:bg-slate-200 flex items-center justify-center text-xs" title="Align Left"><i class="fa-solid fa-align-left"></i></button>
+                                <button type="button" onclick="formatText('justifyCenter')" class="w-7 h-7 rounded hover:bg-slate-200 flex items-center justify-center text-xs" title="Align Center"><i class="fa-solid fa-align-center"></i></button>
+                                <button type="button" onclick="formatText('justifyFull')" class="w-7 h-7 rounded hover:bg-slate-200 flex items-center justify-center text-xs" title="Justify"><i class="fa-solid fa-align-justify"></i></button>
+                            </div>
+                            <!-- Editable Area -->
+                            <div id="editorNotulen" contenteditable="true" placeholder="Tuliskan hasil rapat, poin-poin keputusan, dan catatan penting di sini..." class="editor-content w-full p-3 min-h-[140px] max-h-[220px] overflow-y-auto text-xs focus:outline-none bg-white"></div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl shadow-md shadow-emerald-600/35 transition-all text-xs cursor-pointer">
+                        Simpan Notulen Rapat
+                    </button>
+                </form>
+            </div>
+
+            <!-- Riwayat Hasil Rapat -->
+            <div>
+                <h3 class="font-bold text-slate-800 text-xs mb-2.5 px-1">Riwayat & Arsip Notulen Rapat</h3>
+                <div id="listRapat" class="space-y-3">
+                    <div class="p-3.5 bg-white rounded-2xl border border-slate-200/70 shadow-sm text-center text-slate-400">
+                        Memuat riwayat rapat...
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Tempat Include Bottom Navigation -->
+        <div id="nav-container"></div>
+
+    </div>
+
+    <!-- Skrip Utama Firestore & Format Text -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { renderNavigation } from "../assets/js/navigation.js";
+
+        // Render Navigasi Bawah
+        document.getElementById('nav-container').innerHTML = renderNavigation('home', true);
+
+        // Toast Notification
+        window.showToast = function(message) {
+            const toast = document.getElementById('toastNotification');
+            const toastText = document.getElementById('toastText');
+            toastText.innerText = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            }, 1800);
+        }
+
+        // Fungsi Toolbar Format Teks
+        window.formatText = function(command, value = null) {
+            document.execCommand(command, false, value);
+            document.getElementById('editorNotulen').focus();
+        }
+
+        // Konfigurasi Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+            authDomain: "erte-979ca.firebaseapp.com",
+            projectId: "erte-979ca",
+            storageBucket: "erte-979ca.firebasestorage.app",
+            messagingSenderId: "329513636032",
+            appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Simpan Notulen ke Firestore
+        const rapatForm = document.getElementById('rapatForm');
+        rapatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const judul = document.getElementById('judulRapat').value.trim();
+            const tanggal = document.getElementById('tanggalRapat').value;
+            const lokasi = document.getElementById('lokasiRapat').value.trim();
+            const isiNotulen = document.getElementById('editorNotulen').innerHTML.trim();
+
+            if (!isiNotulen || isiNotulen === "<br>") {
+                alert("Isi notulen rapat tidak boleh kosong!");
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "notulenRapat"), {
+                    judul: judul,
+                    tanggal: tanggal,
+                    lokasi: lokasi,
+                    notulen: isiNotulen,
+                    createdAt: serverTimestamp()
+                });
+
+                showToast('Notulen rapat berhasil disimpan!');
+                rapatForm.reset();
+                document.getElementById('editorNotulen').innerHTML = "";
+            } catch (error) {
+                alert("Gagal menyimpan notulen: " + error.message);
+            }
+        });
+
+        // Ambil Riwayat Notulen Rapat secara Real-time
+        const listRapat = document.getElementById('listRapat');
+        const q = query(collection(db, "notulenRapat"), orderBy("createdAt", "desc"));
+        
+        onSnapshot(q, (snapshot) => {
+            if (snapshot.empty) {
+                listRapat.innerHTML = `
+                    <div class="p-4 bg-white rounded-2xl border border-slate-200/70 shadow-sm text-center text-slate-400 text-xs">
+                        Belum ada arsip notulen rapat.
+                    </div>
+                `;
+                return;
+            }
+
+            let html = "";
+            snapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                html += `
+                    <div class="p-4 bg-white rounded-2xl border border-slate-200/70 shadow-sm space-y-2">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-bold text-slate-800 text-xs">${data.judul}</h4>
+                            <span class="text-[9px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-bold">${data.tanggal || 'Baru'}</span>
+                        </div>
+                        <p class="text-[11px] text-emerald-700 font-medium"><i class="fa-solid fa-location-dot mr-1"></i> ${data.lokasi}</p>
+                        <div class="text-[11px] text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100 leading-relaxed overflow-hidden">
+                            ${data.notulen}
+                        </div>
+                    </div>
+                `;
+            });
+            listRapat.innerHTML = html;
+        });
+    </script>
+</body>
+</html>

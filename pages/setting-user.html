@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Setting User - Aplikasi RT-Ku</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none !important;
+            width: 0px !important;
+            height: 0px !important;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 font-['Inter'] flex justify-center items-center h-screen overflow-hidden m-0">
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-slate-900/95 border border-slate-700 text-white px-4 py-2.5 rounded-2xl shadow-2xl text-xs font-medium flex items-center space-x-2 z-50 transition-all duration-300 opacity-0 pointer-events-none translate-y-[-20px]">
+        <div class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] shadow">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <span id="toastText">Berhasil!</span>
+    </div>
+
+    <!-- Container HP Frame -->
+    <div class="w-full h-screen sm:max-w-[400px] sm:h-[92vh] sm:max-h-[820px] bg-slate-50 sm:rounded-[35px] shadow-2xl flex flex-col justify-between relative overflow-hidden sm:border-[6px] sm:border-slate-800">
+        
+        <!-- Header -->
+        <div class="bg-gradient-to-b from-emerald-600 to-emerald-700 text-white p-5 rounded-b-[28px] flex items-center justify-between shrink-0">
+            <a href="../home.html" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white backdrop-blur-sm transition-all hover:bg-white/20">
+                <i class="fa-solid fa-arrow-left text-xs"></i>
+            </a>
+            <h1 class="font-bold text-sm tracking-wide">Setting User Warga</h1>
+            <div class="w-9"></div>
+        </div>
+
+        <!-- Content (Scrollable) -->
+        <div class="p-4 flex-1 overflow-y-auto no-scrollbar pb-28 space-y-4 text-xs">
+            
+            <!-- Info Card -->
+            <div class="bg-emerald-50 border border-emerald-200/60 rounded-2xl p-3.5 flex items-start space-x-3">
+                <div class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 text-xs shadow-md">
+                    <i class="fa-solid fa-users-gear"></i>
+                </div>
+                <div>
+                    <h2 class="font-bold text-emerald-900 text-xs">Daftar Akun Terdaftar</h2>
+                    <p class="text-[11px] text-emerald-700 mt-0.5 leading-relaxed">Kelola data warga dan atur hak akses (role) pengguna sistem RT-Ku.</p>
+                </div>
+            </div>
+
+            <!-- List User Container -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/65 space-y-3">
+                <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                    <span class="font-bold text-slate-800 text-xs">Data Pengguna Aktif</span>
+                    <span id="userCountBadge" class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[10px] font-bold">0 User</span>
+                </div>
+
+                <div id="userListContainer" class="space-y-2.5">
+                    <div class="text-center py-6 text-slate-400 text-xs">
+                        <i class="fa-solid fa-spinner fa-spin text-emerald-600 text-base mb-2"></i>
+                        <p>Memuat data user...</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Tempat Include Bottom Navigation -->
+        <div id="nav-container"></div>
+
+        <!-- MODAL EDIT ROLE USER -->
+        <div id="editRoleModal" class="absolute inset-0 bg-black/50 backdrop-blur-[2px] z-50 flex items-end justify-center hidden transition-all duration-300">
+            <div class="w-full bg-white rounded-t-[28px] p-5 shadow-2xl transform translate-y-full transition-transform duration-300" id="editRoleModalContent">
+                
+                <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-100">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-user-shield"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-xs">Ubah Role Pengguna</h3>
+                    </div>
+                    <button type="button" onclick="closeEditRoleModal()" class="w-6 h-6 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center text-[10px] transition-all cursor-pointer">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <form id="editRoleForm" class="space-y-3 pb-2">
+                    <input type="hidden" id="editUserId">
+                    
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Nama Warga</label>
+                        <input type="text" id="editUserName" disabled class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-slate-100 text-slate-500 cursor-not-allowed">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Pilih Role / Hak Akses</label>
+                        <select id="selectRole" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600 font-medium">
+                            <option value="Warga">Warga</option>
+                            <option value="Pengurus RT">Pengurus RT</option>
+                            <option value="Bendahara">Bendahara</option>
+                            <option value="Admin RT">Admin RT</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl shadow-md shadow-emerald-600/35 transition-all text-xs mt-2 cursor-pointer">
+                        Simpan Role
+                    </button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Skrip Utama Firestore -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, deleteDoc, doc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { renderNavigation } from "../assets/js/navigation.js";
+
+        // Render Navigasi Bawah
+        document.getElementById('nav-container').innerHTML = renderNavigation('home', true);
+
+        // Toast Notification
+        window.showToast = function(message) {
+            const toast = document.getElementById('toastNotification');
+            const toastText = document.getElementById('toastText');
+            toastText.innerText = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            }, 1800);
+        }
+
+        // Konfigurasi Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+            authDomain: "erte-979ca.firebaseapp.com",
+            projectId: "erte-979ca",
+            storageBucket: "erte-979ca.firebasestorage.app",
+            messagingSenderId: "329513636032",
+            appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const userListContainer = document.getElementById('userListContainer');
+        const userCountBadge = document.getElementById('userCountBadge');
+
+        // Ambil Data Warga / User dari Firestore secara Real-time
+        onSnapshot(collection(db, "users"), (snapshot) => {
+            let userHTML = "";
+            let count = snapshot.size;
+            userCountBadge.innerText = `${count} User`;
+
+            if (snapshot.empty) {
+                userListContainer.innerHTML = `
+                    <div class="text-center py-6 text-slate-400 text-xs">
+                        <i class="fa-regular fa-folder-open text-2xl mb-1 text-slate-300"></i>
+                        <p>Belum ada data user terdaftar di database.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            snapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                const id = docSnap.id;
+                const name = data.name || data.displayName || "Warga RT 05";
+                const email = data.email || "-";
+                const phone = data.phone || data.whatsapp || "-";
+                const role = data.role || "Warga";
+
+                userHTML += `
+                    <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200/80 hover:border-emerald-300 transition-all">
+                        <div class="flex items-center space-x-3 overflow-hidden">
+                            <div class="w-9 h-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs shrink-0">
+                                ${name.substring(0, 2).toUpperCase()}
+                            </div>
+                            <div class="overflow-hidden">
+                                <h4 class="font-bold text-slate-800 text-[11px] truncate">${name}</h4>
+                                <p class="text-[10px] text-slate-500 truncate">${email}</p>
+                                <div class="flex items-center space-x-2 mt-0.5">
+                                    <span class="text-[9px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold">${role}</span>
+                                    <span class="text-[9px] text-slate-400 truncate">HP: ${phone}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-1.5 shrink-0">
+                            <button type="button" onclick="openEditRoleModal('${id}', '${name}', '${role}')" class="w-7 h-7 rounded-lg bg-amber-50 text-amber-600 hover:bg-amber-600 hover:text-white flex items-center justify-center text-xs transition-all cursor-pointer" title="Ubah Role">
+                                <i class="fa-solid fa-user-pen"></i>
+                            </button>
+                            <button type="button" onclick="deleteUser('${id}')" class="w-7 h-7 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white flex items-center justify-center text-xs transition-all cursor-pointer" title="Hapus User">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            userListContainer.innerHTML = userHTML;
+        });
+
+        // Modal Edit Role Handlers
+        window.openEditRoleModal = function(id, name, currentRole) {
+            document.getElementById('editUserId').value = id;
+            document.getElementById('editUserName').value = name;
+            document.getElementById('selectRole').value = currentRole;
+
+            const modal = document.getElementById('editRoleModal');
+            const content = document.getElementById('editRoleModalContent');
+            if (modal && content) {
+                modal.classList.remove('hidden');
+                setTimeout(() => content.classList.remove('translate-y-full'), 10);
+            }
+        };
+
+        window.closeEditRoleModal = function() {
+            const modal = document.getElementById('editRoleModal');
+            const content = document.getElementById('editRoleModalContent');
+            if (modal && content) {
+                content.classList.add('translate-y-full');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+        };
+
+        // Simpan Perubahan Role ke Firestore
+        const editRoleForm = document.getElementById('editRoleForm');
+        editRoleForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editUserId').value;
+            const newRole = document.getElementById('selectRole').value;
+
+            try {
+                await updateDoc(doc(db, "users", id), {
+                    role: newRole,
+                    updatedAt: new Date()
+                });
+                showToast('Role berhasil diperbarui!');
+                closeEditRoleModal();
+            } catch (error) {
+                alert("Gagal memperbarui role: " + error.message);
+            }
+        });
+
+        // Fungsi Hapus User dari Firestore
+        window.deleteUser = async function(id) {
+            if (confirm("Apakah Anda yakin ingin menghapus data user ini dari sistem?")) {
+                try {
+                    await deleteDoc(doc(db, "users", id));
+                    showToast('User berhasil dihapus!');
+                } catch (error) {
+                    alert("Gagal menghapus user: " + error.message);
+                }
+            }
+        };
+    </script>
+</body>
+</html>
