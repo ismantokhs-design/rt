@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pendapatan & Pengeluaran - Aplikasi RT-Ku</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none !important;
+            width: 0px !important;
+            height: 0px !important;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 font-['Inter'] flex justify-center items-center h-screen overflow-hidden m-0">
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-slate-900/95 border border-slate-700 text-white px-4 py-2.5 rounded-none shadow-2xl text-xs font-medium flex items-center space-x-2 z-50 transition-all duration-300 opacity-0 pointer-events-none translate-y-[-20px]">
+        <div class="w-5 h-5 rounded-none bg-emerald-500 text-white flex items-center justify-center text-[10px] shadow">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <span id="toastText">Berhasil!</span>
+    </div>
+
+    <!-- Container HP Frame -->
+    <div class="w-full h-screen sm:max-w-[400px] sm:h-[92vh] sm:max-h-[820px] bg-slate-50 sm:rounded-[35px] shadow-2xl flex flex-col justify-between relative overflow-hidden sm:border-[6px] sm:border-slate-800">
+        
+        <!-- Header -->
+        <div class="bg-gradient-to-b from-emerald-600 to-emerald-700 text-white p-5 rounded-b-[28px] flex items-center justify-between shrink-0">
+            <a href="keuangan.html" class="w-9 h-9 rounded-none bg-white/10 flex items-center justify-center text-white backdrop-blur-sm transition-all hover:bg-white/20">
+                <i class="fa-solid fa-arrow-left text-xs"></i>
+            </a>
+            <h1 class="font-bold text-sm tracking-wide">Pendapatan / Pengeluaran</h1>
+            <div class="w-9"></div>
+        </div>
+
+        <!-- Content (Scrollable) -->
+        <div class="p-4 flex-1 overflow-y-auto no-scrollbar pb-6 space-y-4 text-xs">
+            
+            <!-- Tombol Buka Modal Catat Transaksi -->
+            <button type="button" onclick="openTransaksiModal()" class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-none shadow-sm transition-all flex items-center justify-center space-x-2 cursor-pointer">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>Catat Transaksi Baru</span>
+            </button>
+
+            <!-- Ringkasan Singkat -->
+            <div class="grid grid-cols-2 gap-2 text-center">
+                <div class="bg-emerald-50 p-3 rounded-none border border-emerald-100">
+                    <span class="text-[10px] text-emerald-800 block font-medium">Total Masuk</span>
+                    <b id="totalMasukVal" class="text-xs text-emerald-700 font-bold">Rp 0</b>
+                </div>
+                <div class="bg-red-50 p-3 rounded-none border border-red-100">
+                    <span class="text-[10px] text-red-800 block font-medium">Total Keluar</span>
+                    <b id="totalKeluarVal" class="text-xs text-red-600 font-bold">Rp 0</b>
+                </div>
+            </div>
+
+            <!-- Daftar Transaksi / Tabel -->
+            <div class="bg-white rounded-none p-3.5 shadow-sm border border-slate-200/70 space-y-3">
+                <div class="flex items-center space-x-2 pb-2 border-b border-slate-100">
+                    <div class="w-7 h-7 rounded-none bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs">
+                        <i class="fa-solid fa-right-left"></i>
+                    </div>
+                    <h2 class="font-bold text-slate-800 text-xs">Riwayat Transaksi Kas RT</h2>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-[10px]">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                                <th class="p-2 font-semibold">Tanggal</th>
+                                <th class="p-2 font-semibold">Uraian / Akun</th>
+                                <th class="p-2 font-semibold text-right">Masuk / Keluar</th>
+                                <th class="p-2 font-semibold text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelTransaksiContainer" class="divide-y divide-slate-100">
+                            <tr>
+                                <td colspan="4" class="p-3 text-center text-slate-400">Memuat data transaksi...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- MODAL CATAT / EDIT TRANSAKSI -->
+        <div id="transaksiModal" class="absolute inset-0 bg-black/50 backdrop-blur-[2px] z-50 flex items-end justify-center hidden transition-all duration-300">
+            <div class="w-full bg-white rounded-t-[25px] p-5 shadow-2xl transform translate-y-full transition-transform duration-300 max-h-[90vh] overflow-y-auto no-scrollbar" id="transaksiModalContent">
+                
+                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-7 h-7 rounded-none bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-file-pen"></i>
+                        </div>
+                        <h2 id="modalTitle" class="font-bold text-slate-800 text-xs">Form Catat Transaksi Kas</h2>
+                    </div>
+                    <button type="button" onclick="closeTransaksiModal()" class="w-6 h-6 rounded-none bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center text-[10px] transition-all cursor-pointer">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <form id="transaksiForm" class="space-y-3 pb-2">
+                    <input type="hidden" id="editTransaksiId">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Jenis Transaksi</label>
+                        <select id="jenisTransaksi" required class="w-full px-3 py-2 rounded-none border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600 text-slate-700 font-medium cursor-pointer">
+                            <option value="" disabled selected>--Pilih Jenis--</option>
+                            <option value="Pemasukan">Pemasukan</option>
+                            <option value="Pengeluaran">Pengeluaran</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Sumber / Tujuan Kas (Aset)</label>
+                        <select id="sumberKas" required class="w-full px-3 py-2 rounded-none border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600 text-slate-700 font-medium cursor-pointer">
+                            <option value="" disabled selected>-- Pilih Kas / Bank --</option>
+                            <option value="1001 - Kas">Tunai (1001 - Kas)</option>
+                            <option value="1002 - Bank BRI">Bank (1002 - Bank BRI)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Tanggal</label>
+                        <input type="date" id="tanggalTransaksi" required class="w-full px-3 py-2 rounded-none border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Pilih Akun (COA)</label>
+                        <select id="akunTransaksi" required class="w-full px-3 py-2 rounded-none border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600 text-slate-700 font-medium cursor-pointer">
+                            <option value="" disabled selected>-- Pilih Akun --</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Nominal (Rp)</label>
+                        <input type="text" id="nominalTransaksi" autocomplete="off" required placeholder="Contoh: 50.000" onkeyup="formatRupiahInput(this)" class="w-full px-3 py-2 rounded-none border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600 font-semibold">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Keterangan / Uraian</label>
+                        <input type="text" id="keteranganTransaksi" required placeholder="Contoh: Pembayaran iuran warga / Beli lampu pos ronda" class="w-full px-3 py-2 rounded-none border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600">
+                    </div>
+
+                    <button type="submit" id="btnSubmitTrans" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-none shadow-md transition-all text-xs cursor-pointer mt-2">
+                        Simpan Transaksi
+                    </button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal Konfirmasi Hapus Kustom (Smooth) -->
+    <div id="modalKonfirmasiHapus" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm transition-all">
+        <div class="bg-white w-full max-w-[300px] rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col p-5 text-center space-y-4">
+            <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto text-lg shadow-inner">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div class="space-y-1">
+                <h3 class="font-bold text-slate-800 text-sm">Hapus Transaksi</h3>
+                <p class="text-slate-500 text-xs">Apakah Anda yakin ingin menghapus data transaksi kas ini?</p>
+            </div>
+            <div class="flex space-x-2 pt-1">
+                <button type="button" onclick="tutupModalKonfirmasiHapus()" class="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl cursor-pointer text-xs transition-all">
+                    Batal
+                </button>
+                <button type="button" id="btnKonfirmasiHapusAksi" class="flex-1 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl cursor-pointer text-xs shadow transition-all">
+                    Hapus
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skrip Firebase & Logika -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, serverTimestamp, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+            authDomain: "erte-979ca.firebaseapp.com",
+            projectId: "erte-979ca",
+            storageBucket: "erte-979ca.firebasestorage.app",
+            messagingSenderId: "329513636032",
+            appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let listAkunMaster = [];
+        let cacheTransaksi = {}; 
+        let idHapusPending = null;
+
+        document.getElementById('tanggalTransaksi').valueAsDate = new Date();
+
+        window.showToast = function(message) {
+            const toast = document.getElementById('toastNotification');
+            const toastText = document.getElementById('toastText');
+            toastText.innerText = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            }, 1800);
+        }
+
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(angka).replace('Rp', 'Rp ');
+        }
+
+        window.formatRupiahInput = function(input) {
+            let value = input.value.replace(/[^,\d]/g, '').toString();
+            let split = value.split(',');
+            let sisa = split[0].length % 3;
+            let rupiah = split[0].substr(0, sisa);
+            let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                let separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+            input.value = rupiah;
+        }
+
+        async function loadMasterAkunOptions(selectedAkun = "") {
+            try {
+                const querySnapshot = await getDocs(collection(db, "masterAkun"));
+                listAkunMaster = [];
+                querySnapshot.forEach((docSnap) => {
+                    listAkunMaster.push(docSnap.data());
+                });
+
+                listAkunMaster.sort((a, b) => (a.kode || "").localeCompare(b.kode || "", undefined, { numeric: true }));
+
+                updateAkunDropdown(selectedAkun);
+            } catch (error) {
+                console.error("Gagal memuat master akun:", error);
+            }
+        }
+
+        function updateAkunDropdown(selectedAkun = "") {
+            const jenis = document.getElementById('jenisTransaksi').value;
+            const selectAkun = document.getElementById('akunTransaksi');
+            let optionsHtml = `<option value="" disabled selected>-- Pilih Akun --</option>`;
+
+            listAkunMaster.forEach(akun => {
+                const valAkun = `${akun.kode} - ${akun.nama}`;
+                const isSelected = (valAkun === selectedAkun) ? 'selected' : '';
+                if (jenis === "Pemasukan" && akun.kategori === "Pendapatan") {
+                    optionsHtml += `<option value="${valAkun}" ${isSelected}>${valAkun}</option>`;
+                } else if (jenis === "Pengeluaran" && akun.kategori === "Pengeluaran") {
+                    optionsHtml += `<option value="${valAkun}" ${isSelected}>${valAkun}</option>`;
+                }
+            });
+
+            selectAkun.innerHTML = optionsHtml;
+        }
+
+        document.getElementById('jenisTransaksi').addEventListener('change', () => updateAkunDropdown());
+
+        // Kontrol Modal Catat/Edit
+        window.openTransaksiModal = function(id = null) {
+            const modal = document.getElementById('transaksiModal');
+            const content = document.getElementById('transaksiModalContent');
+            const form = document.getElementById('transaksiForm');
+            const modalTitle = document.getElementById('modalTitle');
+
+            form.reset();
+            document.getElementById('editTransaksiId').value = "";
+
+            if (id && cacheTransaksi[id]) {
+                modalTitle.innerText = "Edit Transaksi Kas";
+                const data = cacheTransaksi[id];
+                document.getElementById('editTransaksiId').value = id;
+                document.getElementById('jenisTransaksi').value = data.jenis || "";
+                document.getElementById('sumberKas').value = data.sumberKas || "1001 - Kas";
+                document.getElementById('tanggalTransaksi').value = data.tanggal || "";
+                document.getElementById('nominalTransaksi').value = Number(data.nominal || 0).toLocaleString('id-ID');
+                document.getElementById('keteranganTransaksi').value = data.keterangan || "";
+
+                loadMasterAkunOptions(data.akun || "");
+            } else {
+                modalTitle.innerText = "Form Catat Transaksi Kas";
+                document.getElementById('tanggalTransaksi').valueAsDate = new Date();
+                loadMasterAkunOptions();
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('translate-y-full');
+            }, 10);
+        }
+
+        window.closeTransaksiModal = function() {
+            const modal = document.getElementById('transaksiModal');
+            const content = document.getElementById('transaksiModalContent');
+            content.classList.add('translate-y-full');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        // Simpan / Update Transaksi ke Firestore
+        const transaksiForm = document.getElementById('transaksiForm');
+        transaksiForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const editId = document.getElementById('editTransaksiId').value;
+            const jenis = document.getElementById('jenisTransaksi').value;
+            const sumberKas = document.getElementById('sumberKas').value;
+            const tanggal = document.getElementById('tanggalTransaksi').value;
+            const akun = document.getElementById('akunTransaksi').value;
+            const nominal = parseFloat(document.getElementById('nominalTransaksi').value.replace(/[^0-9]/g, '')) || 0;
+            const keterangan = document.getElementById('keteranganTransaksi').value.trim();
+
+            if (!jenis || !sumberKas || !akun || nominal <= 0) {
+                alert("Mohon lengkapi seluruh field dengan benar!");
+                return;
+            }
+
+            try {
+                if (editId) {
+                    await updateDoc(doc(db, "kasRt", editId), {
+                        jenis: jenis,
+                        sumberKas: sumberKas,
+                        tanggal: tanggal,
+                        akun: akun,
+                        nominal: nominal,
+                        keterangan: keterangan,
+                        updatedAt: serverTimestamp()
+                    });
+                    showToast('Transaksi berhasil diperbarui!');
+                } else {
+                    await addDoc(collection(db, "kasRt"), {
+                        jenis: jenis,
+                        sumberKas: sumberKas,
+                        tanggal: tanggal,
+                        akun: akun,
+                        nominal: nominal,
+                        keterangan: keterangan,
+                        createdAt: serverTimestamp()
+                    });
+                    showToast('Transaksi berhasil dicatat!');
+                }
+
+                closeTransaksiModal();
+            } catch (error) {
+                alert("Gagal menyimpan transaksi: " + error.message);
+            }
+        });
+
+        // Kontrol Modal Konfirmasi Hapus Kustom
+        window.hapusTransaksi = function(id) {
+            idHapusPending = id;
+            document.getElementById('modalKonfirmasiHapus').classList.remove('hidden');
+        }
+
+        window.tutupModalKonfirmasiHapus = function() {
+            document.getElementById('modalKonfirmasiHapus').classList.add('hidden');
+            idHapusPending = null;
+        }
+
+        document.getElementById('btnKonfirmasiHapusAksi').onclick = async function() {
+            if (!idHapusPending) return;
+            const id = idHapusPending;
+            tutupModalKonfirmasiHapus();
+
+            try {
+                await deleteDoc(doc(db, "kasRt", id));
+                showToast('Transaksi berhasil dihapus!');
+            } catch (error) {
+                alert("Gagal menghapus transaksi: " + error.message);
+            }
+        };
+
+        // Ambil Data Transaksi secara Real-time
+        const q = query(collection(db, "kasRt"), orderBy("tanggal", "desc"));
+        onSnapshot(q, (snapshot) => {
+            let html = "";
+            let totalMasuk = 0;
+            let totalKeluar = 0;
+            cacheTransaksi = {};
+
+            snapshot.forEach((docSnap) => {
+                const id = docSnap.id;
+                const data = docSnap.data();
+                cacheTransaksi[id] = data;
+
+                const nominal = Number(data.nominal || 0);
+                const isMasuk = data.jenis === "Pemasukan";
+
+                if (isMasuk) totalMasuk += nominal;
+                else totalKeluar += nominal;
+
+                const formatTgl = data.tanggal ? new Date(data.tanggal).toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '-';
+
+                html += `
+                    <tr class="hover:bg-slate-50 border-b border-slate-100">
+                        <td class="p-2 text-slate-600 whitespace-nowrap align-middle">${formatTgl}</td>
+                        <td class="p-2 text-slate-800 font-medium align-middle">
+                            ${data.keterangan || '-'}<br>
+                            <span class="text-[9px] text-slate-400">${data.akun || ''} (${data.sumberKas || 'Kas'})</span>
+                        </td>
+                        <td class="p-2 text-right font-bold align-middle ${isMasuk ? 'text-emerald-600' : 'text-red-600'}">
+                            ${isMasuk ? '+ ' + formatRupiah(nominal) : '- ' + formatRupiah(nominal)}
+                        </td>
+                        <td class="p-2 text-center align-middle whitespace-nowrap">
+                            <button type="button" onclick="openTransaksiModal('${id}')" class="w-6 h-6 bg-amber-50 hover:bg-amber-100 text-amber-600 rounded-none inline-flex items-center justify-center text-[10px] mr-1 transition-all cursor-pointer" title="Edit">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button type="button" onclick="hapusTransaksi('${id}')" class="w-6 h-6 bg-red-50 hover:bg-red-100 text-red-600 rounded-none inline-flex items-center justify-center text-[10px] transition-all cursor-pointer" title="Hapus">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            if (html === "") {
+                html = `<tr><td colspan="4" class="p-4 text-center text-slate-400">Belum ada catatan transaksi kas.</td></tr>`;
+            }
+
+            document.getElementById('tabelTransaksiContainer').innerHTML = html;
+            document.getElementById('totalMasukVal').innerText = formatRupiah(totalMasuk);
+            document.getElementById('totalKeluarVal').innerText = formatRupiah(totalKeluar);
+        });
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "../index.html";
+            }
+        });
+    </script>
+</body>
+</html>

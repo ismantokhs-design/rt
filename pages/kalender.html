@@ -1,0 +1,307 @@
+<!-- KELOMPOK UTAMA DESKTOP -->
+<div id="spaAppContainer" class="space-y-6 pb-20">
+    <!-- Header Bagian Halaman -->
+    <div class="bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-none p-6 text-white shadow-sm flex items-center justify-between gap-4 shrink-0">
+        <div>
+            <h2 class="text-lg font-bold">Kalender & Agenda RT</h2>
+            <p id="desktopWetonDate" class="text-xs text-emerald-100 mt-1">Memuat tanggal...</p>
+        </div>
+        <div class="w-14 h-14 bg-white/10 rounded-none flex items-center justify-center shrink-0">
+            <i class="fa-solid fa-calendar-days text-xl text-white"></i>
+        </div>
+    </div>
+
+    <!-- Navigasi Bulan & Grid Kalender Desktop -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 space-y-4">
+            <!-- Navigasi Bulan -->
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                <button type="button" onclick="ubahBulanKalender(-1)" class="w-8 h-8 rounded-none bg-slate-100 dark:bg-slate-700 hover:bg-emerald-100 text-slate-700 dark:text-slate-200 flex items-center justify-center text-xs cursor-pointer transition-all" title="Bulan Sebelumnya">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <div class="text-center">
+                    <h2 id="labelBulanMasehiDesktop" class="font-bold text-slate-800 dark:text-slate-100 text-sm">November 2026</h2>
+                    <p id="labelBulanHijriyahDesktop" class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Tahun 2026 Masehi</p>
+                </div>
+                <button type="button" onclick="ubahBulanKalender(1)" class="w-8 h-8 rounded-none bg-slate-100 dark:bg-slate-700 hover:bg-emerald-100 text-slate-700 dark:text-slate-200 flex items-center justify-center text-xs cursor-pointer transition-all" title="Bulan Berikutnya">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <!-- Tabel Kalender -->
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-none shadow-sm border border-slate-200 dark:border-slate-700">
+                <div class="grid grid-cols-7 text-center text-xs font-bold text-slate-600 dark:text-slate-300 pb-3 border-b border-slate-100 dark:border-slate-700">
+                    <span class="text-red-600">Ahad</span>
+                    <span>Senin</span>
+                    <span>Selasa</span>
+                    <span>Rabu</span>
+                    <span>Kamis</span>
+                    <span class="text-emerald-600">Jumat</span>
+                    <span>Sabtu</span>
+                </div>
+                <div id="calendarGridDesktop" class="grid grid-cols-7 gap-1.5 pt-3">
+                    <!-- Diisi via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel Agenda Samping Desktop -->
+        <div class="bg-white dark:bg-slate-800 p-4 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 space-y-3 h-fit">
+            <div class="border-b border-slate-100 dark:border-slate-700 pb-2.5">
+                <h3 class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Agenda Warga</h3>
+            </div>
+            <div class="text-[11px] font-bold text-emerald-800 dark:text-emerald-200 bg-emerald-50 dark:bg-emerald-950/40 px-3 py-2 border border-emerald-200 dark:border-emerald-800">
+                Tanggal: <span id="labelSelectedDateDesktop">-</span>
+            </div>
+            <div id="tabContentAgendaDesktop" class="space-y-2.5 pt-1">
+                <div class="p-4 bg-slate-50 dark:bg-slate-900 text-center text-slate-400 text-xs">Memuat agenda...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- KELOMPOK UTAMA MOBILE -->
+<div id="spaAppContainerMobile" class="space-y-4 pb-28">
+    <!-- Navigasi Bulan Masehi -->
+    <div class="bg-white dark:bg-slate-800 p-3.5 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+        <button type="button" onclick="ubahBulanKalender(-1)" class="w-7 h-7 rounded-none bg-slate-100 dark:bg-slate-700 hover:bg-emerald-100 text-slate-700 dark:text-slate-200 flex items-center justify-center text-xs cursor-pointer transition-all">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <div class="text-center">
+            <h2 id="labelBulanMasehiMobile" class="font-bold text-slate-800 dark:text-slate-100 text-xs">November 2026</h2>
+            <p id="labelBulanHijriyahMobile" class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Tahun 2026 Masehi</p>
+        </div>
+        <button type="button" onclick="ubahBulanKalender(1)" class="w-7 h-7 rounded-none bg-slate-100 dark:bg-slate-700 hover:bg-emerald-100 text-slate-700 dark:text-slate-200 flex items-center justify-center text-xs cursor-pointer transition-all">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Grid Kalender Mobile -->
+    <div class="bg-white dark:bg-slate-800 p-3 rounded-none shadow-sm border border-slate-200 dark:border-slate-700">
+        <div class="grid grid-cols-7 text-center text-[10px] font-bold text-slate-600 dark:text-slate-300 pb-2 border-b border-slate-100 dark:border-slate-700">
+            <span class="text-red-600">Ahad</span>
+            <span>Senin</span>
+            <span>Selasa</span>
+            <span>Rabu</span>
+            <span>Kamis</span>
+            <span class="text-emerald-600">Jumat</span>
+            <span>Sabtu</span>
+        </div>
+        <div id="calendarGridMobile" class="grid grid-cols-7 gap-1 pt-2">
+            <!-- Diisi via JS -->
+        </div>
+    </div>
+
+    <!-- Bagian Agenda RT Mobile -->
+    <div class="bg-white dark:bg-slate-800 rounded-none p-4 shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
+        <div class="border-b border-slate-100 dark:border-slate-700 pb-2">
+            <h3 class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Agenda Warga</h3>
+        </div>
+
+        <div class="text-[11px] font-bold text-emerald-800 dark:text-emerald-200 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1.5 border border-emerald-200 dark:border-emerald-800">
+            Tanggal: <span id="labelSelectedDateMobile">-</span>
+        </div>
+
+        <div id="tabContentAgendaMobile" class="space-y-2 pt-1">
+            <div class="p-3 bg-slate-50 dark:bg-slate-900 text-center text-slate-400 text-xs">Memuat agenda bulan ini...</div>
+        </div>
+    </div>
+</div>
+
+<!-- SKRIP KALENDER & FIREBASE -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+        authDomain: "erte-979ca.firebaseapp.com",
+        projectId: "erte-979ca",
+        storageBucket: "erte-979ca.firebasestorage.app",
+        messagingSenderId: "329513636032",
+        appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let activeDate = new Date(); 
+    let selectedDateStr = new Date().toISOString().split('T')[0]; 
+    let rawEventsData = [];
+
+    const namaBulanMasehi = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+    const namaHari = ["Ahad", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+    const pasaranJawa = ["Legi", "Pahing", "Pon", "Wage", "Kliwon"];
+
+    function getWetonJawa(date) {
+        const baseDate = new Date(2026, 9, 4); 
+        const diffTime = date.getTime() - baseDate.getTime();
+        const diffDays = Math.round(diffTime / (1000 * 3600 * 24));
+        let wetonIndex = (4 + (diffDays % 5)) % 5;
+        if (wetonIndex < 0) wetonIndex += 5;
+        return pasaranJawa[wetonIndex];
+    }
+
+    function updateHeaderTodayInfo() {
+        const now = new Date();
+        const hariStr = namaHari[now.getDay()];
+        const pasaranStr = getWetonJawa(now);
+        const tglStr = `${now.getDate()} ${namaBulanMasehi[now.getMonth()]} ${now.getFullYear()}`;
+        
+        const headerWeton = document.getElementById('desktopWetonDate');
+        if (headerWeton) headerWeton.innerText = `${hariStr} ${pasaranStr}, ${tglStr}`;
+
+        const lblSelDesktop = document.getElementById('labelSelectedDateDesktop');
+        const lblSelMobile = document.getElementById('labelSelectedDateMobile');
+        if (lblSelDesktop) lblSelDesktop.innerText = selectedDateStr;
+        if (lblSelMobile) lblSelMobile.innerText = selectedDateStr;
+    }
+    updateHeaderTodayInfo();
+
+    window.ubahBulanKalender = function(n) {
+        activeDate.setMonth(activeDate.getMonth() + n);
+        renderCalendar();
+    }
+
+    window.pilihTanggal = function(dateStr) {
+        selectedDateStr = dateStr;
+        const lblSelDesktop = document.getElementById('labelSelectedDateDesktop');
+        const lblSelMobile = document.getElementById('labelSelectedDateMobile');
+        if (lblSelDesktop) lblSelDesktop.innerText = selectedDateStr;
+        if (lblSelMobile) lblSelMobile.innerText = selectedDateStr;
+
+        renderCalendar();
+        renderAgendaList();
+    }
+
+    function renderCalendar() {
+        const tahun = activeDate.getFullYear();
+        const bulan = activeDate.getMonth();
+
+        const masehiText = `${namaBulanMasehi[bulan]} ${tahun}`;
+        const hijriText = `Tahun ${tahun} Masehi`;
+
+        if (document.getElementById('labelBulanMasehiDesktop')) document.getElementById('labelBulanMasehiDesktop').innerText = masehiText;
+        if (document.getElementById('labelBulanHijriyahDesktop')) document.getElementById('labelBulanHijriyahDesktop').innerText = hijriText;
+        if (document.getElementById('labelBulanMasehiMobile')) document.getElementById('labelBulanMasehiMobile').innerText = masehiText;
+        if (document.getElementById('labelBulanHijriyahMobile')) document.getElementById('labelBulanHijriyahMobile').innerText = hijriText;
+
+        const firstDayIndex = new Date(tahun, bulan, 1).getDay();
+        const totalDays = new Date(tahun, bulan + 1, 0).getDate();
+        const prevTotalDays = new Date(tahun, bulan, 0).getDate();
+
+        const todayStr = new Date().toISOString().split('T')[0];
+        let gridDesktopHTML = "";
+        let gridMobileHTML = "";
+
+        for (let i = firstDayIndex; i > 0; i--) {
+            const dayNum = prevTotalDays - i + 1;
+            const emptyCell = `
+                <div class="h-12 md:h-20 bg-slate-50/50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-700/50 flex flex-col items-center justify-center text-slate-300 dark:text-slate-600 text-[10px]">
+                    <span class="font-medium">${dayNum}</span>
+                </div>
+            `;
+            gridDesktopHTML += emptyCell;
+            gridMobileHTML += emptyCell;
+        }
+
+        for (let d = 1; d <= totalDays; d++) {
+            const currentObjDate = new Date(tahun, bulan, d);
+            const mMonth = String(bulan + 1).padStart(2, '0');
+            const mDay = String(d).padStart(2, '0');
+            const dateString = `${tahun}-${mMonth}-${mDay}`;
+
+            const isToday = (dateString === todayStr);
+            const isSelected = (dateString === selectedDateStr);
+            const weton = getWetonJawa(currentObjDate);
+            const dayOfWeek = currentObjDate.getDay();
+
+            let colorClass = "text-slate-800 dark:text-slate-100";
+            if (dayOfWeek === 0) colorClass = "text-red-600 font-bold";
+            else if (dayOfWeek === 5) colorClass = "text-emerald-600 dark:text-emerald-400 font-bold";
+
+            let hasEvent = rawEventsData.some(ev => ev.eventDate === dateString);
+
+            let bgClass = "bg-white dark:bg-slate-800 hover:bg-emerald-50/40 dark:hover:bg-slate-700/50";
+            let borderClass = "border-slate-200/70 dark:border-slate-700";
+
+            if (isSelected) {
+                bgClass = "bg-emerald-100 dark:bg-emerald-950/60 border-emerald-600 shadow-sm";
+            } else if (hasEvent) {
+                bgClass = "bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 border-amber-300 dark:border-amber-700";
+            } else if (isToday) {
+                borderClass = "border-emerald-500 dark:border-emerald-400";
+            }
+
+            const cellHTML = `
+                <div onclick="pilihTanggal('${dateString}')" class="h-12 md:h-20 ${bgClass} border ${borderClass} flex flex-col items-center justify-between p-1 cursor-pointer transition-all relative rounded-none">
+                    <div class="flex items-center justify-between w-full">
+                        <span class="hidden md:block text-[9px] text-slate-400 font-normal">Warga</span>
+                        <span class="text-[10px] md:text-xs font-bold ${colorClass}">${d}</span>
+                    </div>
+                    <span class="text-[8px] md:text-[10px] text-slate-600 dark:text-slate-300 truncate max-w-full font-semibold">${weton}</span>
+                    <div class="flex space-x-0.5 absolute bottom-1">
+                        ${hasEvent ? `<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>` : ''}
+                    </div>
+                </div>
+            `;
+            gridDesktopHTML += cellHTML;
+            gridMobileHTML += cellHTML;
+        }
+
+        const totalCellsSoFar = firstDayIndex + totalDays;
+        const remainingCells = totalCellsSoFar % 7 === 0 ? 0 : 7 - (totalCellsSoFar % 7);
+        for (let i = 1; i <= remainingCells; i++) {
+            const emptyCell = `
+                <div class="h-12 md:h-20 bg-slate-50/50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-700/50 flex flex-col items-center justify-center text-slate-300 dark:text-slate-600 text-[10px]">
+                    <span class="font-medium">${i}</span>
+                </div>
+            `;
+            gridDesktopHTML += emptyCell;
+            gridMobileHTML += emptyCell;
+        }
+
+        if (document.getElementById('calendarGridDesktop')) document.getElementById('calendarGridDesktop').innerHTML = gridDesktopHTML;
+        if (document.getElementById('calendarGridMobile')) document.getElementById('calendarGridMobile').innerHTML = gridMobileHTML;
+        
+        renderAgendaList();
+    }
+
+    function renderAgendaList() {
+        let agendaHtml = "";
+        rawEventsData.forEach(ev => {
+            if (ev.eventDate === selectedDateStr) {
+                agendaHtml += `
+                    <div class="p-2.5 bg-amber-50/60 dark:bg-slate-700/50 border border-amber-200/70 dark:border-slate-600 rounded-none flex items-start space-x-2 text-xs">
+                        <div class="w-7 h-7 bg-amber-500 text-white flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-calendar-day text-[10px]"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-slate-800 dark:text-slate-100 text-[11px]">${ev.title || 'Agenda RT'}</h4>
+                            <p class="text-[10px] text-slate-600 dark:text-slate-300 mt-0.5">${ev.description || '-'}</p>
+                            <span class="text-[9px] text-amber-700 dark:text-amber-400 font-semibold mt-1 block">Tanggal: ${ev.eventDate}</span>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+        
+        if (agendaHtml === "") {
+            agendaHtml = `<div class="p-3 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-700 text-center text-slate-400 text-xs">Tidak ada agenda pada tanggal ${selectedDateStr}.</div>`;
+        }
+
+        const agendaDesktop = document.getElementById('tabContentAgendaDesktop');
+        const agendaMobile = document.getElementById('tabContentAgendaMobile');
+        if (agendaDesktop) agendaDesktop.innerHTML = agendaHtml;
+        if (agendaMobile) agendaMobile.innerHTML = agendaHtml;
+    }
+
+    const qEvents = query(collection(db, "events"), orderBy("createdAt", "desc"));
+    onSnapshot(qEvents, (snapshot) => {
+        rawEventsData = [];
+        snapshot.forEach(docSnap => {
+            rawEventsData.push({ id: docSnap.id, ...docSnap.data() });
+        });
+        renderCalendar();
+    });
+</script>

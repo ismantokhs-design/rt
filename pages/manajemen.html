@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="id" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pengaturan & Manajemen - RT-Ku</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none !important;
+            width: 0px !important;
+            height: 0px !important;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+        body {
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+    </style>
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+
+        window.addEventListener('DOMContentLoaded', () => {
+            document.body.style.opacity = '1';
+        });
+    </script>
+</head>
+<body class="bg-slate-900 font-['Inter'] h-screen overflow-hidden m-0 flex flex-col items-center justify-center">
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-slate-900/95 dark:bg-slate-800 border border-slate-700 text-white px-4 py-2.5 rounded-none shadow-2xl text-xs font-medium flex items-center space-x-2 z-50 transition-all duration-300 opacity-0 pointer-events-none translate-y-[-20px]">
+        <div class="w-5 h-5 rounded-none bg-emerald-500 text-white flex items-center justify-center text-[10px] shadow">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <span id="toastText">Berhasil!</span>
+    </div>
+
+    <!-- Dropdown Pop-up Melayang untuk Tombol More (2 Kolom) -->
+    <div id="morePopupMenu" class="hidden absolute bottom-20 right-4 w-80 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-2xl rounded-none p-2.5 z-50 grid grid-cols-2 gap-2 transform origin-bottom-right transition-all opacity-0 scale-95 translate-y-2 duration-200">
+        <a href="../layout.html?page=admin-profil" onclick="event.stopPropagation()" class="flex items-center space-x-2 px-3 py-2.5 text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+            <i class="fa-solid fa-user-gear text-emerald-600 dark:text-emerald-400 w-4 shrink-0"></i>
+            <span>Setting Profil</span>
+        </a>
+        <a href="../layout.html?page=hak-akses" onclick="event.stopPropagation()" class="flex items-center space-x-2 px-3 py-2.5 text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+            <i class="fa-solid fa-shield-halved text-emerald-600 dark:text-emerald-400 w-4 shrink-0"></i>
+            <span>Hak Akses</span>
+        </a>
+        <a href="../layout.html?page=setting-user" onclick="event.stopPropagation()" class="flex items-center space-x-2 px-3 py-2.5 text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+            <i class="fa-solid fa-users-gear text-emerald-600 dark:text-emerald-400 w-4 shrink-0"></i>
+            <span>Setting User</span>
+        </a>
+        <a href="manajemen.html" onclick="event.stopPropagation()" class="flex items-center space-x-2 px-3 py-2.5 text-xs text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+            <i class="fa-solid fa-address-book text-emerald-600 dark:text-emerald-400 w-4 shrink-0"></i>
+            <span>Manajemen</span>
+        </a>
+    </div>
+
+    <!-- TAMPILAN MOBILE & CONTAINER UTAMA -->
+    <div class="w-full h-screen sm:max-w-[400px] sm:h-[92vh] sm:max-h-[820px] bg-slate-50 dark:bg-slate-900 sm:rounded-none shadow-2xl flex flex-col justify-between relative overflow-hidden sm:border-[6px] sm:border-slate-800">
+        
+        <!-- Header Identik dengan Home -->
+        <div class="bg-gradient-to-b from-emerald-600 to-emerald-700 dark:from-slate-800 dark:to-slate-900 text-white px-4 pt-4 pb-3 shrink-0 relative space-y-2 border-b border-emerald-800 dark:border-slate-700">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3 overflow-hidden">
+                    <a href="../layout.html?page=home" class="w-9 h-9 rounded-none bg-white/10 flex items-center justify-center text-white backdrop-blur-sm transition-all hover:bg-white/20 shrink-0">
+                        <i class="fa-solid fa-arrow-left text-xs"></i>
+                    </a>
+                    <div class="overflow-hidden">
+                        <p id="greetingText" class="text-[11px] text-emerald-100 dark:text-slate-300 font-normal leading-tight">Pengaturan &</p>
+                        <h2 class="text-sm font-bold tracking-wide truncate text-white uppercase">Manajemen RT</h2>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button type="button" onclick="toggleDarkMode()" class="w-9 h-9 rounded-none text-white dark:text-yellow-400 flex items-center justify-center transition-all cursor-pointer hover:bg-white/10">
+                        <i id="themeIconMobile" class="fa-solid fa-moon text-xs"></i>
+                    </button>
+                    <div class="relative shrink-0">
+                        <button type="button" id="userAvatarBtn" class="w-10 h-10 rounded-full bg-white text-emerald-700 font-bold text-xs shadow-lg flex items-center justify-center border-2 border-emerald-500 cursor-pointer overflow-hidden">
+                            <span id="userInitials">RT</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2 w-fit py-0.5">
+                    <i class="fa-solid fa-location-dot text-emerald-300 dark:text-emerald-400 text-[11px]"></i>
+                    <span id="headerRtRw" class="text-[11px] font-bold text-white tracking-wide">RT 10 / RW 00 - Sumberan Ngestiharjo, Kasihan</span>
+                </div>
+            </div>
+
+            <div class="flex items-center bg-emerald-900/60 dark:bg-slate-800 border border-emerald-400/30 dark:border-slate-700 text-emerald-100 dark:text-slate-200 px-2.5 py-1 rounded-none text-[11px] shadow-inner">
+                <i class="fa-solid fa-bullhorn text-emerald-300 dark:text-emerald-400 shrink-0 mr-2"></i>
+                <marquee scrollamount="5" class="font-medium w-full">
+                    <span id="mobileRunningText">Selamat datang di Layanan Warga RT-Ku</span>
+                </marquee>
+            </div>
+        </div>
+
+        <!-- Content (Scrollable Grid Menu 2 Kolom) -->
+        <div class="p-4 flex-1 overflow-y-auto no-scrollbar pb-28 space-y-4 text-slate-800 dark:text-slate-100">
+            
+            <h2 id="menuTitleRt" class="font-bold text-xs px-1 uppercase tracking-wider text-slate-500 dark:text-slate-400">Menu Pengelolaan RT 10</h2>
+
+            <div class="grid grid-cols-2 gap-3">
+                
+                <!-- 1. Manajemen Warga -->
+                <a href="data-warga.html" class="bg-white dark:bg-slate-800 p-4 rounded-none border border-slate-200 dark:border-slate-700 shadow-sm hover:border-emerald-500 dark:hover:border-emerald-500 hover:shadow-md transition-all flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <div class="w-11 h-11 rounded-none bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-base mb-2.5 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm border border-emerald-100 dark:border-emerald-900">
+                        <i class="fa-solid fa-users-gear"></i>
+                    </div>
+                    <span class="font-bold text-xs group-hover:text-emerald-600 dark:group-hover:text-emerald-400">Manajemen Warga</span>
+                    <span class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Data & Kepala Keluarga</span>
+                </a>
+
+                <!-- 2. Rapat -->
+                <a href="rapat.html" class="bg-white dark:bg-slate-800 p-4 rounded-none border border-slate-200 dark:border-slate-700 shadow-sm hover:border-emerald-500 dark:hover:border-emerald-500 hover:shadow-md transition-all flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <div class="w-11 h-11 rounded-none bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-base mb-2.5 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm border border-emerald-100 dark:border-emerald-900">
+                        <i class="fa-solid fa-users-rectangle"></i>
+                    </div>
+                    <span class="font-bold text-xs group-hover:text-emerald-600 dark:group-hover:text-emerald-400">Rapat</span>
+                    <span class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Musyawarah & presensi</span>
+                </a>
+
+                <!-- 3. Keuangan -->
+                <a href="keuangan.html" class="bg-white dark:bg-slate-800 p-4 rounded-none border border-slate-200 dark:border-slate-700 shadow-sm hover:border-emerald-500 dark:hover:border-emerald-500 hover:shadow-md transition-all flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <div class="w-11 h-11 rounded-none bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-base mb-2.5 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm border border-emerald-100 dark:border-emerald-900">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <span class="font-bold text-xs group-hover:text-emerald-600 dark:group-hover:text-emerald-400">Keuangan</span>
+                    <span class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Pencatatan kas & iuran</span>
+                </a>
+
+                <!-- 4. Aset -->
+                <a href="inventaris.html" class="bg-white dark:bg-slate-800 p-4 rounded-none border border-slate-200 dark:border-slate-700 shadow-sm hover:border-emerald-500 dark:hover:border-emerald-500 hover:shadow-md transition-all flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <div class="w-11 h-11 rounded-none bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-base mb-2.5 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm border border-emerald-100 dark:border-emerald-900">
+                        <i class="fa-solid fa-boxes-stacked"></i>
+                    </div>
+                    <span class="font-bold text-xs group-hover:text-emerald-600 dark:group-hover:text-emerald-400">Aset</span>
+                    <span class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Inventaris barang RT</span>
+                </a>
+
+                <!-- 5. Manajemen Event -->
+                <a href="event-input.html" class="bg-white dark:bg-slate-800 p-4 rounded-none border border-slate-200 dark:border-slate-700 shadow-sm hover:border-emerald-500 dark:hover:border-emerald-500 hover:shadow-md transition-all flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <div class="w-11 h-11 rounded-none bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-base mb-2.5 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm border border-emerald-100 dark:border-emerald-900">
+                        <i class="fa-solid fa-calendar-days"></i>
+                    </div>
+                    <span class="font-bold text-xs group-hover:text-emerald-600 dark:group-hover:text-emerald-400">Manajemen Event</span>
+                    <span class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Jadwal & Agenda RT</span>
+                </a>
+
+                <!-- 6. Galeri -->
+                <a href="galeri-input.html" class="bg-white dark:bg-slate-800 p-4 rounded-none border border-slate-200 dark:border-slate-700 shadow-sm hover:border-emerald-500 dark:hover:border-emerald-500 hover:shadow-md transition-all flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <div class="w-11 h-11 rounded-none bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-base mb-2.5 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm border border-emerald-100 dark:border-emerald-900">
+                        <i class="fa-solid fa-images"></i>
+                    </div>
+                    <span class="font-bold text-xs group-hover:text-emerald-600 dark:group-hover:text-emerald-400">Galeri</span>
+                    <span class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Dokumentasi kegiatan RT</span>
+                </a>
+
+                <!-- 7. Banner -->
+                <a href="banner.html" class="bg-white dark:bg-slate-800 p-4 rounded-none border border-slate-200 dark:border-slate-700 shadow-sm hover:border-emerald-500 dark:hover:border-emerald-500 hover:shadow-md transition-all flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <div class="w-11 h-11 rounded-none bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-base mb-2.5 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm border border-emerald-100 dark:border-emerald-900">
+                        <i class="fa-solid fa-panorama"></i>
+                    </div>
+                    <span class="font-bold text-xs group-hover:text-emerald-600 dark:group-hover:text-emerald-400">Banner</span>
+                    <span class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Slider foto beranda</span>
+                </a>
+
+                <!-- 8. Running Text -->
+                <a href="running-text.html" class="bg-white dark:bg-slate-800 p-4 rounded-none border border-slate-200 dark:border-slate-700 shadow-sm hover:border-emerald-500 dark:hover:border-emerald-500 hover:shadow-md transition-all flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <div class="w-11 h-11 rounded-none bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-base mb-2.5 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm border border-emerald-100 dark:border-emerald-900">
+                        <i class="fa-solid fa-bars-staggered"></i>
+                    </div>
+                    <span class="font-bold text-xs group-hover:text-emerald-600 dark:group-hover:text-emerald-400">Running Text</span>
+                    <span class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Teks berjalan info RT</span>
+                </a>
+
+                <!-- 9. QR Code Absensi -->
+                <a href="admin-qr.html" class="bg-white dark:bg-slate-800 p-4 rounded-none border border-slate-200 dark:border-slate-700 shadow-sm hover:border-emerald-500 dark:hover:border-emerald-500 hover:shadow-md transition-all flex flex-col items-center justify-center text-center group cursor-pointer col-span-2">
+                    <div class="w-11 h-11 rounded-none bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-base mb-2.5 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm border border-emerald-100 dark:border-emerald-900">
+                        <i class="fa-solid fa-qrcode"></i>
+                    </div>
+                    <span class="font-bold text-xs group-hover:text-emerald-600 dark:group-hover:text-emerald-400">QR Code Absensi</span>
+                    <span class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Scan absensi kehadiran warga</span>
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- Bilah Navigasi Bawah Langsung Dirender Tanpa Jeda -->
+        <div id="nav-container"></div>
+
+    </div>
+
+    <!-- Skrip Utama -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { renderNavigation } from "../assets/js/navigation.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+            authDomain: "erte-979ca.firebaseapp.com",
+            projectId: "erte-979ca",
+            storageBucket: "erte-979ca.firebasestorage.app",
+            messagingSenderId: "329513636032",
+            appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const navContainerEl = document.getElementById('nav-container');
+        const menuTitleRt = document.getElementById('menuTitleRt');
+        const headerRtRw = document.getElementById('headerRtRw');
+        const mobileRunningText = document.getElementById('mobileRunningText');
+
+        // Langsung render navigasi bawah saat pertama kali script dieksekusi (tanpa menunggu Firebase)
+        if (navContainerEl) {
+            navContainerEl.innerHTML = renderNavigation('more', true, 'pengurus');
+        }
+
+        // Toggle Dark/Light Mode
+        window.toggleDarkMode = function() {
+            const htmlEl = document.documentElement;
+            const themeIconMobile = document.getElementById('themeIconMobile');
+            if (htmlEl.classList.contains('dark')) {
+                htmlEl.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                if (themeIconMobile) themeIconMobile.className = "fa-solid fa-moon text-xs";
+            } else {
+                htmlEl.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                if (themeIconMobile) themeIconMobile.className = "fa-solid fa-sun text-xs text-yellow-400";
+            }
+        };
+
+        // Toggle Pop-up More
+        window.toggleMorePopup = function(event) {
+            if (event) event.stopPropagation();
+            const menu = document.getElementById('morePopupMenu');
+            if (menu) {
+                if (menu.classList.contains('hidden')) {
+                    menu.classList.remove('hidden');
+                    setTimeout(() => {
+                        menu.classList.remove('opacity-0', 'scale-95', 'translate-y-2');
+                        menu.classList.add('opacity-100', 'scale-100', 'translate-y-0');
+                    }, 10);
+                } else {
+                    menu.classList.remove('opacity-100', 'scale-100', 'translate-y-0');
+                    menu.classList.add('opacity-0', 'scale-95', 'translate-y-2');
+                    setTimeout(() => {
+                        menu.classList.add('hidden');
+                    }, 200);
+                }
+            }
+        };
+
+        window.addEventListener('click', function() {
+            const menu = document.getElementById('morePopupMenu');
+            if (menu && !menu.classList.contains('hidden')) {
+                menu.classList.remove('opacity-100', 'scale-100', 'translate-y-0');
+                menu.classList.add('opacity-0', 'scale-95', 'translate-y-2');
+                setTimeout(() => {
+                    menu.classList.add('hidden');
+                }, 200);
+            }
+        });
+
+        async function loadHeaderData() {
+            try {
+                const docRef = doc(db, "settings", "profilWilayah");
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    const rt = data.rtNumber || "RT 10";
+                    const rw = data.rwNumber || "RW 00";
+                    const kelurahan = data.kelurahan || "Sumberan Ngestiharjo";
+                    const kecamatan = data.kecamatan || "Kasihan";
+
+                    if (headerRtRw) headerRtRw.innerText = `${rt} / ${rw} - ${kelurahan}, ${kecamatan}`;
+                    if (menuTitleRt) menuTitleRt.innerText = `Menu Pengelolaan ${rt}`;
+                }
+
+                const querySnapshot = await getDocs(collection(db, "runningTextTemplates"));
+                if (!querySnapshot.empty) {
+                    const docData = querySnapshot.docs[0].data();
+                    if (docData.content && mobileRunningText) {
+                        mobileRunningText.innerText = docData.content;
+                    }
+                }
+            } catch (error) {
+                console.error("Gagal memuat header:", error);
+            }
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                await loadHeaderData();
+                try {
+                    const userDocSnap = await getDoc(doc(db, "users", user.uid));
+                    if (userDocSnap.exists()) {
+                        const data = userDocSnap.data();
+                        const namaWarga = data.name || data.nama || user.displayName || "Warga RT";
+                        const userRole = data.role || data.hakAkses || data.level || 'pengurus';
+                        
+                        const nameParts = namaWarga.trim().split(" ");
+                        let initials = "RT";
+                        if (nameParts.length >= 2) {
+                            initials = (nameParts[0][0] + nameParts[1][0]).toUpperCase();
+                        } else if (nameParts.length === 1 && nameParts[0].length > 0) {
+                            initials = nameParts[0].substring(0, 2).toUpperCase();
+                        }
+                        const userInitialsEl = document.getElementById('userInitials');
+                        if (userInitialsEl) userInitialsEl.innerText = initials;
+
+                        // Perbarui ulang navigasi dengan role akun yang valid dari database
+                        if (navContainerEl) {
+                            navContainerEl.innerHTML = renderNavigation('more', true, userRole);
+                        }
+                    }
+                } catch (e) {
+                    console.error("Gagal memuat profil user:", e);
+                }
+            } else {
+                window.location.replace("../index.html");
+            }
+        });
+    </script>
+</body>
+</html>

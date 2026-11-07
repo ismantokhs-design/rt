@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="id" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Warga</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none !important;
+            width: 0px !important;
+            height: 0px !important;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+        body {
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+    </style>
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+
+        window.addEventListener('DOMContentLoaded', () => {
+            document.body.style.opacity = '1';
+            const savedState = localStorage.getItem('sidebarState');
+            const sidebar = document.getElementById('desktopSidebar');
+            if (sidebar && savedState === 'collapsed') {
+                sidebar.style.width = '5rem';
+                sidebar.classList.remove('w-64');
+                sidebar.classList.add('w-20');
+                document.querySelectorAll('.sidebar-text').forEach(el => {
+                    el.style.display = 'none';
+                    el.classList.add('hidden');
+                });
+            }
+        });
+    </script>
+</head>
+<body class="bg-slate-900 font-['Inter'] h-screen overflow-hidden m-0 flex flex-col items-center justify-center">
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-slate-900/95 dark:bg-slate-800 border border-slate-700 text-white px-4 py-2.5 rounded-none shadow-2xl text-xs font-medium flex items-center space-x-2 z-50 transition-all duration-300 opacity-0 pointer-events-none translate-y-[-20px]">
+        <div id="toastIconContainer" class="w-5 h-5 rounded-none bg-emerald-500 text-white flex items-center justify-center text-[10px] shadow">
+            <i id="toastIcon" class="fa-solid fa-check"></i>
+        </div>
+        <span id="toastText">Berhasil!</span>
+    </div>
+
+    <!-- Dropdown Menu Universal -->
+    <div id="userDropdownMenu" class="fixed right-6 top-16 w-56 bg-white dark:bg-slate-800 rounded-none shadow-2xl border border-slate-200 dark:border-slate-700 py-2 hidden transition-all transform origin-top-right z-50">
+        <div onclick="openProfileModal()" class="px-4 py-2.5 border-b border-slate-100 dark:border-slate-700 hover:bg-emerald-50/60 dark:hover:bg-slate-700 cursor-pointer transition-all group">
+            <div class="flex items-center justify-between">
+                <div class="overflow-hidden">
+                    <p id="dropdownName" class="font-bold text-slate-800 dark:text-slate-100 text-xs truncate group-hover:text-emerald-700">Nama Warga</p>
+                    <p id="dropdownEmail" class="text-[10px] text-slate-400 dark:text-slate-400 truncate">email@domain.com</p>
+                    <p id="dropdownRole" class="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 truncate mt-0.5">Role: Memuat...</p>
+                </div>
+                <i class="fa-solid fa-pen-to-square text-[10px] text-slate-400 group-hover:text-emerald-600 shrink-0 ml-2"></i>
+            </div>
+        </div>
+
+        <div class="py-1 border-b border-slate-100 dark:border-slate-700">
+            <a id="dropdownResetData" href="layout.html?page=reset-data" onclick="toggleUserDropdown()" class="hidden w-full text-left px-4 py-2 text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 items-center space-x-2 transition-all">
+                <i class="fa-solid fa-database w-4 text-red-500"></i>
+                <span>Reset Data</span>
+            </a>
+        </div>
+
+        <div class="py-1">
+            <button type="button" id="btnLogout" class="w-full text-left px-4 py-2 text-xs text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-slate-700 flex items-center space-x-2 cursor-pointer transition-all">
+                <i class="fa-solid fa-power-off w-4"></i>
+                <span>Keluar Akun</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- TAMPILAN DESKTOP -->
+    <div class="hidden md:flex w-full h-screen bg-slate-100 dark:bg-slate-900 overflow-hidden">
+        
+        <!-- SIDEBAR GLOBAL DESKTOP -->
+        <aside id="desktopSidebar" class="w-64 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 flex flex-col justify-between shrink-0 h-screen transition-all duration-300 relative border-r border-slate-200 dark:border-slate-700 shadow-sm">
+            <div class="p-4 flex items-center justify-between border-b border-slate-100 dark:border-slate-700 shrink-0 overflow-hidden">
+                <div class="flex items-center space-x-3 overflow-hidden">
+                    <div class="w-9 h-9 rounded-none bg-emerald-600 text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-md">
+                        <i class="fa-solid fa-house-chimney"></i>
+                    </div>
+                    <div class="sidebar-text overflow-hidden whitespace-nowrap">
+                        <h1 class="font-bold text-slate-800 dark:text-slate-100 text-xs tracking-wider">RT-KU ONLINE</h1>
+                        <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium truncate">Sistem Layanan Warga</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto no-scrollbar py-4 px-3 space-y-2">
+                <div class="pb-1 px-3">
+                    <span class="sidebar-text text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Warga</span>
+                </div>
+
+                <a href="layout.html?page=home" class="flex items-center space-x-3 px-3 py-2.5 rounded-none hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium text-xs transition-all">
+                    <i class="fa-solid fa-house w-5 text-center text-xs"></i>
+                    <span class="sidebar-text">Home</span>
+                </a>
+                <a href="layout.html?page=profil-view" class="flex items-center space-x-3 px-3 py-2.5 rounded-none hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium text-xs transition-all">
+                    <i class="fa-solid fa-building-shield w-5 text-center text-xs"></i>
+                    <span class="sidebar-text">Profil</span>
+                </a>
+                <a href="layout.html?page=galeri" class="flex items-center space-x-3 px-3 py-2.5 rounded-none hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium text-xs transition-all">
+                    <i class="fa-solid fa-images w-5 text-center text-xs"></i>
+                    <span class="sidebar-text">Galeri</span>
+                </a>
+                <a href="layout.html?page=umkm" class="flex items-center space-x-3 px-3 py-2.5 rounded-none hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium text-xs transition-all">
+                    <i class="fa-solid fa-store w-5 text-center text-xs"></i>
+                    <span class="sidebar-text">UMKM</span>
+                </a>
+                <a href="layout.html?page=kas" class="flex items-center space-x-3 px-3 py-2.5 rounded-none hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium text-xs transition-all">
+                    <i class="fa-solid fa-wallet w-5 text-center text-xs"></i>
+                    <span class="sidebar-text">Kas RT</span>
+                </a>
+
+                <div class="pt-4 pb-1 px-3">
+                    <span class="sidebar-text text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Pengurus</span>
+                </div>
+
+                <a href="layout.html?page=data-warga" class="flex items-center space-x-3 px-3 py-2.5 rounded-none hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium text-xs transition-all">
+                    <i class="fa-solid fa-users w-5 text-center text-xs"></i>
+                    <span class="sidebar-text">Manajemen Warga</span>
+                </a>
+                <a href="layout.html?page=rapat" class="flex items-center space-x-3 px-3 py-2.5 rounded-none hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium text-xs transition-all">
+                    <i class="fa-solid fa-handshake w-5 text-center text-xs"></i>
+                    <span class="sidebar-text">Rapat</span>
+                </a>
+                <a href="layout.html?page=keuangan" class="flex items-center space-x-3 px-3 py-2.5 rounded-none hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium text-xs transition-all">
+                    <i class="fa-solid fa-file-invoice-dollar w-5 text-center text-xs"></i>
+                    <span class="sidebar-text">Keuangan</span>
+                </a>
+                <a href="layout.html?page=inventaris" class="flex items-center space-x-3 px-3 py-2.5 rounded-none hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium text-xs transition-all">
+                    <i class="fa-solid fa-boxes-stacked w-5 text-center text-xs"></i>
+                    <span class="sidebar-text">Aset</span>
+                </a>
+                <a href="layout.html?page=event" class="flex items-center space-x-3 px-3 py-2.5 rounded-none hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium text-xs transition-all">
+                    <i class="fa-solid fa-calendar-days w-5 text-center text-xs"></i>
+                    <span class="sidebar-text">Event</span>
+                </a>
+                <a href="layout.html?page=galeri-input" class="flex items-center space-x-3 px-3 py-2.5 rounded-none hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium text-xs transition-all">
+                    <i class="fa-solid fa-photo-film w-5 text-center text-xs"></i>
+                    <span class="sidebar-text">Galeri Input</span>
+                </a>
+                <a href="layout.html?page=banner" class="flex items-center space-x-3 px-3 py-2.5 rounded-none hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium text-xs transition-all">
+                    <i class="fa-solid fa-panorama w-5 text-center text-xs"></i>
+                    <span class="sidebar-text">Banner</span>
+                </a>
+                <a href="layout.html?page=running-text" class="flex items-center space-x-3 px-3 py-2.5 rounded-none hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium text-xs transition-all">
+                    <i class="fa-solid fa-bullhorn w-5 text-center text-xs"></i>
+                    <span class="sidebar-text">Running Text</span>
+                </a>
+                <a href="layout.html?page=admin-qr" class="flex items-center space-x-3 px-3 py-2.5 rounded-none hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium text-xs transition-all">
+                    <i class="fa-solid fa-qrcode w-5 text-center text-xs"></i>
+                    <span class="sidebar-text">QR Code</span>
+                </a>
+
+                <div class="pt-4 pb-1 px-3">
+                    <span class="sidebar-text text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Administrator</span>
+                </div>
+
+                <a href="layout.html?page=admin-profil" class="flex items-center space-x-3 px-3 py-2.5 rounded-none hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium text-xs transition-all">
+                    <i class="fa-solid fa-id-card w-5 text-center text-xs"></i>
+                    <span class="sidebar-text">Profil</span>
+                </a>
+                <a href="layout.html?page=hak-akses" class="flex items-center space-x-3 px-3 py-2.5 rounded-none hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium text-xs transition-all">
+                    <i class="fa-solid fa-user-shield w-5 text-center text-xs"></i>
+                    <span class="sidebar-text">Hak Akses</span>
+                </a>
+                <a href="layout.html?page=setting-user" class="flex items-center space-x-3 px-3 py-2.5 rounded-none hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium text-xs transition-all">
+                    <i class="fa-solid fa-user-gear w-5 text-center text-xs"></i>
+                    <span class="sidebar-text">Setting User</span>
+                </a>
+            </div>
+
+            <div class="p-3 border-t border-slate-100 dark:border-slate-700 shrink-0 text-center">
+                <span class="sidebar-text text-[10px] text-slate-400">Copyright This Application-RTKu 2026</span>
+            </div>
+        </aside>
+
+        <!-- AREA UTAMA -->
+        <main class="flex-1 flex flex-col h-screen overflow-hidden bg-slate-50 dark:bg-slate-900">
+            <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex flex-col shrink-0 shadow-sm relative space-y-3">
+                <div class="flex items-center justify-between w-full">
+                    <div class="flex items-center space-x-3">
+                        <button type="button" onclick="toggleDesktopSidebar()" class="w-8 h-8 rounded-none bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 flex items-center justify-center transition-all cursor-pointer shrink-0 shadow-sm border border-slate-200 dark:border-slate-600">
+                            <i class="fa-solid fa-bars text-xs"></i>
+                        </button>
+                        <div class="flex items-center space-x-2 px-3 py-1.5">
+                            <i class="fa-solid fa-location-dot text-emerald-600 dark:text-emerald-400 text-xs shrink-0"></i>
+                            <span id="desktopRtRw" class="text-xs font-bold text-slate-700 dark:text-slate-200 tracking-wide">Memuat Alamat Wilayah...</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-3">
+                        <button type="button" onclick="toggleDarkMode()" class="w-9 h-9 rounded-none text-slate-700 dark:text-yellow-400 flex items-center justify-center transition-all cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700/50" title="Ubah Tema Terang/Gelap">
+                            <i id="themeIconDesktop" class="fa-solid fa-moon text-xs"></i>
+                        </button>
+
+                        <div class="relative shrink-0">
+                            <button type="button" id="desktopUserAvatarBtn" onclick="toggleUserDropdown()" class="flex items-center space-x-3 focus:outline-none cursor-pointer group">
+                                <div class="w-9 h-9 rounded-full bg-emerald-600 text-white font-bold text-xs shadow flex items-center justify-center border-2 border-emerald-500 transition-all group-hover:scale-105 overflow-hidden">
+                                    <span id="desktopUserInitials">RT</span>
+                                </div>
+                                <div class="text-left hidden lg:block">
+                                    <p id="desktopUserName" class="font-bold text-slate-800 dark:text-slate-100 text-xs leading-tight truncate max-w-[140px]">Memuat Warga...</p>
+                                    <p id="desktopUserEmail" class="text-[10px] text-slate-400 dark:text-slate-400 truncate max-w-[140px]">email@domain.com</p>
+                                </div>
+                                <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 group-hover:text-emerald-600 transition-transform"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 px-3 py-1.5 rounded-none text-xs shadow-inner">
+                    <i class="fa-solid fa-bullhorn text-amber-600 dark:text-amber-400 shrink-0 mr-2"></i>
+                    <marquee scrollamount="5" class="font-medium w-full">
+                        <span id="desktopRunningText">Memuat pengumuman...</span>
+                    </marquee>
+                </div>
+            </header>
+
+            <div id="mainContentArea" class="flex-1 flex flex-col overflow-y-auto px-6 pb-6 pt-2 space-y-6 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+            </div>
+        </main>
+    </div>
+
+    <!-- TAMPILAN MOBILE -->
+    <div class="flex md:hidden w-full h-screen sm:max-w-[400px] sm:h-[92vh] sm:max-h-[820px] bg-slate-50 dark:bg-slate-900 sm:rounded-none shadow-2xl flex-col justify-between relative sm:border-[6px] sm:border-slate-800">
+        <div class="bg-gradient-to-b from-emerald-600 to-emerald-700 dark:from-slate-800 dark:to-slate-900 text-white px-4 pt-4 pb-3 shrink-0 relative space-y-2 border-b border-emerald-800 dark:border-slate-700">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3 overflow-hidden">
+                    <div class="w-11 h-11 rounded-none bg-white/10 flex items-center justify-center text-white backdrop-blur-sm overflow-hidden p-1.5 shadow-sm border border-white/25 shrink-0">
+                        <img src="assets/icons/icon-192.png" alt="Logo" class="w-full h-full object-contain rounded-none">
+                    </div>
+                    <div class="overflow-hidden">
+                        <p id="greetingText" class="text-[11px] text-emerald-100 dark:text-slate-300 font-normal leading-tight">Selamat siang,</p>
+                        <h2 id="headerUserName" class="text-sm font-bold tracking-wide truncate text-white">Memuat Warga...</h2>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button type="button" onclick="toggleDarkMode()" class="w-9 h-9 rounded-none text-white dark:text-yellow-400 flex items-center justify-center transition-all cursor-pointer hover:bg-white/10">
+                        <i id="themeIconMobile" class="fa-solid fa-moon text-xs"></i>
+                    </button>
+                    <div class="relative shrink-0">
+                        <button type="button" id="userAvatarBtn" onclick="toggleUserDropdown()" class="w-10 h-10 rounded-full bg-white text-emerald-700 font-bold text-xs shadow-lg flex items-center justify-center border-2 border-emerald-500 cursor-pointer transition-all hover:scale-105 overflow-hidden">
+                            <span id="userInitials">RT</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2 w-fit py-0.5">
+                    <i class="fa-solid fa-location-dot text-emerald-300 dark:text-emerald-400 text-[11px]"></i>
+                    <span id="headerRtRw" class="text-[11px] font-bold text-white tracking-wide">RT 10 / RW 00 - Sumberan Ngestiharjo, Kasihan</span>
+                </div>
+            </div>
+
+            <div class="flex items-center bg-emerald-900/60 dark:bg-slate-800 border border-emerald-400/30 dark:border-slate-700 text-emerald-100 dark:text-slate-200 px-2.5 py-1 rounded-none text-[11px] shadow-inner">
+                <i class="fa-solid fa-bullhorn text-emerald-300 dark:text-emerald-400 shrink-0 mr-2"></i>
+                <marquee scrollamount="5" class="font-medium w-full">
+                    <span id="mobileRunningText">Memuat pengumuman...</span>
+                </marquee>
+            </div>
+        </div>
+
+        <div id="mainContentAreaMobile" class="flex-1 flex flex-col overflow-y-auto p-4 pb-32 space-y-4 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+        </div>
+
+        <div id="nav-container"></div>
+    </div>
+
+    <!-- Modal Lightbox Preview Gambar -->
+    <div id="imageModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] flex items-center justify-center p-4 hidden transition-all" onclick="closeImageModal()">
+        <div class="relative max-w-[90vw] max-h-[90vh] bg-white dark:bg-slate-800 p-2 shadow-2xl border border-slate-700 flex flex-col items-center" onclick="event.stopPropagation()">
+            <button type="button" onclick="closeImageModal()" class="absolute -top-3 -right-3 w-7 h-7 bg-slate-900 text-white rounded-full flex items-center justify-center text-xs shadow-lg cursor-pointer hover:bg-emerald-600 transition-all border border-slate-600 z-10">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <img id="modalImageSrc" src="" alt="Zoom" class="max-w-full max-h-[75vh] object-contain rounded-none">
+            <p id="modalImageCaption" class="text-slate-800 dark:text-slate-200 text-center text-xs mt-2 px-2 font-semibold"></p>
+        </div>
+    </div>
+
+    <!-- Modal Popup Detail UMKM -->
+    <div id="umkmModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-[9999] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-none shadow-2xl w-full max-w-lg overflow-hidden border border-slate-200 dark:border-slate-700 flex flex-col max-h-[90vh]">
+            <div class="bg-emerald-600 text-white px-4 py-3 flex items-center justify-between shrink-0">
+                <h3 class="font-bold text-xs sm:text-sm flex items-center space-x-2">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>Detail Informasi UMKM</span>
+                </h3>
+                <button id="closeModalBtn" onclick="closeUmkmModal()" class="w-7 h-7 bg-white/10 hover:bg-white/20 rounded-none flex items-center justify-center text-white cursor-pointer transition-all">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="p-4 overflow-y-auto space-y-4 flex-1 text-xs text-slate-800 dark:text-slate-100">
+                <div class="w-full h-56 bg-slate-100 dark:bg-slate-900 rounded-none overflow-hidden border border-slate-200 dark:border-slate-700 relative">
+                    <img id="modalImg" src="" alt="Detail UMKM" class="w-full h-full object-cover">
+                    <span id="modalKategori" class="absolute top-2 right-2 bg-emerald-600 text-white font-bold text-[10px] px-2 py-0.5 uppercase tracking-wider shadow">
+                        Kategori
+                    </span>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex items-start justify-between border-b border-slate-100 dark:border-slate-700 pb-2">
+                        <div>
+                            <span class="text-[10px] text-slate-400 block font-medium">Nama Usaha / Produk</span>
+                            <h4 id="modalNamaUsaha" class="font-bold text-slate-800 dark:text-slate-100 text-sm mt-0.5">-</h4>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[10px] text-slate-400 block font-medium">Harga</span>
+                            <span id="modalHarga" class="font-bold text-emerald-600 dark:text-emerald-400 text-sm mt-0.5 block">Rp 0</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 bg-slate-50 dark:bg-slate-700/50 p-3 border border-slate-200/70 dark:border-slate-700">
+                        <div>
+                            <span class="text-[10px] text-slate-400 block font-medium">Nama Pemilik</span>
+                            <p id="modalNamaPemilik" class="font-bold text-slate-700 dark:text-slate-200 text-xs mt-0.5">-</p>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 block font-medium">Kontak WhatsApp</span>
+                            <p id="modalPhone" class="font-bold text-slate-700 dark:text-slate-200 text-xs mt-0.5">-</p>
+                        </div>
+                        <div class="col-span-2">
+                            <span class="text-[10px] text-slate-400 block font-medium">Email Pemilik</span>
+                            <p id="modalEmail" class="font-medium text-slate-600 dark:text-slate-300 text-xs mt-0.5">-</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="text-[10px] text-slate-400 block font-medium">Deskripsi Lengkap</span>
+                        <p id="modalDeskripsi" class="font-normal text-slate-600 dark:text-slate-300 text-xs mt-1 leading-relaxed bg-white dark:bg-slate-700 p-2.5 border border-slate-200/60 dark:border-slate-600">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-3 bg-slate-50 dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700 shrink-0">
+                <a id="modalWaBtn" href="#" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-none transition-all text-xs flex items-center justify-center space-x-1.5 shadow-sm cursor-pointer">
+                    <i class="fa-brands fa-whatsapp text-sm"></i>
+                    <span>Pesan / Hubungi via WhatsApp</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- SKRIP UTAMA GLOBAL & ROUTER SPA -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { renderNavigation } from "./assets/js/navigation.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+            authDomain: "erte-979ca.firebaseapp.com",
+            projectId: "erte-979ca",
+            storageBucket: "erte-979ca.firebasestorage.app",
+            messagingSenderId: "329513636032",
+            appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUserRole = 'warga';
+
+        window.showToast = function(message) {
+            const toast = document.getElementById('toastNotification');
+            const toastText = document.getElementById('toastText');
+            if (toast && toastText) {
+                toastText.innerText = message;
+                toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+                toast.classList.add('opacity-100', 'translate-y-0');
+                setTimeout(() => {
+                    toast.classList.remove('opacity-100', 'translate-y-0');
+                    toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+                }, 1800);
+            }
+        };
+
+        window.toggleMorePopup = function(event) {
+            if (event) event.stopPropagation();
+            const menu = document.getElementById('morePopupMenu');
+            if (menu) {
+                menu.classList.toggle('hidden');
+            }
+        };
+
+        window.addEventListener('click', function() {
+            const menu = document.getElementById('morePopupMenu');
+            if (menu && !menu.classList.contains('hidden')) {
+                menu.classList.add('hidden');
+            }
+        });
+
+        window.toggleDarkMode = function() {
+            const htmlEl = document.documentElement;
+            const themeIconDesktop = document.getElementById('themeIconDesktop');
+            const themeIconMobile = document.getElementById('themeIconMobile');
+
+            if (htmlEl.classList.contains('dark')) {
+                htmlEl.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                if (themeIconDesktop) { themeIconDesktop.className = "fa-solid fa-moon text-xs"; }
+                if (themeIconMobile) { themeIconMobile.className = "fa-solid fa-moon text-xs"; }
+            } else {
+                htmlEl.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                if (themeIconDesktop) { themeIconDesktop.className = "fa-solid fa-sun text-xs text-yellow-400"; }
+                if (themeIconMobile) { themeIconMobile.className = "fa-solid fa-sun text-xs text-yellow-400"; }
+            }
+        };
+
+        function initThemeIcons() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const themeIconDesktop = document.getElementById('themeIconDesktop');
+            const themeIconMobile = document.getElementById('themeIconMobile');
+            if (isDark) {
+                if (themeIconDesktop) themeIconDesktop.className = "fa-solid fa-sun text-xs text-yellow-400";
+                if (themeIconMobile) themeIconMobile.className = "fa-solid fa-sun text-xs text-yellow-400";
+            } else {
+                if (themeIconDesktop) themeIconDesktop.className = "fa-solid fa-moon text-xs";
+                if (themeIconMobile) themeIconMobile.className = "fa-solid fa-moon text-xs";
+            }
+        }
+
+        window.toggleDesktopSidebar = function() {
+            const sidebar = document.getElementById('desktopSidebar');
+            if (sidebar) {
+                if (sidebar.classList.contains('w-64') || sidebar.style.width === '16rem' || sidebar.style.width === '') {
+                    sidebar.style.width = '5rem';
+                    sidebar.classList.remove('w-64');
+                    sidebar.classList.add('w-20');
+                    document.querySelectorAll('.sidebar-text').forEach(el => {
+                        el.style.display = 'none';
+                        el.classList.add('hidden');
+                    });
+                    localStorage.setItem('sidebarState', 'collapsed');
+                } else {
+                    sidebar.style.width = '16rem';
+                    sidebar.classList.remove('w-20');
+                    sidebar.classList.add('w-64');
+                    document.querySelectorAll('.sidebar-text').forEach(el => {
+                        el.style.display = 'block';
+                        el.classList.remove('hidden');
+                    });
+                    localStorage.setItem('sidebarState', 'expanded');
+                }
+            }
+        };
+
+        window.toggleUserDropdown = function() {
+            const userDropdown = document.getElementById('userDropdownMenu');
+            if (userDropdown) userDropdown.classList.toggle('hidden');
+        };
+
+        window.openImageModal = function(url, caption) {
+            const modal = document.getElementById('imageModal');
+            const img = document.getElementById('modalImageSrc');
+            const cap = document.getElementById('modalImageCaption');
+            if (img) img.src = url;
+            if (cap) cap.innerText = caption;
+            if (modal) modal.classList.remove('hidden');
+        };
+
+        window.closeImageModal = function() {
+            const modal = document.getElementById('imageModal');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        window.closeUmkmModal = function() {
+            const umkmModal = document.getElementById('umkmModal');
+            if (umkmModal) umkmModal.classList.add('hidden');
+        };
+
+        const umkmModalEl = document.getElementById('umkmModal');
+        if (umkmModalEl) {
+            umkmModalEl.addEventListener('click', (e) => {
+                if (e.target === umkmModalEl) closeUmkmModal();
+            });
+        }
+
+        const btnLogout = document.getElementById('btnLogout');
+        if (btnLogout) {
+            btnLogout.addEventListener('click', async () => {
+                try {
+                    await signOut(auth);
+                    window.location.replace("index.html");
+                } catch (error) {
+                    console.error("Gagal keluar akun:", error);
+                }
+            });
+        }
+
+        async function loadHeaderWilayah() {
+            try {
+                const docRef = doc(db, "settings", "profilWilayah");
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    const rt = data.rtNumber || "RT 10";
+                    const rw = data.rwNumber || "RW 00";
+                    const kelurahan = data.kelurahan || "Sumberan Ngestiharjo";
+                    const kecamatan = data.kecamatan || "Kasihan";
+
+                    const alamatLengkap = `${rt} / ${rw} - ${kelurahan}, ${kecamatan}`;
+
+                    const mobileRtRw = document.getElementById('headerRtRw');
+                    if (mobileRtRw) mobileRtRw.innerText = alamatLengkap;
+
+                    const desktopRtRw = document.getElementById('desktopRtRw');
+                    if (desktopRtRw) desktopRtRw.innerText = alamatLengkap;
+                }
+            } catch (error) {
+                console.error("Gagal memuat profil wilayah:", error);
+            }
+        }
+
+        async function loadRunningText() {
+            try {
+                const docRef = doc(db, "settings", "runningText");
+                const docSnap = await getDoc(docRef);
+                
+                let textContent = "Selamat datang di Layanan Warga RT-Ku";
+                
+                if (docSnap.exists() && docSnap.data().text) {
+                    textContent = docSnap.data().text;
+                }
+
+                const desktopRunningText = document.getElementById('desktopRunningText');
+                if (desktopRunningText) desktopRunningText.innerText = textContent;
+
+                const mobileRunningText = document.getElementById('mobileRunningText');
+                if (mobileRunningText) mobileRunningText.innerText = textContent;
+            } catch (error) {
+                console.error("Gagal memuat running text:", error);
+            }
+        }
+
+        async function loadUserProfile(user) {
+            try {
+                let userDocRef = doc(db, "users", user.uid);
+                let userDocSnap = await getDoc(userDocRef);
+
+                let namaWarga = user.displayName || "Warga RT";
+                let emailWarga = user.email;
+                let roleWarga = "warga";
+                let initials = "RT";
+
+                if (userDocSnap.exists()) {
+                    const data = userDocSnap.data();
+                    namaWarga = data.name || data.nama || namaWarga;
+                    roleWarga = data.role || data.hakAkses || data.level || roleWarga;
+                } else {
+                    const qEmail = query(collection(db, "users"), where("email", "==", user.email));
+                    const snapEmail = await getDocs(qEmail);
+                    if (!snapEmail.empty) {
+                        const data = snapEmail.docs[0].data();
+                        namaWarga = data.name || data.nama || namaWarga;
+                        roleWarga = data.role || data.hakAkses || data.level || roleWarga;
+                    } else {
+                        const docByEmailRef = doc(db, "users", user.email);
+                        const docByEmailSnap = await getDoc(docByEmailRef);
+                        if (docByEmailSnap.exists()) {
+                            const data = docByEmailSnap.data();
+                            namaWarga = data.name || data.nama || namaWarga;
+                            roleWarga = data.role || data.hakAkses || data.level || roleWarga;
+                        }
+                    }
+                }
+
+                currentUserRole = roleWarga;
+
+                const hour = new Date().getHours();
+                let greeting = "Selamat malam,";
+                if (hour >= 4 && hour < 11) {
+                    greeting = "Selamat pagi,";
+                } else if (hour >= 11 && hour < 15) {
+                    greeting = "Selamat siang,";
+                } else if (hour >= 15 && hour < 18) {
+                    greeting = "Selamat sore,";
+                }
+                
+                const greetingEl = document.getElementById('greetingText');
+                if (greetingEl) greetingEl.innerText = greeting;
+
+                const nameParts = namaWarga.trim().split(" ");
+                if (nameParts.length >= 2) {
+                    initials = (nameParts[0][0] + nameParts[1][0]).toUpperCase();
+                } else if (nameParts.length === 1 && nameParts[0].length > 0) {
+                    initials = nameParts[0].substring(0, 2).toUpperCase();
+                }
+
+                if (document.getElementById('desktopUserName')) document.getElementById('desktopUserName').innerText = namaWarga;
+                if (document.getElementById('desktopUserEmail')) document.getElementById('desktopUserEmail').innerText = emailWarga;
+                if (document.getElementById('desktopUserInitials')) document.getElementById('desktopUserInitials').innerText = initials;
+
+                if (document.getElementById('headerUserName')) document.getElementById('headerUserName').innerText = namaWarga;
+                if (document.getElementById('userInitials')) document.getElementById('userInitials').innerText = initials;
+
+                if (document.getElementById('dropdownName')) document.getElementById('dropdownName').innerText = namaWarga;
+                if (document.getElementById('dropdownEmail')) document.getElementById('dropdownEmail').innerText = emailWarga;
+                
+                const dropdownRoleEl = document.getElementById('dropdownRole');
+                if (dropdownRoleEl) dropdownRoleEl.innerText = `Role: ${roleWarga}`;
+
+                const dropdownResetData = document.getElementById('dropdownResetData');
+                if (dropdownResetData) {
+                    if (roleWarga.toLowerCase() === 'administrator') {
+                        dropdownResetData.classList.remove('hidden');
+                        dropdownResetData.classList.add('flex');
+                    } else {
+                        dropdownResetData.classList.remove('flex');
+                        dropdownResetData.classList.add('hidden');
+                    }
+                }
+
+            } catch (error) {
+                console.error("Gagal memuat profil user:", error);
+            }
+        }
+
+        async function loadPageContent(targetUrl) {
+            try {
+                if (targetUrl) {
+                    window.history.pushState({}, '', targetUrl);
+                }
+
+                const urlParams = new URLSearchParams(window.location.search);
+                const page = urlParams.get('page') || 'home'; 
+                
+                let fileName = '';
+                if (page === 'home') fileName = 'home.html';
+                else if (page === 'profil-view') fileName = 'pages/profil-view.html'; 
+                else if (page === 'galeri') fileName = 'pages/galeri.html';
+                else if (page === 'umkm') fileName = 'pages/umkm-view.html';
+                else if (page === 'kas') fileName = 'pages/keuangan-view.html';
+                else if (page === 'kalender') fileName = 'pages/kalender.html';
+                else if (page === 'data-warga' || page === 'manajemen-warga') fileName = 'pages/data-warga.html';
+                
+                else if (page === 'warga') fileName = 'pages/warga.html';
+                else if (page === 'sensus') fileName = 'pages/sensus.html';
+                else if (page === 'kelahiran') fileName = 'pages/kelahiran.html';
+                else if (page === 'kematian') fileName = 'pages/kematian.html';
+                else if (page === 'pindah-masuk') fileName = 'pages/pindah-masuk.html';
+                else if (page === 'pindah-keluar') fileName = 'pages/pindah-keluar.html';
+                else if (page === 'koreksi-penulisan') fileName = 'pages/koreksi-penulisan.html';
+                else if (page === 'data-statistik') fileName = 'pages/data-statistik.html';
+                else if (page === 'pengaturan-warga') fileName = 'pages/pengaturan-warga.html';
+
+                else if (page === 'rapat') fileName = 'pages/rapat.html';
+                else if (page === 'keuangan') fileName = 'pages/keuangan.html';
+                else if (page === 'inventaris') fileName = 'pages/inventaris.html';
+                else if (page === 'event') fileName = 'pages/event-input.html';
+                else if (page === 'galeri-input') fileName = 'pages/galeri-input.html';
+                else if (page === 'banner') fileName = 'pages/banner.html';
+                else if (page === 'running-text') fileName = 'pages/running-text.html';
+                else if (page === 'admin-qr' || page === 'qr') fileName = 'pages/admin-qr.html';
+                else if (page === 'admin-profil') fileName = 'pages/profil.html';
+                else if (page === 'hak-akses') fileName = 'pages/hak-akses.html';
+                else if (page === 'setting-user') fileName = 'pages/setting-user.html';
+                else if (page === 'reset-data') fileName = 'pages/reset-data.html';
+                else fileName = 'home.html';
+
+                const response = await fetch(fileName);
+                if (!response.ok) throw new Error("Gagal memuat halaman " + fileName);
+                const html = await response.text();
+                
+                const parser = new DOMParser();
+                const docParsed = parser.parseFromString(html, 'text/html');
+                
+                const desktopArea = document.getElementById('mainContentArea');
+                const mobileArea = document.getElementById('mainContentAreaMobile');
+
+                const targetDesktopContent = docParsed.getElementById('spaAppContainer') || docParsed.body;
+                const targetMobileContent = docParsed.getElementById('spaAppContainerMobile') || docParsed.body;
+
+                if (desktopArea) {
+                    desktopArea.innerHTML = targetDesktopContent.innerHTML;
+                }
+                if (mobileArea) {
+                    mobileArea.innerHTML = targetMobileContent.innerHTML;
+                }
+
+                // Bersihkan skrip dinamis lama agar tidak menumpuk/bentrok
+                document.querySelectorAll('script[data-dynamic-script]').forEach(el => el.remove());
+
+                docParsed.querySelectorAll('script').forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    newScript.setAttribute('data-dynamic-script', 'true');
+                    
+                    if (oldScript.type) {
+                        newScript.type = oldScript.type;
+                    } else {
+                        newScript.type = "module";
+                    }
+                    
+                    if (oldScript.src) {
+                        newScript.src = oldScript.src;
+                    } else {
+                        newScript.textContent = oldScript.textContent;
+                    }
+                    
+                    document.body.appendChild(newScript);
+                });
+
+                loadHeaderWilayah();
+                loadRunningText();
+
+                const navContainerEl = document.getElementById('nav-container');
+                if (navContainerEl) {
+                    let activeNav = page;
+                    if (page === 'kas') activeNav = 'keuangan';
+                    navContainerEl.innerHTML = renderNavigation(activeNav, false, currentUserRole);
+                }
+
+                document.querySelectorAll('#desktopSidebar a').forEach(el => {
+                    el.classList.remove('bg-emerald-600', 'text-white', 'shadow-sm');
+                    el.classList.add('hover:bg-slate-100', 'dark:hover:bg-slate-700', 'text-slate-600', 'dark:text-slate-300');
+                    if (el.getAttribute('href') === `layout.html?page=${page}`) {
+                        el.classList.add('bg-emerald-600', 'text-white', 'shadow-sm');
+                        el.classList.remove('hover:bg-slate-100', 'dark:hover:bg-slate-700', 'text-slate-600', 'dark:text-slate-300');
+                    }
+                });
+
+            } catch (error) {
+                console.error("Error loading page:", error);
+            }
+        }
+
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('a');
+            if (link && link.href && link.href.includes('layout.html?page=')) {
+                e.preventDefault();
+                loadPageContent(link.href);
+            }
+        });
+
+        window.addEventListener('popstate', () => {
+            loadPageContent();
+        });
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                initThemeIcons();
+                await loadUserProfile(user);
+                await loadHeaderWilayah();
+                await loadRunningText();
+                await loadPageContent();
+            } else {
+                window.location.replace("index.html");
+            }
+        });
+    </script>
+</body>
+</html>

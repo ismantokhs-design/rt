@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sensus Pendidikan - RT-Ku</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none !important;
+            width: 0px !important;
+            height: 0px !important;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 font-['Inter'] flex justify-center items-center h-screen overflow-hidden m-0">
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-slate-900/95 border border-slate-700 text-white px-4 py-2.5 rounded-none shadow-2xl text-xs font-medium flex items-center space-x-2 z-50 transition-all duration-300 opacity-0 pointer-events-none translate-y-[-20px]">
+        <div class="w-5 h-5 rounded-none bg-emerald-500 text-white flex items-center justify-center text-[10px] shadow">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <span id="toastText">Berhasil!</span>
+    </div>
+
+    <!-- Container HP Frame -->
+    <div class="w-full h-screen sm:max-w-[400px] sm:h-[92vh] sm:max-h-[820px] bg-slate-50 sm:rounded-[35px] shadow-2xl flex flex-col justify-between relative overflow-hidden sm:border-[6px] sm:border-slate-800">
+        
+        <!-- Header -->
+        <div class="bg-gradient-to-b from-emerald-600 to-emerald-700 text-white p-5 rounded-b-[28px] flex items-center justify-between shrink-0">
+            <a href="data-warga.html" class="w-9 h-9 rounded-none bg-white/10 flex items-center justify-center text-white backdrop-blur-sm transition-all hover:bg-white/20">
+                <i class="fa-solid fa-arrow-left text-xs"></i>
+            </a>
+            <h1 class="font-bold text-sm tracking-wide">Sensus Pendidikan</h1>
+            <div class="w-9"></div>
+        </div>
+
+        <!-- Content (Scrollable Grid Menu tanpa Scrollbar) -->
+        <div class="p-4 flex-1 overflow-y-auto no-scrollbar pb-6 space-y-4">
+            
+            <h2 class="font-bold text-slate-800 text-xs px-1">Daftar Jenjang Pendidikan Warga</h2>
+
+            <!-- Grid Menu 2 Kolom -->
+            <div class="grid grid-cols-2 gap-3">
+                
+                <!-- Menu 1: Belum / Tidak Sekolah -->
+                <a href="pendidikan-belum-sekolah.html" class="bg-white p-5 rounded-none border border-slate-200/70 shadow-sm hover:border-emerald-500 hover:shadow-md transition-all flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <div class="w-12 h-12 rounded-none bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg mb-3 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm">
+                        <i class="fa-solid fa-child"></i>
+                    </div>
+                    <span class="font-bold text-slate-800 text-xs group-hover:text-emerald-700">Belum Sekolah</span>
+                    <span class="text-[10px] text-slate-400 mt-0.5">Usia dini & balita</span>
+                </a>
+
+                <!-- Menu 2: SD / Sederajat -->
+                <a href="pendidikan-sd.html" class="bg-white p-5 rounded-none border border-slate-200/70 shadow-sm hover:border-emerald-500 hover:shadow-md transition-all flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <div class="w-12 h-12 rounded-none bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg mb-3 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm">
+                        <i class="fa-solid fa-school"></i>
+                    </div>
+                    <span class="font-bold text-slate-800 text-xs group-hover:text-emerald-700">SD / Sederajat</span>
+                    <span class="text-[10px] text-slate-400 mt-0.5">Sekolah Dasar / MI</span>
+                </a>
+
+                <!-- Menu 3: SMP / Sederajat -->
+                <a href="pendidikan-smp.html" class="bg-white p-5 rounded-none border border-slate-200/70 shadow-sm hover:border-emerald-500 hover:shadow-md transition-all flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <div class="w-12 h-12 rounded-none bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg mb-3 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <span class="font-bold text-slate-800 text-xs group-hover:text-emerald-700">SMP / Sederajat</span>
+                    <span class="text-[10px] text-slate-400 mt-0.5">Sekolah Menengah Pertama</span>
+                </a>
+
+                <!-- Menu 4: SMA / Sederajat -->
+                <a href="pendidikan-sma.html" class="bg-white p-5 rounded-none border border-slate-200/70 shadow-sm hover:border-emerald-500 hover:shadow-md transition-all flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <div class="w-12 h-12 rounded-none bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg mb-3 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <span class="font-bold text-slate-800 text-xs group-hover:text-emerald-700">SMA / SMK / Sederajat</span>
+                    <span class="text-[10px] text-slate-400 mt-0.5">Sekolah Menengah Atas</span>
+                </a>
+
+                <!-- Menu 5: Diploma (D1/D2/D3/D4) -->
+                <a href="pendidikan-diploma.html" class="bg-white p-5 rounded-none border border-slate-200/70 shadow-sm hover:border-emerald-500 hover:shadow-md transition-all flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <div class="w-12 h-12 rounded-none bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg mb-3 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm">
+                        <i class="fa-solid fa-scroll"></i>
+                    </div>
+                    <span class="font-bold text-slate-800 text-xs group-hover:text-emerald-700">Diploma (D1-D4)</span>
+                    <span class="text-[10px] text-slate-400 mt-0.5">Pendidikan vokasi</span>
+                </a>
+
+                <!-- Menu 6: Strata 1 (S1) -->
+                <a href="pendidikan-s1.html" class="bg-white p-5 rounded-none border border-slate-200/70 shadow-sm hover:border-emerald-500 hover:shadow-md transition-all flex flex-col items-center justify-center text-center group cursor-pointer">
+                    <div class="w-12 h-12 rounded-none bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg mb-3 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+                    <span class="font-bold text-slate-800 text-xs group-hover:text-emerald-700">Strata 1 (S1)</span>
+                    <span class="text-[10px] text-slate-400 mt-0.5">Sarjana strata 1</span>
+                </a>
+
+                <!-- Menu 7: Strata 2 & 3 (S2/S3) -->
+                <a href="pendidikan-s2-s3.html" class="bg-white p-5 rounded-none border border-slate-200/70 shadow-sm hover:border-emerald-500 hover:shadow-md transition-all flex flex-col items-center justify-center text-center group cursor-pointer col-span-2">
+                    <div class="w-12 h-12 rounded-none bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg mb-3 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                    <span class="font-bold text-slate-800 text-xs group-hover:text-emerald-700">Strata 2 & Strata 3 (S2 / S3)</span>
+                    <span class="text-[10px] text-slate-400 mt-0.5">Magister & Doktoral</span>
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>

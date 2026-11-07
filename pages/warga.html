@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Warga - RT-Digital</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: { 600: '#059669', 700: '#047857' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col font-sans">
+
+    <!-- HEADER / NAVBAR -->
+    <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <a href="../layout.html?page=home" class="w-7 h-7 bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center text-xs shrink-0 border border-slate-200 dark:border-slate-600 hover:bg-emerald-50 hover:text-emerald-600 transition-all cursor-pointer" title="Kembali">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                <div>
+                    <h1 class="font-bold text-xs md:text-sm text-slate-800 dark:text-slate-100 tracking-wide uppercase">Manajemen Data Warga</h1>
+                    <p class="text-[10px] text-slate-400 dark:text-slate-500">Sistem Administrasi Warga RT-Ku</p>
+                </div>
+            </div>
+            <a href="tambah-warga.html" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold px-3 py-1.5 uppercase transition-all flex items-center space-x-1 shadow-sm">
+                <i class="fa-solid fa-plus text-[9px]"></i>
+                <span>Tambah KK</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- KONTEN UTAMA -->
+    <main class="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6 pb-28 space-y-4">
+
+        <!-- NAVIGASI 2 TAB -->
+        <div class="flex border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 pt-2 shadow-sm">
+            <button onclick="switchTab('kepala')" id="btnTabKepala" class="flex-1 pb-3 text-xs md:text-sm font-bold uppercase border-b-2 border-emerald-600 text-emerald-600 dark:text-emerald-400 transition-all cursor-pointer">
+                <i class="fa-solid fa-house-user mr-1.5"></i> Kepala Keluarga
+            </button>
+            <button onclick="switchTab('warga')" id="btnTabWarga" class="flex-1 pb-3 text-xs md:text-sm font-bold uppercase border-b-2 border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-all cursor-pointer">
+                <i class="fa-solid fa-users mr-1.5"></i> Daftar Warga
+            </button>
+        </div>
+
+        <!-- KONTEN TAB 1: KEPALA KELUARGA -->
+        <div id="contentKepala" class="space-y-3">
+            <div class="bg-white dark:bg-slate-800 p-4 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase">Daftar Kepala Keluarga</span>
+                <span id="countKepala" class="text-xs bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 font-bold">0 Data</span>
+            </div>
+            <div id="listKepala" class="space-y-2">
+                <div class="text-center py-8 text-slate-400 text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                    <i class="fa-solid fa-spinner fa-spin text-lg mb-1"></i>
+                    <p>Memuat data kepala keluarga...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- KONTEN TAB 2: DAFTAR WARGA -->
+        <div id="contentWarga" class="space-y-3 hidden">
+            <div class="bg-white dark:bg-slate-800 p-4 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase">Seluruh Daftar Warga</span>
+                <span id="countWarga" class="text-xs bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 font-bold">0 Data</span>
+            </div>
+            <div id="listWarga" class="space-y-2">
+                <div class="text-center py-8 text-slate-400 text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                    <i class="fa-solid fa-spinner fa-spin text-lg mb-1"></i>
+                    <p>Memuat seluruh data warga...</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- SKRIP FIREBASE & LOGIKA TAMPILAN MANDIRI -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, query } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+            authDomain: "erte-979ca.firebaseapp.com",
+            projectId: "erte-979ca",
+            storageBucket: "erte-979ca.firebasestorage.app",
+            messagingSenderId: "329513636032",
+            appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.switchTab = function(tab) {
+            const btnKepala = document.getElementById('btnTabKepala');
+            const btnWarga = document.getElementById('btnTabWarga');
+            const contentKepala = document.getElementById('contentKepala');
+            const contentWarga = document.getElementById('contentWarga');
+
+            if (tab === 'kepala') {
+                if (btnKepala) btnKepala.className = "flex-1 pb-3 text-xs md:text-sm font-bold uppercase border-b-2 border-emerald-600 text-emerald-600 dark:text-emerald-400 transition-all cursor-pointer";
+                if (btnWarga) btnWarga.className = "flex-1 pb-3 text-xs md:text-sm font-bold uppercase border-b-2 border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-all cursor-pointer";
+                if (contentKepala) contentKepala.classList.remove('hidden');
+                if (contentWarga) contentWarga.classList.add('hidden');
+            } else {
+                if (btnWarga) btnWarga.className = "flex-1 pb-3 text-xs md:text-sm font-bold uppercase border-b-2 border-emerald-600 text-emerald-600 dark:text-emerald-400 transition-all cursor-pointer";
+                if (btnKepala) btnKepala.className = "flex-1 pb-3 text-xs md:text-sm font-bold uppercase border-b-2 border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-all cursor-pointer";
+                if (contentWarga) contentWarga.classList.remove('hidden');
+                if (contentKepala) contentKepala.classList.add('hidden');
+            }
+        };
+
+        async function loadData() {
+            try {
+                const q = query(collection(db, "dataWarga"));
+                const querySnapshot = await getDocs(q);
+                
+                let dataWargaList = [];
+                querySnapshot.forEach((doc) => {
+                    dataWargaList.push({ id: doc.id, ...doc.data() });
+                });
+
+                console.log("Data Warga Berhasil Dimuat:", dataWargaList);
+
+                const dataKepala = dataWargaList.filter(item => {
+                    const status = (item.statusHubungan || "").trim().toUpperCase();
+                    return status === "KEPALA KELUARGA" || status.includes("KEPALA") || status.includes("KK");
+                });
+
+                const finalKepala = dataKepala.length > 0 ? dataKepala : dataWargaList;
+
+                // Render Kepala Keluarga
+                const cKepala = document.getElementById('listKepala');
+                const cntKepala = document.getElementById('countKepala');
+                if (cntKepala) cntKepala.innerText = `${finalKepala.length} Data`;
+                if (cKepala) {
+                    if (finalKepala.length === 0) {
+                        cKepala.innerHTML = `<div class="p-6 text-center text-slate-400 text-xs bg-white dark:bg-slate-800">Belum ada data kepala keluarga.</div>`;
+                    } else {
+                        let html = '';
+                        finalKepala.forEach((item, index) => {
+                            html += `
+                                <div class="bg-white dark:bg-slate-800 p-4 border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+                                    <div class="space-y-1">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="font-bold text-emerald-600 dark:text-emerald-400">#${index + 1}</span>
+                                            <span class="font-bold uppercase text-slate-800 dark:text-slate-100 text-sm">${item.namaLengkap || item.namaKepalaKeluarga || 'Tanpa Nama'}</span>
+                                            <span class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[10px] px-2 py-0.5 font-bold uppercase">${item.statusHubungan || 'KEPALA KELUARGA'}</span>
+                                        </div>
+                                        <p class="text-slate-500">NIK: <span class="font-medium text-slate-700">${item.nik || '-'}</span> &bull; No. KK: <span class="font-medium text-slate-700">${item.noKk || item.nomorKK || '-'}</span></p>
+                                    </div>
+                                    <div class="shrink-0">
+                                        <span class="text-[10px] bg-emerald-50 text-emerald-700 px-2.5 py-1 border border-emerald-200 font-medium uppercase">${item.jenisKelamin || '-'}</span>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        cKepala.innerHTML = html;
+                    }
+                }
+
+                // Render Daftar Warga
+                const cWarga = document.getElementById('listWarga');
+                const cntWarga = document.getElementById('countWarga');
+                if (cntWarga) cntWarga.innerText = `${dataWargaList.length} Data`;
+                if (cWarga) {
+                    if (dataWargaList.length === 0) {
+                        cWarga.innerHTML = `<div class="p-6 text-center text-slate-400 text-xs bg-white dark:bg-slate-800">Belum ada data warga sama sekali.</div>`;
+                    } else {
+                        let html = '';
+                        dataWargaList.forEach((item, index) => {
+                            html += `
+                                <div class="bg-white dark:bg-slate-800 p-4 border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+                                    <div class="space-y-1">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="font-bold text-emerald-600 dark:text-emerald-400">#${index + 1}</span>
+                                            <span class="font-bold uppercase text-slate-800 dark:text-slate-100 text-sm">${item.namaLengkap || 'Tanpa Nama'}</span>
+                                            <span class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[10px] px-2 py-0.5 font-bold uppercase">${item.statusHubungan || 'WARGA'}</span>
+                                        </div>
+                                        <p class="text-slate-500">NIK: <span class="font-medium text-slate-700">${item.nik || '-'}</span> &bull; Kepala Keluarga: <span class="font-medium text-slate-700 uppercase">${item.namaKepalaKeluarga || '-'}</span></p>
+                                    </div>
+                                    <div class="shrink-0">
+                                        <span class="text-[10px] bg-slate-100 text-slate-700 px-2.5 py-1 font-medium uppercase">${item.jenisKelamin || '-'}</span>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        cWarga.innerHTML = html;
+                    }
+                }
+            } catch (err) {
+                console.error("Gagal menarik data Firestore:", err);
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

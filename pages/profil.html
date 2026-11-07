@@ -1,0 +1,629 @@
+<!-- Kontainer Mobile -->
+<div id="spaAppContainerMobile" class="flex md:hidden p-4 flex-1 overflow-y-auto no-scrollbar bg-slate-50 dark:bg-slate-900 flex-col space-y-4 w-full text-slate-800 dark:text-slate-100">
+    
+    <!-- Banner / Header Halaman Mobile -->
+    <div class="bg-gradient-to-r from-emerald-600 to-emerald-700 dark:from-slate-800 dark:to-slate-900 rounded-none p-4 text-white shadow-sm flex items-center justify-between gap-3 shrink-0">
+        <div>
+            <h2 class="text-xs font-bold tracking-wide">Profil Wilayah & Pengurus RT</h2>
+            <p class="text-[10px] text-emerald-100 dark:text-slate-300 mt-0.5">Kelola identitas wilayah & pengurus.</p>
+        </div>
+        <div class="w-10 h-10 bg-white/10 rounded-none flex items-center justify-center shrink-0">
+            <i class="fa-solid fa-building-shield text-sm text-white"></i>
+        </div>
+    </div>
+
+    <!-- Form Identitas Wilayah RT (Mobile) -->
+    <div class="bg-white dark:bg-slate-800 rounded-none p-4 shadow-sm border border-slate-200/70 dark:border-slate-700 space-y-3">
+        <div class="border-b border-slate-100 dark:border-slate-700 pb-2">
+            <h4 class="font-bold text-slate-800 dark:text-slate-100 text-[11px] uppercase tracking-wider">Form Identitas Wilayah RT</h4>
+        </div>
+
+        <form id="wilayahFormMobile" class="space-y-2.5 text-xs">
+            <div>
+                <label class="block text-[10px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Nomor RT & RW</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="text" id="rtNumberMobile" required placeholder="RT 05" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                    <input type="text" id="rwNumberMobile" required placeholder="RW 05" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Kelurahan / Desa</label>
+                <input type="text" id="kelurahanMobile" required placeholder="Kelurahan" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Kecamatan</label>
+                    <input type="text" id="kecamatanMobile" required placeholder="Kecamatan" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Kota / Kabupaten</label>
+                    <input type="text" id="kotaMobile" required placeholder="Kota" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Alamat Sekretariat</label>
+                <input type="text" id="alamatSekretariatMobile" placeholder="Alamat Balai RT" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Link Google Maps</label>
+                <input type="url" id="alamatMapsMobile" placeholder="https://maps.google.com/..." class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Deskripsi Wilayah</label>
+                <!-- Diperbesar menjadi rows="6" dan min-h-[100px] -->
+                <textarea id="descriptionMobile" rows="6" placeholder="Deskripsi..." class="w-full px-2.5 py-2 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-[100px]"></textarea>
+            </div>
+
+            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-none shadow transition-all text-xs cursor-pointer">
+                Simpan Perubahan Wilayah
+            </button>
+        </form>
+    </div>
+
+    <!-- Form Kelola Pengurus RT (Mobile) -->
+    <div class="bg-white dark:bg-slate-800 rounded-none p-4 shadow-sm border border-slate-200/70 dark:border-slate-700 space-y-3 mb-16">
+        <div class="border-b border-slate-100 dark:border-slate-700 pb-2 flex items-center justify-between">
+            <h4 class="font-bold text-slate-800 dark:text-slate-100 text-[11px] uppercase tracking-wider">Kelola Pengurus RT</h4>
+            <button type="button" onclick="openKategoriModal()" class="text-[10px] bg-emerald-50 dark:bg-slate-700 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded-none font-semibold">
+                Kategori
+            </button>
+        </div>
+
+        <form id="pengurusFormMobile" class="space-y-2.5 text-xs">
+            <div>
+                <label class="block text-[10px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Kategori Pengurus</label>
+                <select id="pengurusKategoriMobile" required class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                    <option value="">-- Pilih Kategori --</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Warga</label>
+                <select id="pengurusNamaMobile" required onchange="onPilihWargaMobile(this)" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                    <option value="">-- Pilih Warga --</option>
+                </select>
+            </div>
+
+            <input type="hidden" id="pengurusNikMobile">
+
+            <div>
+                <label class="block text-[10px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Nomor HP / WhatsApp</label>
+                <input type="tel" id="pengurusPhoneMobile" required placeholder="081234567890" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+            </div>
+
+            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-none shadow transition-all text-xs cursor-pointer">
+                <i class="fa-solid fa-plus mr-1"></i> Tambah Pengurus
+            </button>
+        </form>
+
+        <div class="pt-2 border-t border-slate-100 dark:border-slate-700 space-y-2">
+            <span class="block text-[10px] font-semibold text-slate-700 dark:text-slate-300">Daftar Pengurus</span>
+            <div id="listPengurusContainerMobile" class="space-y-2 max-h-[200px] overflow-y-auto no-scrollbar">
+                <div class="text-center py-3 text-slate-400 text-xs">Memuat data...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Kontainer Desktop -->
+<div id="spaAppContainer" class="hidden md:flex p-6 flex-1 overflow-y-auto no-scrollbar bg-slate-50 dark:bg-slate-900 flex-col space-y-6 w-full text-slate-800 dark:text-slate-100">
+    
+    <!-- Banner / Header Halaman Desktop -->
+    <div class="bg-gradient-to-r from-emerald-600 to-emerald-700 dark:from-slate-800 dark:to-slate-900 rounded-none p-6 text-white shadow-sm flex items-center justify-between gap-4 shrink-0 border border-transparent dark:border-slate-700">
+        <div>
+            <h2 class="text-sm sm:text-base font-bold tracking-wide">Profil Wilayah & Pengurus RT</h2>
+            <p class="text-xs text-emerald-100 dark:text-slate-300 mt-1">Perbarui informasi identitas wilayah RT, deskripsi, tautan Google Maps, serta data pengurus.</p>
+        </div>
+        <div class="w-12 h-12 bg-white/10 rounded-none flex items-center justify-center shrink-0">
+            <i class="fa-solid fa-building-shield text-lg text-white"></i>
+        </div>
+    </div>
+
+    <!-- Grid Layout Form Input Profil & Kelola Pengurus -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
+        
+        <!-- Form Profil Wilayah -->
+        <div class="bg-white dark:bg-slate-800 rounded-none p-5 shadow-sm border border-slate-200/70 dark:border-slate-700 space-y-4">
+            <div class="border-b border-slate-100 dark:border-slate-700 pb-2.5">
+                <h4 class="font-bold text-slate-800 dark:text-slate-100 text-xs uppercase tracking-wider">Form Identitas Wilayah RT</h4>
+            </div>
+
+            <form id="wilayahForm" class="space-y-3 text-xs">
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Nomor RT</label>
+                        <input type="text" id="rtNumber" required class="w-full px-3 py-2 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Nomor RW</label>
+                        <input type="text" id="rwNumber" required class="w-full px-3 py-2 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Kelurahan / Desa</label>
+                    <input type="text" id="kelurahan" required class="w-full px-3 py-2 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600">
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Kecamatan</label>
+                        <input type="text" id="kecamatan" required class="w-full px-3 py-2 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Kota / Kabupaten</label>
+                        <input type="text" id="kota" required class="w-full px-3 py-2 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Alamat Sekretariat</label>
+                    <input type="text" id="alamatSekretariat" class="w-full px-3 py-2 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600">
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Link Google Maps</label>
+                    <input type="url" id="alamatMaps" class="w-full px-3 py-2 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600">
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Deskripsi Wilayah</label>
+                    <!-- Diperbesar menjadi rows="8" dan min-h-[140px] agar lebih luas & lega -->
+                    <textarea id="description" rows="8" class="w-full px-3 py-2.5 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600 min-h-[140px]"></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-none shadow transition-all text-xs cursor-pointer">
+                    Simpan Perubahan Wilayah
+                </button>
+            </form>
+        </div>
+
+        <!-- Form Kelola Pengurus RT (Desktop) -->
+        <div class="bg-white dark:bg-slate-800 rounded-none p-5 shadow-sm border border-slate-200/70 dark:border-slate-700 space-y-4">
+            <div class="border-b border-slate-100 dark:border-slate-700 pb-2.5 flex items-center justify-between">
+                <h4 class="font-bold text-slate-800 dark:text-slate-100 text-xs uppercase tracking-wider">Kelola Data Pengurus RT</h4>
+                <button type="button" onclick="openKategoriModal()" class="text-[11px] bg-emerald-50 dark:bg-slate-700 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 px-2.5 py-1 rounded-none font-semibold transition-all flex items-center space-x-1 cursor-pointer">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Kategori</span>
+                </button>
+            </div>
+
+            <form id="pengurusForm" class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Pilih Kategori Pengurus</label>
+                    <select id="pengurusKategori" required class="w-full px-3 py-2 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600 cursor-pointer">
+                        <option value="">-- Pilih Kategori --</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Lengkap Pengurus (Dari Data Warga)</label>
+                    <select id="pengurusNama" required onchange="onPilihWarga(this)" class="w-full px-3 py-2 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600 cursor-pointer">
+                        <option value="">-- Pilih Nama Warga --</option>
+                    </select>
+                </div>
+
+                <input type="hidden" id="pengurusNik">
+
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Nomor HP / WhatsApp</label>
+                    <input type="tel" id="pengurusPhone" autocomplete="off" required placeholder="Contoh: 081234567890" class="w-full px-3 py-2 rounded-none border border-slate-200 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600">
+                </div>
+
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-none shadow transition-all text-xs cursor-pointer">
+                    <i class="fa-solid fa-plus mr-1"></i> Tambah Pengurus RT
+                </button>
+            </form>
+
+            <div class="pt-3 border-t border-slate-100 dark:border-slate-700 space-y-2">
+                <span class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300">Daftar Pengurus Terdaftar</span>
+                <div id="listPengurusContainer" class="space-y-2 max-h-[280px] overflow-y-auto no-scrollbar">
+                    <div class="text-center py-4 text-slate-400 text-xs">Memuat data pengurus...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL KELOLA KATEGORI PENGURUS RT -->
+<div id="kategoriModal" class="fixed inset-0 bg-black/50 backdrop-blur-[2px] z-50 flex items-center justify-center hidden transition-all duration-300 p-4">
+    <div class="w-full max-w-md bg-white dark:bg-slate-800 rounded-none p-5 shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col max-h-[85vh] text-slate-800 dark:text-slate-100">
+        <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100 dark:border-slate-700 shrink-0">
+            <div class="flex items-center space-x-2">
+                <div class="w-7 h-7 rounded-none bg-emerald-50 dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs">
+                    <i class="fa-solid fa-list-check"></i>
+                </div>
+                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-xs">Kelola Kategori Pengurus RT</h3>
+            </div>
+            <button type="button" onclick="closeKategoriModal()" class="w-6 h-6 rounded-none bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 flex items-center justify-center text-[10px] transition-all cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="addKategoriForm" class="space-y-2.5 pb-3 border-b border-slate-100 dark:border-slate-700 shrink-0 text-xs">
+            <div>
+                <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Tambah Kategori Baru</label>
+                <div class="flex space-x-2">
+                    <input type="text" id="inputNamaKategori" autocomplete="off" required placeholder="Contoh: Seksi Keamanan" class="w-full px-3 py-2 rounded-none border border-slate-200 dark:border-slate-700 text-xs focus:outline-none focus:border-emerald-600 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2 rounded-none shadow transition-all text-xs shrink-0 cursor-pointer">
+                        <i class="fa-solid fa-plus mr-1"></i> Tambah
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <div class="py-2.5 flex-1 overflow-y-auto no-scrollbar space-y-2 text-xs">
+            <span class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Daftar Kategori Pengurus Aktif</span>
+            <div id="listKategoriContainer" class="space-y-1.5">
+                <div class="text-center py-4 text-slate-400 text-xs">Memuat kategori...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EDIT KATEGORI -->
+<div id="editKategoriModal" class="fixed inset-0 bg-black/50 backdrop-blur-[2px] z-50 flex items-center justify-center hidden transition-all duration-300 p-4">
+    <div class="w-full max-w-xs bg-white dark:bg-slate-800 rounded-none p-4 shadow-2xl transform scale-95 transition-transform duration-300 text-xs text-slate-800 dark:text-slate-100">
+        <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100 dark:border-slate-700">
+            <h3 class="font-bold text-slate-800 dark:text-slate-100 text-xs">Ubah Kategori Pengurus</h3>
+            <button type="button" onclick="closeEditModal()" class="w-5 h-5 rounded-none bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 flex items-center justify-center text-[10px] transition-all cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <form id="editKategoriForm" class="space-y-3">
+            <input type="hidden" id="editKategoriId">
+            <div>
+                <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Kategori</label>
+                <input type="text" id="editInputNama" autocomplete="off" required class="w-full px-3 py-2 rounded-none border border-slate-200 dark:border-slate-700 text-xs focus:outline-none focus:border-emerald-600 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+            </div>
+            <div class="flex space-x-2 pt-1">
+                <button type="button" onclick="closeEditModal()" class="w-1/2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 font-semibold py-2 rounded-none transition-all text-xs cursor-pointer">
+                    Batal
+                </button>
+                <button type="submit" class="w-1/2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-none shadow transition-all text-xs cursor-pointer">
+                    Simpan
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- CONTAINER TOAST NOTIFICATION ELEGAN -->
+<div id="toastContainer" class="fixed top-5 right-5 z-[9999] flex flex-col space-y-2 pointer-events-none"></div>
+
+<!-- SKRIP JAVASCRIPT SINKRONISASI FIRESTORE & TOAST -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc, collection, addDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+        authDomain: "erte-979ca.firebaseapp.com",
+        projectId: "erte-979ca",
+        storageBucket: "erte-979ca.firebasestorage.app",
+        messagingSenderId: "329513636032",
+        appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Fungsi Custom Toast Notification yang Smooth & Elegan
+    window.showToast = function(message, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = `pointer-events-auto flex items-center space-x-3 px-4 py-3 shadow-lg border text-xs font-medium transition-all duration-300 transform translate-y-[-10px] opacity-0 ${
+            type === 'success' 
+                ? 'bg-emerald-600 text-white border-emerald-500 shadow-emerald-900/10' 
+                : 'bg-rose-600 text-white border-rose-500 shadow-rose-900/10'
+        }`;
+        
+        toast.innerHTML = `
+            <i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation'} text-sm"></i>
+            <span>${message}</span>
+        `;
+
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.classList.remove('translate-y-[-10px]', 'opacity-0');
+        }, 10);
+
+        setTimeout(() => {
+            toast.classList.add('translate-y-[-10px]', 'opacity-0');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    };
+
+    // Load Profil Wilayah (Sinkronisasi Desktop & Mobile)
+    async function loadProfilWilayah() {
+        try {
+            const docRef = doc(db, "settings", "profilWilayah");
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                
+                // Desktop
+                if (document.getElementById('rtNumber')) document.getElementById('rtNumber').value = data.rtNumber || "";
+                if (document.getElementById('rwNumber')) document.getElementById('rwNumber').value = data.rwNumber || "";
+                if (document.getElementById('kelurahan')) document.getElementById('kelurahan').value = data.kelurahan || "";
+                if (document.getElementById('kecamatan')) document.getElementById('kecamatan').value = data.kecamatan || "";
+                if (document.getElementById('kota')) document.getElementById('kota').value = data.kota || "";
+                if (document.getElementById('description')) document.getElementById('description').value = data.description || "";
+                if (document.getElementById('alamatSekretariat')) document.getElementById('alamatSekretariat').value = data.alamatSekretariat || "";
+                if (document.getElementById('alamatMaps')) document.getElementById('alamatMaps').value = data.alamatMaps || "";
+
+                // Mobile
+                if (document.getElementById('rtNumberMobile')) document.getElementById('rtNumberMobile').value = data.rtNumber || "";
+                if (document.getElementById('rwNumberMobile')) document.getElementById('rwNumberMobile').value = data.rwNumber || "";
+                if (document.getElementById('kelurahanMobile')) document.getElementById('kelurahanMobile').value = data.kelurahan || "";
+                if (document.getElementById('kecamatanMobile')) document.getElementById('kecamatanMobile').value = data.kecamatan || "";
+                if (document.getElementById('kotaMobile')) document.getElementById('kotaMobile').value = data.kota || "";
+                if (document.getElementById('descriptionMobile')) document.getElementById('descriptionMobile').value = data.description || "";
+                if (document.getElementById('alamatSekretariatMobile')) document.getElementById('alamatSekretariatMobile').value = data.alamatSekretariat || "";
+                if (document.getElementById('alamatMapsMobile')) document.getElementById('alamatMapsMobile').value = data.alamatMaps || "";
+            }
+        } catch (error) {
+            console.error("Gagal memuat profil wilayah:", error);
+        }
+    }
+    loadProfilWilayah();
+
+    // Submit Form Wilayah (Desktop & Mobile)
+    const handleWilayahSubmit = async (e, isMobile = false) => {
+        e.preventDefault();
+        const suffix = isMobile ? 'Mobile' : '';
+        try {
+            await setDoc(doc(db, "settings", "profilWilayah"), {
+                rtNumber: document.getElementById(`rtNumber${suffix}`).value.trim(),
+                rwNumber: document.getElementById(`rwNumber${suffix}`).value.trim(),
+                kelurahan: document.getElementById(`kelurahan${suffix}`).value.trim(),
+                kecamatan: document.getElementById(`kecamatan${suffix}`).value.trim(),
+                kota: document.getElementById(`kota${suffix}`).value.trim(),
+                description: document.getElementById(`description${suffix}`).value.trim(),
+                alamatSekretariat: document.getElementById(`alamatSekretariat${suffix}`).value.trim(),
+                alamatMaps: document.getElementById(`alamatMaps${suffix}`).value.trim(),
+                updatedAt: new Date()
+            }, { merge: true });
+
+            showToast('Profil wilayah berhasil disimpan!');
+            loadProfilWilayah();
+        } catch (error) {
+            showToast("Gagal menyimpan: " + error.message, 'error');
+        }
+    };
+
+    const formDesktop = document.getElementById('wilayahForm');
+    if (formDesktop) formDesktop.addEventListener('submit', (e) => handleWilayahSubmit(e, false));
+
+    const formMobile = document.getElementById('wilayahFormMobile');
+    if (formMobile) formMobile.addEventListener('submit', (e) => handleWilayahSubmit(e, true));
+
+    // Modal Handler Global
+    window.openKategoriModal = function() {
+        const modal = document.getElementById('kategoriModal');
+        if (modal) modal.classList.remove('hidden');
+    };
+    window.closeKategoriModal = function() {
+        const modal = document.getElementById('kategoriModal');
+        if (modal) modal.classList.add('hidden');
+    };
+    window.openEditModal = function(id, nama) {
+        document.getElementById('editKategoriId').value = id;
+        document.getElementById('editInputNama').value = nama;
+        const modal = document.getElementById('editKategoriModal');
+        if (modal) modal.classList.remove('hidden');
+    };
+    window.closeEditModal = function() {
+        const modal = document.getElementById('editKategoriModal');
+        if (modal) modal.classList.add('hidden');
+    };
+
+    // Real-time Kategori Pengurus (Sinkronisasi Dropdown & List)
+    const qKategori = query(collection(db, "kategoriPengurus"), orderBy("createdAt", "asc"));
+    onSnapshot(qKategori, (snapshot) => {
+        let listHtml = "";
+        let dropdownHtml = `<option value="">-- Pilih Kategori --</option>`;
+
+        if (snapshot.empty) {
+            listHtml = `<p class="text-center text-slate-400 text-xs py-3">Belum ada kategori pengurus.</p>`;
+        } else {
+            snapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                const id = docSnap.id;
+                const nama = data.nama || "Tanpa Nama";
+
+                listHtml += `
+                    <div class="flex items-center justify-between p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200/70 dark:border-slate-700 rounded-none">
+                        <span class="text-xs font-medium text-slate-800 dark:text-slate-200">${nama}</span>
+                        <div class="flex items-center space-x-1.5">
+                            <button type="button" onclick="openEditModal('${id}', '${nama.replace(/'/g, "\\'")}')" class="w-6 h-6 rounded-none bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 hover:bg-blue-600 hover:text-white flex items-center justify-center text-xs transition-all cursor-pointer" title="Edit">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button type="button" onclick="hapusKategori('${id}', '${nama.replace(/'/g, "\\'")}')" class="w-6 h-6 rounded-none bg-red-50 dark:bg-slate-800 text-red-600 dark:text-red-400 hover:bg-red-600 hover:text-white flex items-center justify-center text-xs transition-all cursor-pointer" title="Hapus">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                dropdownHtml += `<option value="${nama}">${nama}</option>`;
+            });
+        }
+        
+        if (document.getElementById('listKategoriContainer')) document.getElementById('listKategoriContainer').innerHTML = listHtml;
+        if (document.getElementById('pengurusKategori')) document.getElementById('pengurusKategori').innerHTML = dropdownHtml;
+        if (document.getElementById('pengurusKategoriMobile')) document.getElementById('pengurusKategoriMobile').innerHTML = dropdownHtml;
+    });
+
+    // Tambah Kategori
+    const addKategoriForm = document.getElementById('addKategoriForm');
+    if (addKategoriForm) {
+        addKategoriForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const inputNama = document.getElementById('inputNamaKategori');
+            const namaKategori = inputNama.value.trim();
+            if (!namaKategori) return;
+
+            try {
+                await addDoc(collection(db, "kategoriPengurus"), {
+                    nama: namaKategori,
+                    createdAt: new Date()
+                });
+                inputNama.value = "";
+                showToast(`Kategori "${namaKategori}" berhasil ditambahkan!`);
+            } catch (error) {
+                showToast("Gagal: " + error.message, 'error');
+            }
+        });
+    }
+
+    // Edit Kategori
+    const editKategoriForm = document.getElementById('editKategoriForm');
+    if (editKategoriForm) {
+        editKategoriForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editKategoriId').value;
+            const namaBaru = document.getElementById('editInputNama').value.trim();
+            if (!namaBaru) return;
+
+            try {
+                await updateDoc(doc(db, "kategoriPengurus", id), {
+                    nama: namaBaru,
+                    updatedAt: new Date()
+                });
+                closeEditModal();
+                showToast(`Kategori berhasil diubah!`);
+            } catch (error) {
+                showToast("Gagal: " + error.message, 'error');
+            }
+        });
+    }
+
+    window.hapusKategori = async function(id, nama) {
+        if (confirm(`Hapus kategori "${nama}"?`)) {
+            try {
+                await deleteDoc(doc(db, "kategoriPengurus", id));
+                showToast(`Kategori berhasil dihapus!`);
+            } catch (error) {
+                showToast("Gagal menghapus: " + error.message, 'error');
+            }
+        }
+    };
+
+    // Ambil Data Warga untuk Dropdown Pengurus
+    let dataWargaMap = {};
+    const qWarga = query(collection(db, "dataWarga"), orderBy("namaLengkap", "asc"));
+    onSnapshot(qWarga, (snapshot) => {
+        let wargaHtml = `<option value="">-- Pilih Warga --</option>`;
+        dataWargaMap = {};
+        snapshot.forEach((docSnap) => {
+            const w = docSnap.data();
+            const nama = w.namaLengkap || w.nama || "";
+            const nik = w.nik || w.NIK || docSnap.id;
+            const phone = w.noHp || w.phone || "";
+            if (nama) {
+                dataWargaMap[nama] = { nik, phone };
+                wargaHtml += `<option value="${nama}">${nama} (NIK: ${nik})</option>`;
+            }
+        });
+
+        if (document.getElementById('pengurusNama')) document.getElementById('pengurusNama').innerHTML = wargaHtml;
+        if (document.getElementById('pengurusNamaMobile')) document.getElementById('pengurusNamaMobile').innerHTML = wargaHtml;
+    });
+
+    window.onPilihWarga = function(el) {
+        const val = el.value;
+        if (val && dataWargaMap[val]) {
+            if (document.getElementById('pengurusNik')) document.getElementById('pengurusNik').value = dataWargaMap[val].nik;
+            if (document.getElementById('pengurusPhone')) document.getElementById('pengurusPhone').value = dataWargaMap[val].phone;
+        }
+    };
+
+    window.onPilihWargaMobile = function(el) {
+        const val = el.value;
+        if (val && dataWargaMap[val]) {
+            if (document.getElementById('pengurusNikMobile')) document.getElementById('pengurusNikMobile').value = dataWargaMap[val].nik;
+            if (document.getElementById('pengurusPhoneMobile')) document.getElementById('pengurusPhoneMobile').value = dataWargaMap[val].phone;
+        }
+    };
+
+    // Submit Data Pengurus (Desktop & Mobile)
+    const handlePengurusSubmit = async (e, isMobile = false) => {
+        e.preventDefault();
+        const suffix = isMobile ? 'Mobile' : '';
+        const kat = document.getElementById(`pengurusKategori${suffix}`).value;
+        const nam = document.getElementById(`pengurusNama${suffix}`).value;
+        const nk = document.getElementById(`pengurusNik${suffix}`).value.trim();
+        const phn = document.getElementById(`pengurusPhone${suffix}`).value.trim();
+
+        if (!kat || !nam) return;
+
+        try {
+            await addDoc(collection(db, "dataPengurus"), {
+                kategori: kat,
+                nama: nam,
+                nik: nk,
+                phone: phn,
+                createdAt: new Date()
+            });
+            document.getElementById(isMobile ? 'pengurusFormMobile' : 'pengurusForm').reset();
+            showToast(`Pengurus "${nam}" berhasil disimpan!`);
+        } catch (error) {
+            showToast("Gagal menyimpan pengurus: " + error.message, 'error');
+        }
+    };
+
+    const formPengurusDesktop = document.getElementById('pengurusForm');
+    if (formPengurusDesktop) formPengurusDesktop.addEventListener('submit', (e) => handlePengurusSubmit(e, false));
+
+    const formPengurusMobile = document.getElementById('pengurusFormMobile');
+    if (formPengurusMobile) formPengurusMobile.addEventListener('submit', (e) => handlePengurusSubmit(e, true));
+
+    // Real-time Daftar Pengurus (Desktop & Mobile)
+    const qPengurus = query(collection(db, "dataPengurus"), orderBy("createdAt", "asc"));
+    onSnapshot(qPengurus, (snapshot) => {
+        let html = "";
+        if (snapshot.empty) {
+            html = `<p class="text-center text-slate-400 text-xs py-3">Belum ada data pengurus terdaftar.</p>`;
+        } else {
+            snapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                const id = docSnap.id;
+
+                html += `
+                    <div class="flex items-center justify-between p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200/70 dark:border-slate-700 rounded-none">
+                        <div>
+                            <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase block tracking-wide">${data.kategori}</span>
+                            <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 block">${data.nama} ${data.nik ? '<span class="text-[10px] font-normal text-slate-500">(NIK: ' + data.nik + ')</span>' : ''}</span>
+                            <span class="text-[10px] text-slate-500 dark:text-slate-400 block"><i class="fa-solid fa-phone text-[9px] mr-1"></i>${data.phone || '-'}</span>
+                        </div>
+                        <button type="button" onclick="hapusPengurus('${id}', '${data.nama.replace(/'/g, "\\'")}')" class="w-6 h-6 rounded-none bg-red-50 dark:bg-slate-800 text-red-600 dark:text-red-400 hover:bg-red-600 hover:text-white flex items-center justify-center text-xs transition-all cursor-pointer" title="Hapus Pengurus">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        if (document.getElementById('listPengurusContainer')) document.getElementById('listPengurusContainer').innerHTML = html;
+        if (document.getElementById('listPengurusContainerMobile')) document.getElementById('listPengurusContainerMobile').innerHTML = html;
+    });
+
+    window.hapusPengurus = async function(id, nama) {
+        if (confirm(`Hapus pengurus "${nama}" dari daftar?`)) {
+            try {
+                await deleteDoc(doc(db, "dataPengurus", id));
+                showToast(`Pengurus "${nama}" berhasil dihapus!`);
+            } catch (error) {
+                showToast("Gagal menghapus: " + error.message, 'error');
+            }
+        }
+    };
+</script>

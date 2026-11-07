@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Data Statistik Warga - RT-Ku</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none !important;
+            width: 0px !important;
+            height: 0px !important;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 font-['Inter'] flex justify-center items-center h-screen overflow-hidden m-0">
+
+    <!-- Container HP Frame -->
+    <div class="w-full h-screen sm:max-w-[400px] sm:h-[92vh] sm:max-h-[820px] bg-slate-50 sm:rounded-[35px] shadow-2xl flex flex-col justify-between relative overflow-hidden sm:border-[6px] sm:border-slate-800">
+        
+        <!-- Header -->
+        <div class="bg-gradient-to-b from-emerald-600 to-emerald-700 text-white p-5 rounded-b-[28px] flex items-center justify-between shrink-0 z-20">
+            <a href="data-warga.html" class="w-9 h-9 rounded-none bg-white/10 flex items-center justify-center text-white backdrop-blur-sm transition-all hover:bg-white/20">
+                <i class="fa-solid fa-arrow-left text-xs"></i>
+            </a>
+            <h1 class="font-bold text-sm tracking-wide">Data Statistik Warga</h1>
+            <div class="w-9"></div>
+        </div>
+
+        <!-- Content (Scrollable) -->
+        <div class="p-4 flex-1 overflow-y-auto no-scrollbar pb-6 space-y-4 text-xs">
+            
+            <!-- Ringkasan Kartu Utama -->
+            <div class="grid grid-cols-2 gap-3">
+                <div class="bg-white p-3.5 rounded-none border border-slate-200/70 shadow-sm space-y-1">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] text-slate-400 font-medium">Total Warga</span>
+                        <div class="w-7 h-7 bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                    </div>
+                    <h3 id="statTotalWarga" class="font-bold text-slate-800 text-base">0</h3>
+                    <span class="text-[9px] text-emerald-600 font-semibold"><i class="fa-solid fa-arrow-up"></i> Jiwa Terdaftar</span>
+                </div>
+
+                <div class="bg-white p-3.5 rounded-none border border-slate-200/70 shadow-sm space-y-1">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] text-slate-400 font-medium">Kepala Keluarga</span>
+                        <div class="w-7 h-7 bg-blue-50 text-blue-600 flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-house-user"></i>
+                        </div>
+                    </div>
+                    <h3 id="statTotalKk" class="font-bold text-slate-800 text-base">0</h3>
+                    <span class="text-[9px] text-blue-600 font-semibold"><i class="fa-solid fa-id-card"></i> Total KK</span>
+                </div>
+            </div>
+
+            <!-- Statistik Jenis Kelamin -->
+            <div class="bg-white p-4 rounded-none border border-slate-200/70 shadow-sm space-y-3">
+                <h4 class="font-bold text-slate-800 text-xs flex items-center">
+                    <i class="fa-solid fa-venus-mars mr-2 text-emerald-600"></i> Distribusi Jenis Kelamin
+                </h4>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-slate-50 p-3 border border-slate-100 flex items-center space-x-3">
+                        <div class="w-9 h-9 bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-bold">
+                            <i class="fa-solid fa-mars"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 block">Laki-laki</span>
+                            <span id="statLaki" class="font-bold text-slate-800 text-sm">0</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-3 border border-slate-100 flex items-center space-x-3">
+                        <div class="w-9 h-9 bg-pink-100 text-pink-600 flex items-center justify-center text-sm font-bold">
+                            <i class="fa-solid fa-venus"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 block">Perempuan</span>
+                            <span id="statPerempuan" class="font-bold text-slate-800 text-sm">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistik Status Warga -->
+            <div class="bg-white p-4 rounded-none border border-slate-200/70 shadow-sm space-y-3">
+                <h4 class="font-bold text-slate-800 text-xs flex items-center">
+                    <i class="fa-solid fa-chart-pie mr-2 text-emerald-600"></i> Status Kependudukan
+                </h4>
+                <div class="space-y-2 text-xs">
+                    <div class="flex items-center justify-between p-2 bg-slate-50 border border-slate-100">
+                        <span class="text-slate-600 font-medium"><i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> Warga Aktif / Tetap</span>
+                        <span id="statAktif" class="font-bold text-slate-800">0</span>
+                    </div>
+                    <div class="flex items-center justify-between p-2 bg-slate-50 border border-slate-100">
+                        <span class="text-slate-600 font-medium"><i class="fa-solid fa-bed-pulse text-amber-600 mr-1.5"></i> Meninggal Wafat</span>
+                        <span id="statMeninggal" class="font-bold text-slate-800">0</span>
+                    </div>
+                    <div class="flex items-center justify-between p-2 bg-slate-50 border border-slate-100">
+                        <span class="text-slate-600 font-medium"><i class="fa-solid fa-right-from-bracket text-red-600 mr-1.5"></i> Pindah Keluar</span>
+                        <span id="statPindah" class="font-bold text-slate-800">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistik Berdasarkan Kelompok Usia -->
+            <div class="bg-white p-4 rounded-none border border-slate-200/70 shadow-sm space-y-3">
+                <h4 class="font-bold text-slate-800 text-xs flex items-center">
+                    <i class="fa-solid fa-layer-group mr-2 text-emerald-600"></i> Kelompok Usia Warga
+                </h4>
+                <div class="space-y-2 text-xs">
+                    <div class="flex items-center justify-between p-2 bg-slate-50 border border-slate-100">
+                        <span class="text-slate-600 font-medium">Anak-anak (0 - 12 Tahun)</span>
+                        <span id="statAnak" class="font-bold text-slate-800">0</span>
+                    </div>
+                    <div class="flex items-center justify-between p-2 bg-slate-50 border border-slate-100">
+                        <span class="text-slate-600 font-medium">Remaja (13 - 17 Tahun)</span>
+                        <span id="statRemaja" class="font-bold text-slate-800">0</span>
+                    </div>
+                    <div class="flex items-center justify-between p-2 bg-slate-50 border border-slate-100">
+                        <span class="text-slate-600 font-medium">Dewasa (18 - 59 Tahun)</span>
+                        <span id="statDewasa" class="font-bold text-slate-800">0</span>
+                    </div>
+                    <div class="flex items-center justify-between p-2 bg-slate-50 border border-slate-100">
+                        <span class="text-slate-600 font-medium">Lansia (60+ Tahun)</span>
+                        <span id="statLansia" class="font-bold text-slate-800">0</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Skrip Firebase & Kalkulasi Statistik -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+            authDomain: "erte-979ca.firebaseapp.com",
+            projectId: "erte-979ca",
+            storageBucket: "erte-979ca.firebasestorage.app",
+            messagingSenderId: "329513636032",
+            appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const statTotalWarga = document.getElementById('statTotalWarga');
+        const statTotalKk = document.getElementById('statTotalKk');
+        const statLaki = document.getElementById('statLaki');
+        const statPerempuan = document.getElementById('statPerempuan');
+        const statAktif = document.getElementById('statAktif');
+        const statMeninggal = document.getElementById('statMeninggal');
+        const statPindah = document.getElementById('statPindah');
+        const statAnak = document.getElementById('statAnak');
+        const statRemaja = document.getElementById('statRemaja');
+        const statDewasa = document.getElementById('statDewasa');
+        const statLansia = document.getElementById('statLansia');
+
+        // Ambil data real-time dari koleksi dataWarga
+        onSnapshot(collection(db, "dataWarga"), (snapshot) => {
+            let totalWarga = 0;
+            const kkSet = new Set();
+            let laki = 0;
+            let perempuan = 0;
+            let aktif = 0;
+            let meninggal = 0;
+            let pindah = 0;
+            let anak = 0;
+            let remaja = 0;
+            let dewasa = 0;
+            let lansia = 0;
+
+            snapshot.forEach((docSnap) => {
+                const w = docSnap.data();
+                totalWarga++;
+
+                // Hitung KK Unik
+                if (w.noKk) {
+                    kkSet.add(w.noKk.trim());
+                }
+
+                // Jenis Kelamin
+                const jk = (w.jenisKelamin || "").toLowerCase();
+                if (jk.includes("laki") || jk === "l") {
+                    laki++;
+                } else if (jk.includes("perempuan") || jk === "p") {
+                    perempuan++;
+                }
+
+                // Status Warga
+                const status = (w.statusWarga || "Aktif").toLowerCase();
+                if (status === "meninggal") {
+                    meninggal++;
+                } else if (status === "pindah" || status === "pindah keluar") {
+                    pindah++;
+                } else {
+                    aktif++;
+                }
+
+                // Hitung Usia dari tanggalLahir jika ada
+                if (w.tanggalLahir) {
+                    const birthDate = new Date(w.tanggalLahir);
+                    const today = new Date();
+                    let age = today.getFullYear() - birthDate.getFullYear();
+                    const m = today.getMonth() - birthDate.getMonth();
+                    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                        age--;
+                    }
+
+                    if (age >= 0 && age <= 12) {
+                        anak++;
+                    } else if (age >= 13 && age <= 17) {
+                        remaja++;
+                    } else if (age >= 18 && age <= 59) {
+                        dewasa++;
+                    } else if (age >= 60) {
+                        lansia++;
+                    }
+                }
+            });
+
+            // Tampilkan ke DOM
+            statTotalWarga.innerText = totalWarga;
+            statTotalKk.innerText = kkSet.size;
+            statLaki.innerText = laki;
+            statPerempuan.innerText = perempuan;
+            statAktif.innerText = aktif;
+            statMeninggal.innerText = meninggal;
+            statPindah.innerText = pindah;
+            statAnak.innerText = anak;
+            statRemaja.innerText = remaja;
+            statDewasa.innerText = dewasa;
+            statLansia.innerText = lansia;
+        });
+    </script>
+</body>
+</html>

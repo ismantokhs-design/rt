@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pengembalian Aset - Aplikasi RT-Ku</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none !important;
+            width: 0px !important;
+            height: 0px !important;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 font-['Inter'] flex justify-center items-center h-screen overflow-hidden m-0">
+
+    <!-- Container HP Frame -->
+    <div class="w-full h-screen sm:max-w-[400px] sm:h-[92vh] sm:max-h-[820px] bg-slate-50 sm:rounded-[35px] shadow-2xl flex flex-col justify-between relative overflow-hidden sm:border-[6px] sm:border-slate-800">
+        
+        <!-- Header -->
+        <div class="bg-gradient-to-b from-emerald-600 to-emerald-700 text-white p-4 rounded-none flex items-center justify-between shrink-0 z-25">
+            <a href="inventaris.html" class="w-9 h-9 rounded-none bg-white/10 flex items-center justify-center text-white backdrop-blur-sm transition-all hover:bg-white/20" title="Kembali ke Inventaris">
+                <i class="fa-solid fa-arrow-left text-xs"></i>
+            </a>
+            <h1 class="font-bold text-sm tracking-wide">Pengembalian Aset</h1>
+            <div class="w-9 h-9"></div>
+        </div>
+
+        <!-- Pencarian & Filter Ringkas -->
+        <div class="p-4 pb-2 bg-white border-b border-slate-200 shrink-0 space-y-2">
+            <div class="bg-emerald-50 p-2.5 border border-emerald-100 flex items-center justify-between text-xs">
+                <div class="flex items-center space-x-2">
+                    <div class="w-7 h-7 bg-emerald-600 text-white flex items-center justify-center rounded text-xs">
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-emerald-800 block font-medium">Sewa Aktif Belum Kembali</span>
+                        <b id="totalSewaAktif" class="text-xs text-emerald-900 font-bold">0 Transaksi</b>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Cari Transaksi -->
+            <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                    <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                </span>
+                <input type="text" id="inputCariTransaksi" oninput="filterTransaksiSewa()" placeholder="Cari No. Transaksi atau Nama Peminjam..." class="w-full pl-8 pr-3 py-1.5 border border-slate-200 rounded text-xs bg-slate-50 focus:outline-none focus:border-emerald-600 font-medium">
+            </div>
+        </div>
+
+        <!-- Content (Scrollable List Sewa Aktif) -->
+        <div class="p-4 flex-1 overflow-y-auto no-scrollbar space-y-3 text-xs">
+            <div class="space-y-2.5" id="listSewaAktifContainer">
+                <div class="text-center py-8 text-slate-400">Memuat data sewa aktif...</div>
+            </div>
+        </div>
+
+        <!-- Footer Info -->
+        <div class="p-3 text-center border-t border-slate-200 bg-white/50 text-[10px] text-slate-400 shrink-0">
+            Aplikasi RT-Ku &copy; 2026
+        </div>
+
+    </div>
+
+    <!-- Modal Konfirmasi & Checklist Pengembalian Aset -->
+    <div id="modalPengembalian" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-[340px] rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[85vh] p-4 space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2 shrink-0">
+                <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-square-check text-emerald-600 mr-1.5"></i> Checklist Pengembalian</h3>
+                <button onclick="tutupModalPengembalian()" class="text-slate-400 hover:text-slate-600 cursor-pointer">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+            </div>
+
+            <div class="space-y-1 shrink-0">
+                <span class="text-[10px] text-slate-500 block">No. Transaksi: <b id="lblNoTrxModal" class="text-emerald-700"></b></span>
+                <p class="text-[11px] text-slate-600 font-medium">Centang dan sesuaikan jumlah aset yang dikembalikan:</p>
+            </div>
+
+            <input type="hidden" id="idTransaksiKembali">
+
+            <!-- Container Item Checklist -->
+            <div id="containerChecklistItems" class="flex-1 overflow-y-auto no-scrollbar space-y-2 border border-slate-100 p-2 bg-slate-50 rounded max-h-[160px]">
+                <!-- Item checklist akan dirender di sini secara dinamis -->
+            </div>
+
+            <!-- Kolom Catatan Pengembalian -->
+            <div class="space-y-1 shrink-0">
+                <label class="block text-[10px] font-semibold text-slate-600">Catatan Pengembalian (Opsional)</label>
+                <textarea id="inputCatatanKembali" rows="2" placeholder="Contoh: Barang lengkap, kondisi baik / Ada yang rusak 1 buah..." class="w-full px-2.5 py-1.5 border border-slate-200 rounded text-xs bg-slate-50 focus:outline-none focus:border-emerald-600 font-medium resize-none"></textarea>
+            </div>
+
+            <div class="flex space-x-2 pt-1 border-t border-slate-100 shrink-0">
+                <button onclick="tutupModalPengembalian()" class="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl cursor-pointer text-xs">
+                    Batal
+                </button>
+                <button onclick="prosesPengembalianFinal()" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl cursor-pointer text-xs shadow">
+                    Konfirmasi Kembali
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Alert / Pemberitahuan Kustom (Smooth) -->
+    <div id="modalAlert" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm transition-all">
+        <div class="bg-white w-full max-w-[300px] rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col p-5 text-center space-y-4">
+            <div id="modalAlertIcon" class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-lg shadow-inner">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div class="space-y-1">
+                <h3 id="modalAlertTitle" class="font-bold text-slate-800 text-sm">Informasi</h3>
+                <p id="modalAlertMessage" class="text-slate-500 text-xs">Pesan informasi...</p>
+            </div>
+            <button onclick="tutupModalAlert()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl cursor-pointer text-xs shadow transition-all">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <!-- Skrip Firebase & Logika Pengembalian Aset -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, query, orderBy, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+            authDomain: "erte-979ca.firebaseapp.com",
+            projectId: "erte-979ca",
+            storageBucket: "erte-979ca.firebasestorage.app",
+            messagingSenderId: "329513636032",
+            appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let dataSewaList = [];
+        let activeModalTransaction = null;
+
+        function showCustomAlert(title, message, isSuccess = true) {
+            document.getElementById('modalAlertTitle').innerText = title;
+            document.getElementById('modalAlertMessage').innerText = message;
+            const iconContainer = document.getElementById('modalAlertIcon');
+            if (isSuccess) {
+                iconContainer.className = "w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-lg shadow-inner";
+                iconContainer.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+            } else {
+                iconContainer.className = "w-12 h-12 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto text-lg shadow-inner";
+                iconContainer.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+            }
+            document.getElementById('modalAlert').classList.remove('hidden');
+        }
+
+        window.tutupModalAlert = function() {
+            document.getElementById('modalAlert').classList.add('hidden');
+        }
+
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(angka).replace('Rp', 'Rp ');
+        }
+
+        window.filterTransaksiSewa = function() {
+            const keyword = document.getElementById('inputCariTransaksi').value.toLowerCase();
+            const filtered = dataSewaList.filter(item => {
+                const statusKembali = item.statusPengembalian || "Belum Kembali";
+                if (statusKembali === "Sudah Kembali") return false;
+
+                const noTrx = String(item.noTransaksi || "").toLowerCase();
+                const nama = String(item.namaPeminjam || "").toLowerCase();
+                return noTrx.includes(keyword) || nama.includes(keyword);
+            });
+            renderSewaAktif(filtered);
+        }
+
+        window.bukaModalPengembalian = function(id) {
+            const item = dataSewaList.find(d => d.id === id);
+            if (!item) return;
+
+            activeModalTransaction = item;
+            document.getElementById('idTransaksiKembali').value = item.id;
+            document.getElementById('lblNoTrxModal').innerText = item.noTransaksi || '-';
+            document.getElementById('inputCatatanKembali').value = item.catatanPengembalian || '';
+
+            const container = document.getElementById('containerChecklistItems');
+            let html = "";
+
+            let itemsArray = [];
+            if (item.items && Array.isArray(item.items) && item.items.length > 0) {
+                itemsArray = item.items;
+            } else if (item.namaAset) {
+                itemsArray = [{
+                    namaAset: item.namaAset,
+                    jumlahSewa: item.jumlahSewa || 1
+                }];
+            }
+
+            itemsArray.forEach((prod, index) => {
+                const maxQty = Number(prod.jumlahSewa || 1);
+                html += `
+                    <div class="flex items-center justify-between bg-white p-2 border border-slate-200 rounded text-xs">
+                        <label class="flex items-center space-x-2 cursor-pointer flex-1">
+                            <input type="checkbox" id="chk_prod_${index}" checked value="${index}" class="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500">
+                            <div>
+                                <span class="font-bold text-slate-800">${prod.namaAset || 'Aset'}</span>
+                                <span class="text-[10px] text-slate-500 block">Disewa: ${maxQty}</span>
+                            </div>
+                        </label>
+                        <div class="flex items-center space-x-1">
+                            <span class="text-[10px] text-slate-500 font-medium">Jml:</span>
+                            <input type="number" id="qty_prod_${index}" min="1" max="${maxQty}" value="${maxQty}" class="w-12 px-1.5 py-1 border border-slate-200 rounded text-center text-xs bg-slate-50 font-bold text-emerald-700 focus:outline-none focus:border-emerald-600">
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            document.getElementById('modalPengembalian').classList.remove('hidden');
+        }
+
+        window.tutupModalPengembalian = function() {
+            document.getElementById('modalPengembalian').classList.add('hidden');
+            activeModalTransaction = null;
+        }
+
+        window.prosesPengembalianFinal = async function() {
+            const id = document.getElementById('idTransaksiKembali').value;
+            const catatan = document.getElementById('inputCatatanKembali').value.trim();
+            if (!activeModalTransaction) return;
+
+            let itemsArray = [];
+            if (activeModalTransaction.items && Array.isArray(activeModalTransaction.items)) {
+                itemsArray = activeModalTransaction.items;
+            } else {
+                itemsArray = [{ namaAset: activeModalTransaction.namaAset, jumlahSewa: activeModalTransaction.jumlahSewa || 1 }];
+            }
+
+            let checkedCount = 0;
+            let rincianKembali = [];
+
+            itemsArray.forEach((prod, index) => {
+                const chk = document.getElementById(`chk_prod_${index}`);
+                const qtyInput = document.getElementById(`qty_prod_${index}`);
+                if (chk && chk.checked) {
+                    checkedCount++;
+                    rincianKembali.push({
+                        ...prod,
+                        jumlahDikembalikan: Number(qtyInput ? qtyInput.value : prod.jumlahSewa)
+                    });
+                }
+            });
+
+            if (checkedCount === 0) {
+                showCustomAlert("Perhatian", "Pilih/centang minimal 1 aset yang dikembalikan!", false);
+                return;
+            }
+
+            tutupModalPengembalian();
+
+            try {
+                await updateDoc(doc(db, "transaksiSewaAset", id), {
+                    statusPengembalian: "Sudah Kembali",
+                    tglDikembalikan: new Date().toISOString().split('T')[0],
+                    detailPengembalian: rincianKembali,
+                    catatanPengembalian: catatan
+                });
+                showCustomAlert("Berhasil", "Aset terpilih berhasil dikembalikan dan status transaksi diperbarui!");
+            } catch (error) {
+                console.error("Gagal memproses pengembalian:", error);
+                showCustomAlert("Kesalahan", "Terjadi kesalahan saat memperbarui status pengembalian.", false);
+            }
+        }
+
+        function renderSewaAktif(list) {
+            const container = document.getElementById('listSewaAktifContainer');
+            let html = "";
+            let aktifCount = 0;
+
+            list.forEach(item => {
+                const statusKembali = item.statusPengembalian || "Belum Kembali";
+                if (statusKembali === "Sudah Kembali") return;
+
+                aktifCount++;
+                const totalBiaya = Number(item.totalBiaya || 0);
+
+                let itemsHtml = "";
+                if (item.items && Array.isArray(item.items) && item.items.length > 0) {
+                    item.items.forEach(prod => {
+                        itemsHtml += `<div>- ${prod.namaAset || 'Memuat...'} (x${prod.jumlahSewa || 1})</div>`;
+                    });
+                } else if (item.namaAset) {
+                    itemsHtml = `<div>- ${item.namaAset} (x${item.jumlahSewa || 1})</div>`;
+                } else {
+                    itemsHtml = `<div>Memuat...</div>`;
+                }
+
+                html += `
+                    <div class="bg-white p-3 border border-slate-200/70 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-1.5">
+                            <div>
+                                <span class="text-[9px] bg-emerald-50 text-emerald-800 px-1.5 py-0.5 rounded font-bold mr-1">${item.statusPeminjam || 'Umum'}</span>
+                                <span class="font-bold text-slate-800 text-[11px]">${item.namaPeminjam || 'Tanpa Nama'}</span>
+                            </div>
+                            <span class="text-[9px] px-2 py-0.5 rounded font-bold bg-amber-100 text-amber-700">Belum Kembali</span>
+                        </div>
+                        <div class="space-y-1 text-[11px] text-slate-600">
+                            <div class="text-[10px] text-emerald-700 font-bold"><i class="fa-solid fa-receipt mr-1"></i> No. Transaksi: ${item.noTransaksi || '-'}</div>
+                            <div>
+                                <span class="font-semibold text-slate-700">Aset Disewa:</span>
+                                <div class="pl-2 font-medium text-slate-800">${itemsHtml}</div>
+                            </div>
+                            <div class="flex justify-between pt-1 border-t border-slate-100">
+                                <span>Periode: ${item.tglMulai || '-'} s/d ${item.tglSelesai || '-'}</span>
+                                <b class="text-emerald-600">${formatRupiah(totalBiaya)}</b>
+                            </div>
+                        </div>
+                        <div class="pt-1.5 border-t border-slate-50 flex items-center justify-between">
+                            <span class="text-[10px] text-slate-400">Tgl Transaksi: ${item.createdAt || '-'}</span>
+                            <button onclick="bukaModalPengembalian('${item.id}')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded text-[11px] shadow cursor-pointer transition-all">
+                                <i class="fa-solid fa-rotate-left mr-1"></i> Proses Pengembalian
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (html === "" || aktifCount === 0) {
+                html = `<div class="text-center py-8 text-slate-400">Tidak ada sewa aset yang aktif / belum dikembalikan.</div>`;
+            }
+
+            container.innerHTML = html;
+            document.getElementById('totalSewaAktif').innerText = `${aktifCount} Transaksi`;
+        }
+
+        // Real-time listener koleksi 'transaksiSewaAset'
+        const qSewa = query(collection(db, "transaksiSewaAset"), orderBy("createdAt", "desc"));
+        onSnapshot(qSewa, (snapshot) => {
+            dataSewaList = [];
+            snapshot.forEach((docSnap) => {
+                dataSewaList.push({ id: docSnap.id, ...docSnap.data() });
+            });
+            filterTransaksiSewa();
+        });
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = "../index.html";
+            }
+        });
+    </script>
+</body>
+</html>

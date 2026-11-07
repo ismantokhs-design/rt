@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kas & Iuran RT - Aplikasi RT-Ku</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none !important;
+            width: 0px !important;
+            height: 0px !important;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 font-['Inter'] flex justify-center items-center h-screen overflow-hidden m-0">
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-slate-900/95 border border-slate-700 text-white px-4 py-2.5 rounded-none shadow-2xl text-xs font-medium flex items-center space-x-2 z-50 transition-all duration-300 opacity-0 pointer-events-none translate-y-[-20px]">
+        <div class="w-5 h-5 rounded-none bg-emerald-500 text-white flex items-center justify-center text-[10px] shadow">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <span id="toastText">Berhasil!</span>
+    </div>
+
+    <!-- Container HP Frame -->
+    <div class="w-full h-screen sm:max-w-[400px] sm:h-[92vh] sm:max-h-[820px] bg-slate-50 sm:rounded-[35px] shadow-2xl flex flex-col justify-between relative overflow-hidden sm:border-[6px] sm:border-slate-800">
+        
+        <!-- Header -->
+        <div class="bg-gradient-to-b from-emerald-600 to-emerald-700 text-white p-4 rounded-none flex items-center justify-between shrink-0 z-25">
+            <a href="keuangan.html" class="w-9 h-9 rounded-none bg-white/10 flex items-center justify-center text-white backdrop-blur-sm transition-all hover:bg-white/20">
+                <i class="fa-solid fa-arrow-left text-xs"></i>
+            </a>
+            <h1 class="font-bold text-sm tracking-wide">Kelola Iuran Wajib</h1>
+            <div class="w-9"></div>
+        </div>
+
+        <!-- Content (Scrollable Area Utama) -->
+        <div class="p-4 flex-1 overflow-y-auto no-scrollbar space-y-4 text-xs pb-6">
+            
+            <!-- Summary Card Saldo, Target Piutang, Pemasukan & Kekurangan -->
+            <div class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-4 rounded-none shadow-md space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] font-medium text-emerald-100">Total Saldo Kas RT</span>
+                    <span class="text-[10px] bg-emerald-800/60 px-2 py-0.5 rounded text-emerald-200" id="badgeTargetIuran">Iuran: Rp 0/thn</span>
+                </div>
+                <div class="text-xl font-bold" id="totalSaldoText">Rp 0</div>
+                
+                <!-- Grid Informasi Piutang & Pemasukan -->
+                <div class="grid grid-cols-2 gap-2 pt-2 border-t border-emerald-500/40 text-[10px]">
+                    <div>
+                        <span class="text-emerald-200 block">Total Target Piutang</span>
+                        <span class="font-bold text-white text-xs" id="totalPiutangText">Rp 0</span>
+                        <span class="text-[9px] text-emerald-200 block" id="infoJmlWajib">(0 KK Wajib)</span>
+                    </div>
+                    <div>
+                        <span class="text-emerald-200 block">Pemasukan S/D Bulan Ini</span>
+                        <span class="font-bold text-white text-xs" id="totalPemasukanText">Rp 0</span>
+                    </div>
+                </div>
+
+                <div class="pt-2 border-t border-emerald-500/40 flex items-center justify-between text-[11px]">
+                    <span class="text-emerald-100 font-medium">Kekurangan / Sisa Piutang:</span>
+                    <span class="font-bold text-amber-300 text-xs" id="kekuranganPiutangText">Rp 0</span>
+                </div>
+            </div>
+
+            <!-- TOMBOL KONTROL: Buka / Tutup Pembayaran Mandiri Warga -->
+            <div class="bg-white rounded-none p-3 shadow-sm border border-slate-200/60 flex items-center justify-between">
+                <div>
+                    <h4 class="font-bold text-slate-800 text-xs">Akses Input Warga</h4>
+                    <p class="text-[10px] text-slate-400">Buka/tutup form bayar di akun warga</p>
+                </div>
+                <button type="button" id="btnToggleAkses" onclick="toggleAksesPembayaran()" class="px-3 py-1.5 rounded-none text-xs font-bold transition-all cursor-pointer bg-slate-200 text-slate-700">
+                    Menyiapkan...
+                </button>
+            </div>
+
+            <!-- Tombol Pemicu Verifikasi Pembayaran Warga -->
+            <div>
+                <button type="button" onclick="toggleVerifikasiModal(true)" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2.5 rounded-none shadow-md shadow-amber-600/35 transition-all text-[11px] flex items-center justify-center space-x-1.5 cursor-pointer relative">
+                    <i class="fa-solid fa-bell"></i>
+                    <span>Verifikasi Warga</span>
+                    <span id="badgePendingCount" class="absolute -top-1.5 -right-1.5 bg-rose-500 text-white text-[9px] px-1.5 py-0.2 rounded-full hidden">0</span>
+                </button>
+            </div>
+
+            <!-- Filter Bulan Dropdown & Histori Transaksi -->
+            <div class="bg-white rounded-none p-4 shadow-sm border border-slate-200/60 space-y-3">
+                <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                    <div class="flex items-center space-x-1.5">
+                        <button type="button" onclick="ubahBulan(-1)" class="w-6 h-6 rounded-none bg-slate-100 hover:bg-emerald-100 text-slate-600 flex items-center justify-center text-[10px] cursor-pointer" title="Bulan Sebelumnya">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <!-- Dropdown Pilih Bulan & Tahun Cepat -->
+                        <input type="month" id="inputPilihBulan" onchange="onBulanDropdownChange(this)" class="px-2 py-1 bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 rounded-none focus:outline-none focus:border-emerald-600 cursor-pointer">
+                        <button type="button" onclick="ubahBulan(1)" class="w-6 h-6 rounded-none bg-slate-100 hover:bg-emerald-100 text-slate-600 flex items-center justify-center text-[10px] cursor-pointer" title="Bulan Berikutnya">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <span class="text-[9px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-none font-bold">Real-time</span>
+                </div>
+
+                <div id="listTransaksiContainer" class="space-y-2">
+                    <div class="p-3 bg-slate-50 rounded-none border border-slate-200/60 text-center text-slate-400 text-xs">
+                        Memuat data transaksi...
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- MODAL VERIFIKASI PEMBAYARAN WARGA -->
+    <div id="verifikasiModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-end justify-center transition-opacity duration-300 opacity-0 pointer-events-none" onclick="toggleVerifikasiModal(false)">
+        <div id="verifikasiModalContent" class="w-full sm:max-w-[400px] bg-white rounded-t-none shadow-2xl p-4 transform translate-y-full transition-transform duration-300 border-t border-slate-200 max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+                <h3 class="font-bold text-slate-800 text-xs flex items-center">
+                    <i class="fa-solid fa-clipboard-check text-amber-600 mr-1.5"></i> Verifikasi Pembayaran Warga
+                </h3>
+                <button type="button" onclick="toggleVerifikasiModal(false)" class="text-slate-400 hover:text-red-500 text-xs cursor-pointer px-2 py-1">
+                    <i class="fa-solid fa-xmark text-sm"></i> Tutup
+                </button>
+            </div>
+            
+            <div id="listPendingContainer" class="space-y-2">
+                <div class="p-3 bg-slate-50 rounded-none border border-slate-200/60 text-center text-slate-400 text-xs">
+                    Tidak ada pengajuan pembayaran baru dari warga.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL KONFIRMASI SMOOTH (CUSTOM) -->
+    <div id="confirmModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-60 flex items-center justify-center transition-opacity duration-300 opacity-0 pointer-events-none p-4">
+        <div id="confirmModalContent" class="w-full max-w-xs bg-white rounded-none shadow-2xl p-5 transform scale-95 transition-transform duration-300 space-y-3 text-center">
+            <div id="confirmIconContainer" class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-base mx-auto">
+                <i class="fa-solid fa-circle-question" id="confirmIcon"></i>
+            </div>
+            <div>
+                <h3 class="font-bold text-slate-800 text-xs" id="confirmTitle">Konfirmasi Aksi</h3>
+                <p class="text-[11px] text-slate-500 mt-1" id="confirmMessage">Apakah Anda yakin?</p>
+            </div>
+            <div class="grid grid-cols-2 gap-2 pt-2">
+                <button type="button" id="confirmBtnBatal" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2 rounded-none transition-all text-xs cursor-pointer">
+                    Batal
+                </button>
+                <button type="button" id="confirmBtnYa" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-none shadow transition-all text-xs cursor-pointer">
+                    Ya, Lanjutkan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skrip Firebase & Logika -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, getDoc, getDocs, setDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        window.showToast = function(message) {
+            const toast = document.getElementById('toastNotification');
+            const toastText = document.getElementById('toastText');
+            toastText.innerText = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            }, 3000);
+        }
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+            authDomain: "erte-979ca.firebaseapp.com",
+            projectId: "erte-979ca",
+            storageBucket: "erte-979ca.firebasestorage.app",
+            messagingSenderId: "329513636032",
+            appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+        let allTransaksi = [];
+        let jumlahKkWajib = 0;
+        let nominalIuranThn = 0;
+        let statusBukaPembayaran = false;
+        let selectedDate = new Date();
+        const namaBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+        const btnToggleAkses = document.getElementById('btnToggleAkses');
+        const inputPilihBulan = document.getElementById('inputPilihBulan');
+        
+        const verifikasiModal = document.getElementById('verifikasiModal');
+        const verifikasiModalContent = document.getElementById('verifikasiModalContent');
+        const listTransaksiContainer = document.getElementById('listTransaksiContainer');
+        const listPendingContainer = document.getElementById('listPendingContainer');
+        const badgePendingCount = document.getElementById('badgePendingCount');
+        
+        const totalSaldoText = document.getElementById('totalSaldoText');
+        const totalPemasukanText = document.getElementById('totalPemasukanText');
+        const totalPiutangText = document.getElementById('totalPiutangText');
+        const infoJmlWajib = document.getElementById('infoJmlWajib');
+        const kekuranganPiutangText = document.getElementById('kekuranganPiutangText');
+        const badgeTargetIuran = document.getElementById('badgeTargetIuran');
+
+        window.ubahBulan = function(n) {
+            selectedDate.setMonth(selectedDate.getMonth() + n);
+            updateMonthInputVal();
+            renderKasUI();
+        }
+
+        window.onBulanDropdownChange = function(el) {
+            if (el.value) {
+                const parts = el.value.split('-');
+                const tahun = parseInt(parts[0], 10);
+                const bulan = parseInt(parts[1], 10) - 1;
+                selectedDate = new Date(tahun, bulan, 1);
+                renderKasUI();
+            }
+        }
+
+        function updateMonthInputVal() {
+            const y = selectedDate.getFullYear();
+            const m = String(selectedDate.getMonth() + 1).padStart(2, '0');
+            inputPilihBulan.value = `${y}-${m}`;
+        }
+
+        window.showConfirm = function(title, message, type, onConfirm) {
+            const modal = document.getElementById('confirmModal');
+            const content = document.getElementById('confirmModalContent');
+            const titleEl = document.getElementById('confirmTitle');
+            const msgEl = document.getElementById('confirmMessage');
+            const btnYa = document.getElementById('confirmBtnYa');
+            const btnBatal = document.getElementById('confirmBtnBatal');
+            const iconEl = document.getElementById('confirmIcon');
+            const iconContainer = document.getElementById('confirmIconContainer');
+
+            titleEl.innerText = title;
+            msgEl.innerText = message;
+
+            if (type === 'danger') {
+                btnYa.className = "w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2 rounded-none shadow transition-all text-xs cursor-pointer";
+                iconContainer.className = "w-10 h-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-base mx-auto";
+                iconEl.className = "fa-solid fa-triangle-exclamation";
+            } else {
+                btnYa.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-none shadow transition-all text-xs cursor-pointer";
+                iconContainer.className = "w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-base mx-auto";
+                iconEl.className = "fa-solid fa-circle-check";
+            }
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+
+            const closeConfirm = () => {
+                content.classList.remove('scale-100');
+                content.classList.add('scale-95');
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                btnYa.replaceWith(btnYa.cloneNode(true));
+                btnBatal.replaceWith(btnBatal.cloneNode(true));
+            };
+
+            document.getElementById('confirmBtnYa').onclick = () => {
+                closeConfirm();
+                if (onConfirm) onConfirm();
+            };
+
+            document.getElementById('confirmBtnBatal').onclick = () => {
+                closeConfirm();
+            };
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                updateMonthInputVal();
+                loadPengaturanDanWarga();
+                loadStatusAkses();
+                loadTransaksiKas();
+                loadPendingVerification();
+            } else {
+                window.location.href = "../index.html";
+            }
+        });
+
+        function loadStatusAkses() {
+            onSnapshot(doc(db, "settings", "pengaturanKeuangan"), (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    statusBukaPembayaran = data.bukaPembayaranWarga || false;
+                } else {
+                    statusBukaPembayaran = false;
+                }
+                updateTombolAksesUI();
+            }, (error) => {
+                statusBukaPembayaran = false;
+                updateTombolAksesUI();
+            });
+        }
+
+        function updateTombolAksesUI() {
+            if (statusBukaPembayaran) {
+                btnToggleAkses.innerText = "DIBUKA (Tutup)";
+                btnToggleAkses.className = "px-3 py-1.5 rounded-none text-xs font-bold transition-all cursor-pointer bg-emerald-600 text-white shadow";
+            } else {
+                btnToggleAkses.innerText = "DITUTUP (Buka)";
+                btnToggleAkses.className = "px-3 py-1.5 rounded-none text-xs font-bold transition-all cursor-pointer bg-rose-600 text-white shadow";
+            }
+        }
+
+        window.toggleAksesPembayaran = async function() {
+            const nextStatus = !statusBukaPembayaran;
+            showConfirm(
+                nextStatus ? "Buka Akses Pembayaran?" : "Tutup Akses Pembayaran?",
+                nextStatus ? "Warga akan dapat mencatat pembayaran mandiri." : "Warga tidak dapat mencatat pembayaran mandiri.",
+                nextStatus ? "success" : "danger",
+                async () => {
+                    statusBukaPembayaran = nextStatus;
+                    updateTombolAksesUI();
+                    try {
+                        await setDoc(doc(db, "settings", "pengaturanKeuangan"), {
+                            bukaPembayaranWarga: statusBukaPembayaran,
+                            updatedAt: serverTimestamp()
+                        }, { merge: true });
+                        showToast(statusBukaPembayaran ? "Fasilitas pembayaran mandiri warga DIBUKA!" : "Fasilitas pembayaran mandiri warga DITUTUP!");
+                    } catch (error) {
+                        alert("Gagal mengubah status akses: " + error.message);
+                    }
+                }
+            );
+        }
+
+        function formatRupiahNum(angka) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
+        }
+
+        window.toggleVerifikasiModal = function(isOpen) {
+            if (isOpen) {
+                verifikasiModal.classList.remove('opacity-0', 'pointer-events-none');
+                verifikasiModalContent.classList.remove('translate-y-full');
+            } else {
+                verifikasiModal.classList.add('opacity-0', 'pointer-events-none');
+                verifikasiModalContent.classList.add('translate-y-full');
+            }
+        }
+
+        async function loadPengaturanDanWarga() {
+            try {
+                // 1. Ambil pengaturan nominal iuran
+                const docSnap = await getDoc(doc(db, "settings", "pengaturanKeuangan"));
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    nominalIuranThn = Number(data.totalSetahun || 0);
+                    badgeTargetIuran.innerText = `Iuran: ${formatRupiahNum(nominalIuranThn)}/thn`;
+                }
+
+                // 2. Ambil jumlah KK warga berdasarkan statusHubungan = KEPALA KELUARGA & statusWajibIuran = Wajib
+                const wargaSnap = await getDocs(collection(db, "dataWarga"));
+                jumlahKkWajib = 0;
+                wargaSnap.forEach((docWarga) => {
+                    const wData = docWarga.data();
+                    const statusHub = (wData.statusHubungan || "").trim().toUpperCase();
+                    const statusWajib = (wData.statusWajibIuran || "").trim().toUpperCase();
+
+                    if (statusHub === "KEPALA KELUARGA" && statusWajib === "WAJIB") {
+                        jumlahKkWajib++;
+                    }
+                });
+
+                renderRingkasanPiutang();
+            } catch (err) {
+                console.error("Gagal memuat data pengaturan atau warga:", err);
+            }
+        }
+
+        function loadTransaksiKas() {
+            onSnapshot(collection(db, "kasRt"), (snapshot) => {
+                allTransaksi = [];
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const kat = (data.kategori || "").toLowerCase();
+                    const ak = (data.akun || "").toLowerCase();
+                    if (kat.includes("iuran wajib") || ak.includes("iuran wajib")) {
+                        allTransaksi.push({ id: docSnap.id, ...data });
+                    }
+                });
+
+                allTransaksi.sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
+                renderKasUI();
+            });
+        }
+
+        function renderRingkasanPiutang() {
+            const totalPiutang = jumlahKkWajib * nominalIuranThn;
+            totalPiutangText.innerText = formatRupiahNum(totalPiutang);
+            infoJmlWajib.innerText = `(${jumlahKkWajib} KK Wajib)`;
+        }
+
+        function renderKasUI() {
+            const tahun = selectedDate.getFullYear();
+            const bulan = selectedDate.getMonth();
+            updateMonthInputVal();
+
+            let saldoBerjalan = 0;
+            let totalPemasukanTahunIni = 0;
+
+            allTransaksi.forEach((item) => {
+                const tgl = new Date(item.tanggal);
+                if (!isNaN(tgl)) {
+                    const nominal = Number(item.nominal || 0);
+                    const isPemasukan = (item.jenis === "Pemasukan" || !item.jenis);
+
+                    // Saldo keseluruhan kas
+                    if (tgl.getFullYear() < tahun || (tgl.getFullYear() === tahun && tgl.getMonth() < bulan)) {
+                        if (isPemasukan) saldoBerjalan += nominal;
+                        else saldoBerjalan -= nominal;
+                    }
+
+                    // Total pemasukan iuran di tahun yang sama sampai bulan terpilih
+                    if (tgl.getFullYear() === tahun && tgl.getMonth() <= bulan && isPemasukan) {
+                        totalPemasukanTahunIni += nominal;
+                    }
+                }
+            });
+
+            let totalMasukBulanIni = 0;
+            let html = "";
+            let adaTransaksi = false;
+
+            const sortedDesc = [...allTransaksi].reverse();
+
+            sortedDesc.forEach((data) => {
+                if (data.tanggal) {
+                    const tgl = new Date(data.tanggal);
+                    if (!isNaN(tgl) && tgl.getFullYear() === tahun && tgl.getMonth() === bulan) {
+                        adaTransaksi = true;
+                        const nominal = Number(data.nominal || 0);
+                        const isPemasukan = (data.jenis === "Pemasukan" || !data.jenis);
+
+                        if (isPemasukan) totalMasukBulanIni += nominal;
+
+                        const badgeClass = isPemasukan ? "bg-emerald-100 text-emerald-700 border border-emerald-200" : "bg-rose-100 text-rose-700 border border-rose-200";
+                        const nominalFormatted = "+ " + formatRupiahNum(nominal);
+                        const nominalColor = "text-emerald-600";
+                        const wargaInfo = data.namaWarga ? `<span class="text-[10px] text-emerald-800 font-semibold block"><i class="fa-solid fa-user mr-1"></i>KK Wajib: ${data.namaWarga}</span>` : '';
+                        const kategoriBadge = data.kategori ? `<span class="text-[9px] text-slate-500 block">Kategori: ${data.kategori}</span>` : '';
+
+                        html += `
+                            <div class="p-3 bg-slate-50 rounded-none border border-slate-200/60 space-y-1.5">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[9px] ${badgeClass} px-1.5 py-0.5 rounded-none font-bold">${data.jenis || 'Pemasukan'}</span>
+                                    <span class="text-xs font-bold ${nominalColor}">${nominalFormatted}</span>
+                                </div>
+                                <h4 class="font-bold text-slate-800 text-[11px]">${data.keterangan || '-'}</h4>
+                                ${kategoriBadge}
+                                ${wargaInfo}
+                                <div class="pt-1 flex items-center justify-between text-[9px] text-slate-400 border-t border-slate-200/40">
+                                    <span><i class="fa-regular fa-calendar mr-1"></i>${data.tanggal || '-'}</span>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            });
+
+            if (!adaTransaksi) {
+                html = `<div class="p-3 bg-slate-50 rounded-none border border-slate-200/60 text-center text-slate-400 text-xs">Tidak ada transaksi Pendapatan Iuran Wajib di bulan ${namaBulan[bulan]} ${tahun}.</div>`;
+            }
+
+            // Kalkulasi piutang dan kekurangan
+            const totalPiutang = jumlahKkWajib * nominalIuranThn;
+            const kekurangan = Math.max(0, totalPiutang - totalPemasukanTahunIni);
+
+            totalSaldoText.innerText = formatRupiahNum(saldoBerjalan + totalMasukBulanIni);
+            totalPemasukanText.innerText = formatRupiahNum(totalPemasukanTahunIni);
+            totalPiutangText.innerText = formatRupiahNum(totalPiutang);
+            kekuranganPiutangText.innerText = formatRupiahNum(kekurangan);
+            listTransaksiContainer.innerHTML = html;
+        }
+
+        function loadPendingVerification() {
+            onSnapshot(collection(db, "iuranPending"), (snapshot) => {
+                let pendingHTML = "";
+                let count = 0;
+
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    count++;
+                    pendingHTML += `
+                        <div class="p-3 bg-amber-50/60 rounded-none border border-amber-200 space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[9px] bg-amber-100 text-amber-700 font-bold px-1.5 py-0.5">Pengajuan Warga</span>
+                                <span class="text-xs font-bold text-emerald-600">+ ${formatRupiahNum(data.nominal || 0)}</span>
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-[11px]">${data.keterangan || '-'}</h4>
+                            <span class="text-[10px] text-emerald-800 font-semibold block"><i class="fa-solid fa-user mr-1"></i>Warga: ${data.namaWarga || data.inputBy}</span>
+                            <div class="pt-1 flex items-center justify-between text-[9px] text-slate-400 border-t border-amber-200/60">
+                                <span><i class="fa-regular fa-calendar mr-1"></i>${data.tanggal || '-'}</span>
+                                <div class="flex items-center space-x-2">
+                                    <button type="button" onclick="approvePending('${docSnap.id}')" class="text-emerald-700 hover:underline font-bold cursor-pointer bg-emerald-100 px-2 py-0.5"><i class="fa-solid fa-check mr-0.5"></i> Setujui</button>
+                                    <button type="button" onclick="rejectPending('${docSnap.id}')" class="text-red-600 hover:underline font-bold cursor-pointer bg-red-100 px-2 py-0.5"><i class="fa-solid fa-xmark mr-0.5"></i> Tolak</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                if (count > 0) {
+                    badgePendingCount.innerText = count;
+                    badgePendingCount.classList.remove('hidden');
+                } else {
+                    badgePendingCount.classList.add('hidden');
+                    pendingHTML = `<div class="p-3 bg-slate-50 rounded-none border border-slate-200/60 text-center text-slate-400 text-xs">Tidak ada pengajuan pembayaran baru dari warga.</div>`;
+                }
+                listPendingContainer.innerHTML = pendingHTML;
+            });
+        }
+
+        window.approvePending = function(id) {
+            showConfirm("Setujui Pembayaran?", "Data pembayaran iuran ini akan disetujui dan dimasukkan ke Kas Resmi RT.", "success", async () => {
+                try {
+                    const docSnap = await getDoc(doc(db, "iuranPending", id));
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        await addDoc(collection(db, "kasRt"), {
+                            jenis: "Pemasukan",
+                            kategori: "Iuran Wajib",
+                            namaWarga: data.namaWarga,
+                            keterangan: data.keterangan || "Pembayaran Iuran Wajib",
+                            nominal: data.nominal,
+                            tanggal: data.tanggal,
+                            inputBy: data.inputBy,
+                            createdAt: serverTimestamp(),
+                            updatedAt: serverTimestamp()
+                        });
+                        await deleteDoc(doc(db, "iuranPending", id));
+                        showToast("Pembayaran iuran berhasil disetujui & masuk kas!");
+                    }
+                } catch (err) { alert("Gagal menyetujui: " + err.message); }
+            });
+        }
+
+        window.rejectPending = function(id) {
+            showConfirm("Tolak Pengajuan?", "Pengajuan pembayaran iuran ini akan ditolak dan dihapus dari daftar.", "danger", async () => {
+                try {
+                    await deleteDoc(doc(db, "iuranPending", id));
+                    showToast("Pengajuan pembayaran ditolak.");
+                } catch (err) { alert("Gagal menolak: " + err.message); }
+            });
+        }
+    </script>
+</body>
+</html>

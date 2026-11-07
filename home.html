@@ -1,0 +1,752 @@
+<!-- KONTEN UTAMA BERANDA (DESKTOP) -->
+<div id="spaAppContainer" class="space-y-6 pb-20">
+    <!-- Bagian Sambutan / Statistik Singkat -->
+    <div class="bg-white dark:bg-slate-800 p-5 rounded-none shadow-sm border border-slate-200 dark:border-slate-700">
+        <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100 mb-1">Beranda Warga RT-Ku</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400">Selamat datang di sistem layanan warga. Silakan pantau informasi, galeri, dan statistik terbaru wilayah kita.</p>
+    </div>
+
+    <!-- SOROTAN GALERI & BANNER RT (DESKTOP) -->
+    <div class="bg-white dark:bg-slate-800 p-4 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
+        <div class="flex items-center justify-between">
+            <h3 class="font-bold text-xs text-slate-800 dark:text-slate-100 tracking-wide uppercase flex items-center space-x-2">
+                <i class="fa-solid fa-panorama text-emerald-600 dark:text-emerald-400"></i>
+                <span>Sorotan Galeri & Banner RT</span>
+            </h3>
+            <span class="hidden md:block text-[10px] text-slate-400 dark:text-slate-500 font-medium">Geser satu-persatu</span>
+        </div>
+
+        <div class="relative overflow-hidden">
+            <button type="button" onclick="prevBannerSlide()" class="absolute left-1 top-1/2 -translate-y-1/2 z-10 w-7 h-7 bg-slate-900/70 hover:bg-slate-900 text-white rounded-full flex items-center justify-center text-xs shadow transition-all cursor-pointer">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+
+            <div class="overflow-hidden px-1">
+                <div id="bannerSliderWrapper" class="flex transition-transform duration-500 ease-out -mx-1">
+                    <div class="min-w-[100%] md:min-w-[25%] px-1 shrink-0">
+                        <div class="bg-slate-50 dark:bg-slate-700 border border-slate-200/70 dark:border-slate-600 rounded-none overflow-hidden shadow-sm flex flex-col h-full p-4 text-center justify-center">
+                            <i class="fa-solid fa-spinner fa-spin text-emerald-600 text-base mb-2"></i>
+                            <span class="text-[11px] text-slate-500 dark:text-slate-300 font-medium">Memuat slider banner...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" onclick="nextBannerSlide()" class="absolute right-1 top-1/2 -translate-y-1/2 z-10 w-7 h-7 bg-slate-900/70 hover:bg-slate-900 text-white rounded-full flex items-center justify-center text-xs shadow transition-all cursor-pointer">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <div id="bannerSliderDots" class="flex justify-center space-x-1.5 pt-1">
+        </div>
+    </div>
+
+    <!-- KARTU STATISTIK KEPENDUDUKAN (DESKTOP) -->
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <div class="bg-white dark:bg-slate-800 p-3.5 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 flex items-center space-x-3">
+            <div class="w-10 h-10 bg-emerald-50 dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-sm font-bold shrink-0">
+                <i class="fa-solid fa-house-user"></i>
+            </div>
+            <div>
+                <span class="text-[10px] text-slate-400 block font-medium uppercase">Kepala Keluarga</span>
+                <h4 id="statTotalKKDesktop" class="font-bold text-slate-800 dark:text-slate-100 text-sm mt-0.5">0</h4>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-800 p-3.5 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 flex items-center space-x-3">
+            <div class="w-10 h-10 bg-blue-50 dark:bg-slate-700 text-blue-600 dark:text-blue-400 flex items-center justify-center text-sm font-bold shrink-0">
+                <i class="fa-solid fa-users"></i>
+            </div>
+            <div>
+                <span class="text-[10px] text-slate-400 block font-medium uppercase">Total Warga</span>
+                <h4 id="statTotalWargaDesktop" class="font-bold text-slate-800 dark:text-slate-100 text-sm mt-0.5">0</h4>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-800 p-3.5 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 flex items-center space-x-3">
+            <div class="w-10 h-10 bg-indigo-50 dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-sm font-bold shrink-0">
+                <i class="fa-solid fa-mars"></i>
+            </div>
+            <div>
+                <span class="text-[10px] text-slate-400 block font-medium uppercase">Laki-Laki</span>
+                <h4 id="statLakiDesktop" class="font-bold text-slate-800 dark:text-slate-100 text-sm mt-0.5">0</h4>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-800 p-3.5 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 flex items-center space-x-3">
+            <div class="w-10 h-10 bg-pink-50 dark:bg-slate-700 text-pink-600 dark:text-pink-400 flex items-center justify-center text-sm font-bold shrink-0">
+                <i class="fa-solid fa-venus"></i>
+            </div>
+            <div>
+                <span class="text-[10px] text-slate-400 block font-medium uppercase">Perempuan</span>
+                <h4 id="statPerempuanDesktop" class="font-bold text-slate-800 dark:text-slate-100 text-sm mt-0.5">0</h4>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-800 p-3.5 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 col-span-2 md:col-span-1 flex flex-col justify-center">
+            <span class="text-[10px] text-slate-400 block font-medium uppercase mb-1">Berdasarkan Usia</span>
+            <div class="flex justify-between text-[11px] text-slate-600 dark:text-slate-300">
+                <span>Anak: <strong id="statAnakDesktop">0</strong></span>
+                <span>Dewasa: <strong id="statDewasaDesktop">0</strong></span>
+                <span>Lansia: <strong id="statLansiaDesktop">0</strong></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- GRID DUA KOLOM: AGENDA EVENT & HASIL RAPAT (DESKTOP) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- AGENDA / EVENT KEGIATAN RT -->
+        <div class="bg-white dark:bg-slate-800 p-4 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <a href="layout.html?page=kalender" class="w-7 h-7 bg-emerald-50 dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs shrink-0 border border-emerald-100 dark:border-slate-600 hover:bg-emerald-100 transition-all cursor-pointer" title="Buka Kalender Kegiatan">
+                        <i class="fa-solid fa-calendar-days"></i>
+                    </a>
+                    <h3 class="font-bold text-xs text-slate-800 dark:text-slate-100 tracking-wide uppercase">
+                        Agenda & Event Warga RT
+                    </h3>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2 pt-1">
+                <select id="filterEventBulanDesktop" onchange="renderHomeEvents()" class="bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-800 dark:text-slate-100 text-[11px] rounded-none px-2 py-1.5 focus:outline-none">
+                    <option value="all">Semua Bulan</option>
+                    <option value="0">Januari</option>
+                    <option value="1">Februari</option>
+                    <option value="2">Maret</option>
+                    <option value="3">April</option>
+                    <option value="4">Mei</option>
+                    <option value="5">Juni</option>
+                    <option value="6">Juli</option>
+                    <option value="7">Agustus</option>
+                    <option value="8">September</option>
+                    <option value="9">Oktober</option>
+                    <option value="10" selected>November</option>
+                    <option value="11">Desember</option>
+                </select>
+                <select id="filterEventTahunDesktop" onchange="renderHomeEvents()" class="bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-800 dark:text-slate-100 text-[11px] rounded-none px-2 py-1.5 focus:outline-none">
+                    <option value="all">Semua Tahun</option>
+                </select>
+            </div>
+            <div id="homeEventContainerDesktop" class="space-y-3 pt-1">
+                <div class="text-center py-6 text-slate-400 text-xs">Memuat agenda event...</div>
+            </div>
+        </div>
+
+        <!-- INFO HASIL RAPAT / RISALAH WARGA -->
+        <div class="bg-white dark:bg-slate-800 p-4 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <div class="w-7 h-7 bg-emerald-50 dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs shrink-0 border border-emerald-100 dark:border-slate-600">
+                        <i class="fa-solid fa-handshake"></i>
+                    </div>
+                    <h3 class="font-bold text-xs text-slate-800 dark:text-slate-100 tracking-wide uppercase">
+                        Info Hasil Rapat Warga
+                    </h3>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2 pt-1">
+                <select id="filterRapatBulanDesktop" onchange="renderHomeRapat()" class="bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-800 dark:text-slate-100 text-[11px] rounded-none px-2 py-1.5 focus:outline-none">
+                    <option value="all">Semua Bulan</option>
+                    <option value="0">Januari</option>
+                    <option value="1">Februari</option>
+                    <option value="2">Maret</option>
+                    <option value="3">April</option>
+                    <option value="4">Mei</option>
+                    <option value="5">Juni</option>
+                    <option value="6">Juli</option>
+                    <option value="7">Agustus</option>
+                    <option value="8">September</option>
+                    <option value="9">Oktober</option>
+                    <option value="10" selected>November</option>
+                    <option value="11">Desember</option>
+                </select>
+                <select id="filterRapatTahunDesktop" onchange="renderHomeRapat()" class="bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-800 dark:text-slate-100 text-[11px] rounded-none px-2 py-1.5 focus:outline-none">
+                    <option value="all">Semua Tahun</option>
+                </select>
+            </div>
+            <div id="homeRapatContainerDesktop" class="space-y-3 pt-1">
+                <div class="text-center py-6 text-slate-400 text-xs">Memuat hasil rapat...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- KONTEN UTAMA BERANDA (MOBILE) -->
+<div id="spaAppContainerMobile" class="space-y-4 pb-28">
+    <!-- SOROTAN GALERI & BANNER RT (MOBILE) -->
+    <div class="bg-white dark:bg-slate-800 p-4 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
+        <div class="flex items-center justify-between">
+            <h3 class="font-bold text-xs text-slate-800 dark:text-slate-100 tracking-wide uppercase flex items-center space-x-2">
+                <i class="fa-solid fa-panorama text-emerald-600 dark:text-emerald-400"></i>
+                <span>Sorotan Galeri & Banner RT</span>
+            </h3>
+        </div>
+
+        <div class="relative overflow-hidden">
+            <button type="button" onclick="prevBannerSlide()" class="absolute left-1 top-1/2 -translate-y-1/2 z-10 w-7 h-7 bg-slate-900/70 hover:bg-slate-900 text-white rounded-full flex items-center justify-center text-xs shadow transition-all cursor-pointer">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+
+            <div class="overflow-hidden px-1">
+                <div id="bannerSliderWrapperMobile" class="flex transition-transform duration-500 ease-out -mx-1">
+                    <div class="min-w-[100%] md:min-w-[25%] px-1 shrink-0">
+                        <div class="bg-slate-50 dark:bg-slate-700 border border-slate-200/70 dark:border-slate-600 rounded-none overflow-hidden shadow-sm flex flex-col h-full p-4 text-center justify-center">
+                            <i class="fa-solid fa-spinner fa-spin text-emerald-600 text-base mb-2"></i>
+                            <span class="text-[11px] text-slate-500 dark:text-slate-300 font-medium">Memuat slider banner...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" onclick="nextBannerSlide()" class="absolute right-1 top-1/2 -translate-y-1/2 z-10 w-7 h-7 bg-slate-900/70 hover:bg-slate-900 text-white rounded-full flex items-center justify-center text-xs shadow transition-all cursor-pointer">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <div id="bannerSliderDotsMobile" class="flex justify-center space-x-1.5 pt-1">
+        </div>
+    </div>
+
+    <!-- KARTU STATISTIK KEPENDUDUKAN (MOBILE) -->
+    <div class="grid grid-cols-2 gap-2">
+        <div class="bg-white dark:bg-slate-800 p-3 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 flex items-center space-x-2.5">
+            <div class="w-8 h-8 bg-emerald-50 dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-bold shrink-0">
+                <i class="fa-solid fa-house-user"></i>
+            </div>
+            <div>
+                <span class="text-[9px] text-slate-400 block font-medium uppercase">Kepala Keluarga</span>
+                <h4 id="statTotalKKMobile" class="font-bold text-slate-800 dark:text-slate-100 text-xs mt-0.5">0</h4>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-800 p-3 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 flex items-center space-x-2.5">
+            <div class="w-8 h-8 bg-blue-50 dark:bg-slate-700 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs font-bold shrink-0">
+                <i class="fa-solid fa-users"></i>
+            </div>
+            <div>
+                <span class="text-[9px] text-slate-400 block font-medium uppercase">Total Warga</span>
+                <h4 id="statTotalWargaMobile" class="font-bold text-slate-800 dark:text-slate-100 text-xs mt-0.5">0</h4>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-800 p-3 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 flex items-center space-x-2.5">
+            <div class="w-8 h-8 bg-indigo-50 dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs font-bold shrink-0">
+                <i class="fa-solid fa-mars"></i>
+            </div>
+            <div>
+                <span class="text-[9px] text-slate-400 block font-medium uppercase">Laki-Laki</span>
+                <h4 id="statLakiMobile" class="font-bold text-slate-800 dark:text-slate-100 text-xs mt-0.5">0</h4>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-800 p-3 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 flex items-center space-x-2.5">
+            <div class="w-8 h-8 bg-pink-50 dark:bg-slate-700 text-pink-600 dark:text-pink-400 flex items-center justify-center text-xs font-bold shrink-0">
+                <i class="fa-solid fa-venus"></i>
+            </div>
+            <div>
+                <span class="text-[9px] text-slate-400 block font-medium uppercase">Perempuan</span>
+                <h4 id="statPerempuanMobile" class="font-bold text-slate-800 dark:text-slate-100 text-xs mt-0.5">0</h4>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-800 p-3 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 col-span-2 flex flex-col justify-center">
+            <span class="text-[9px] text-slate-400 block font-medium uppercase mb-1">Perbandingan Berdasarkan Usia</span>
+            <div class="flex justify-around text-[10px] text-slate-600 dark:text-slate-300">
+                <span>Anak (&lt;17 th): <strong id="statAnakMobile">0</strong></span>
+                <span>Dewasa (17-59 th): <strong id="statDewasaMobile">0</strong></span>
+                <span>Lansia (&ge;60 th): <strong id="statLansiaMobile">0</strong></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- AGENDA / EVENT KEGIATAN RT (MOBILE) -->
+    <div class="bg-white dark:bg-slate-800 p-4 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
+        <div class="flex items-center space-x-2">
+            <a href="layout.html?page=kalender" class="w-7 h-7 bg-emerald-50 dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs shrink-0 border border-emerald-100 dark:border-slate-600 hover:bg-emerald-100 transition-all cursor-pointer" title="Buka Kalender Kegiatan">
+                <i class="fa-solid fa-calendar-days"></i>
+            </a>
+            <h3 class="font-bold text-xs text-slate-800 dark:text-slate-100 tracking-wide uppercase">
+                Agenda & Event Warga RT
+            </h3>
+        </div>
+        <div class="grid grid-cols-2 gap-2 pt-1">
+            <select id="filterEventBulanMobile" onchange="renderHomeEvents()" class="bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-800 dark:text-slate-100 text-[11px] rounded-none px-2 py-1.5 focus:outline-none">
+                <option value="all">Semua Bulan</option>
+                <option value="0">Januari</option>
+                <option value="1">Februari</option>
+                <option value="2">Maret</option>
+                <option value="3">April</option>
+                <option value="4">Mei</option>
+                <option value="5">Juni</option>
+                <option value="6">Juli</option>
+                <option value="7">Agustus</option>
+                <option value="8">September</option>
+                <option value="9">Oktober</option>
+                <option value="10" selected>November</option>
+                <option value="11">Desember</option>
+            </select>
+            <select id="filterEventTahunMobile" onchange="renderHomeEvents()" class="bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-800 dark:text-slate-100 text-[11px] rounded-none px-2 py-1.5 focus:outline-none">
+                <option value="all">Semua Tahun</option>
+            </select>
+        </div>
+        <div id="homeEventContainerMobile" class="space-y-3 pt-1">
+            <div class="text-center py-6 text-slate-400 text-xs">Memuat agenda event...</div>
+        </div>
+    </div>
+
+    <!-- INFO HASIL RAPAT / RISALAH WARGA (MOBILE) -->
+    <div class="bg-white dark:bg-slate-800 p-4 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
+        <div class="flex items-center space-x-2">
+            <div class="w-7 h-7 bg-emerald-50 dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs shrink-0 border border-emerald-100 dark:border-slate-600">
+                <i class="fa-solid fa-handshake"></i>
+            </div>
+            <h3 class="font-bold text-xs text-slate-800 dark:text-slate-100 tracking-wide uppercase">
+                Info Hasil Rapat Warga
+            </h3>
+        </div>
+        <div class="grid grid-cols-2 gap-2 pt-1">
+            <select id="filterRapatBulanMobile" onchange="renderHomeRapat()" class="bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-800 dark:text-slate-100 text-[11px] rounded-none px-2 py-1.5 focus:outline-none">
+                <option value="all">Semua Bulan</option>
+                <option value="0">Januari</option>
+                <option value="1">Februari</option>
+                <option value="2">Maret</option>
+                <option value="3">April</option>
+                <option value="4">Mei</option>
+                <option value="5">Juni</option>
+                <option value="6">Juli</option>
+                <option value="7">Agustus</option>
+                <option value="8">September</option>
+                <option value="9">Oktober</option>
+                <option value="10" selected>November</option>
+                <option value="11">Desember</option>
+            </select>
+            <select id="filterRapatTahunMobile" onchange="renderHomeRapat()" class="bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-800 dark:text-slate-100 text-[11px] rounded-none px-2 py-1.5 focus:outline-none">
+                <option value="all">Semua Tahun</option>
+            </select>
+        </div>
+        <div id="homeRapatContainerMobile" class="space-y-3 pt-1">
+            <div class="text-center py-6 text-slate-400 text-xs">Memuat hasil rapat...</div>
+        </div>
+    </div>
+</div>
+
+<!-- SKRIP MANDIRI KHUSUS HALAMAN HOME -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+        authDomain: "erte-979ca.firebaseapp.com",
+        projectId: "erte-979ca",
+        storageBucket: "erte-979ca.firebasestorage.app",
+        messagingSenderId: "329513636032",
+        appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let homeActiveBanners = [];
+    let homeCurrentIndex = 0;
+    let homeSlideInterval = null;
+
+    let globalEventsList = [];
+    let globalRapatList = [];
+
+    window.showBannerSlide = function(index) {
+        if (homeActiveBanners.length === 0) return;
+        const visibleItems = window.innerWidth >= 768 ? 4 : 1;
+        const maxIndex = Math.max(0, homeActiveBanners.length - visibleItems);
+        
+        if (index > maxIndex) {
+            homeCurrentIndex = 0;
+        } else if (index < 0) {
+            homeCurrentIndex = maxIndex;
+        } else {
+            homeCurrentIndex = index;
+        }
+
+        const percentage = homeCurrentIndex * (100 / visibleItems);
+        
+        const wrapperDesktop = document.getElementById('bannerSliderWrapper');
+        const wrapperMobile = document.getElementById('bannerSliderWrapperMobile');
+        
+        if (wrapperDesktop) wrapperDesktop.style.transform = `translateX(-${percentage}%)`;
+        if (wrapperMobile) wrapperMobile.style.transform = `translateX(-${percentage}%)`;
+
+        updateDotsActive();
+    }
+
+    window.nextBannerSlide = function() {
+        window.showBannerSlide(homeCurrentIndex + 1);
+        resetBannerTimer();
+    }
+
+    window.prevBannerSlide = function() {
+        window.showBannerSlide(homeCurrentIndex - 1);
+        resetBannerTimer();
+    }
+
+    function resetBannerTimer() {
+        clearInterval(homeSlideInterval);
+        const visibleItems = window.innerWidth >= 768 ? 4 : 1;
+        if (homeActiveBanners.length > visibleItems) {
+            homeSlideInterval = setInterval(() => {
+                window.showBannerSlide(homeCurrentIndex + 1);
+            }, 4000);
+        }
+    }
+
+    function updateDotsActive() {
+        const dots = document.querySelectorAll('.banner-dot-item');
+        dots.forEach((dot) => {
+            const match = parseInt(dot.getAttribute('data-index')) === homeCurrentIndex;
+            dot.classList.toggle('bg-emerald-600', match);
+            dot.classList.toggle('bg-slate-300', !match);
+            dot.classList.toggle('dark:bg-emerald-400', match);
+            dot.classList.toggle('dark:bg-slate-600', !match);
+        });
+    }
+
+    function formatDate(dateString) {
+        if (!dateString) return "-";
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const date = new Date(dateString);
+        return isNaN(date) ? dateString : date.toLocaleDateString('id-ID', options);
+    }
+
+    function calculateAge(birthDateString) {
+        if (!birthDateString) return 0;
+        const birthDate = new Date(birthDateString);
+        if (isNaN(birthDate)) return 0;
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    }
+
+    async function initWargaStatistics() {
+        try {
+            const querySnapshot = await getDocs(collection(db, "dataWarga"));
+            let totalWarga = 0;
+            let totalKK = 0;
+            let totalLaki = 0;
+            let totalPerempuan = 0;
+            let countAnak = 0;   
+            let countDewasa = 0; 
+            let countLansia = 0; 
+
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                totalWarga++;
+
+                const statusHub = (data.statusHubungan || "").toUpperCase();
+                if (statusHub.includes("KEPALA KELUARGA")) {
+                    totalKK++;
+                }
+
+                const jk = (data.jenisKelamin || "").toUpperCase();
+                if (jk.includes("LAKI")) {
+                    totalLaki++;
+                } else if (jk.includes("PEREMPUAN") || jk.includes("WANITA")) {
+                    totalPerempuan++;
+                }
+
+                const umur = calculateAge(data.tanggalLahir);
+                if (umur < 17) {
+                    countAnak++;
+                } else if (umur >= 60) {
+                    countLansia++;
+                } else {
+                    countDewasa++;
+                }
+            });
+
+            if (document.getElementById('statTotalKKDesktop')) document.getElementById('statTotalKKDesktop').innerText = totalKK;
+            if (document.getElementById('statTotalWargaDesktop')) document.getElementById('statTotalWargaDesktop').innerText = totalWarga;
+            if (document.getElementById('statLakiDesktop')) document.getElementById('statLakiDesktop').innerText = totalLaki;
+            if (document.getElementById('statPerempuanDesktop')) document.getElementById('statPerempuanDesktop').innerText = totalPerempuan;
+            if (document.getElementById('statAnakDesktop')) document.getElementById('statAnakDesktop').innerText = countAnak;
+            if (document.getElementById('statDewasaDesktop')) document.getElementById('statDewasaDesktop').innerText = countDewasa;
+            if (document.getElementById('statLansiaDesktop')) document.getElementById('statLansiaDesktop').innerText = countLansia;
+
+            if (document.getElementById('statTotalKKMobile')) document.getElementById('statTotalKKMobile').innerText = totalKK;
+            if (document.getElementById('statTotalWargaMobile')) document.getElementById('statTotalWargaMobile').innerText = totalWarga;
+            if (document.getElementById('statLakiMobile')) document.getElementById('statLakiMobile').innerText = totalLaki;
+            if (document.getElementById('statPerempuanMobile')) document.getElementById('statPerempuanMobile').innerText = totalPerempuan;
+            if (document.getElementById('statAnakMobile')) document.getElementById('statAnakMobile').innerText = countAnak;
+            if (document.getElementById('statDewasaMobile')) document.getElementById('statDewasaMobile').innerText = countDewasa;
+            if (document.getElementById('statLansiaMobile')) document.getElementById('statLansiaMobile').innerText = countLansia;
+
+        } catch (error) {
+            console.error("Gagal memuat statistik warga:", error);
+        }
+    }
+
+    function populateYearOptions(dataList, dateField) {
+        const yearsSet = new Set();
+        dataList.forEach(item => {
+            const val = item[dateField];
+            if (val) {
+                const d = new Date(val);
+                if (!isNaN(d)) {
+                    yearsSet.add(d.getFullYear());
+                }
+            }
+        });
+
+        const currentYear = new Date().getFullYear();
+        yearsSet.add(currentYear);
+
+        const sortedYears = Array.from(yearsSet).sort((a, b) => b - a);
+        let optionsHtml = '<option value="all">Semua Tahun</option>';
+        sortedYears.forEach(y => {
+            const selected = (y === currentYear) ? 'selected' : '';
+            optionsHtml += `<option value="${y}" ${selected}>${y}</option>`;
+        });
+        return optionsHtml;
+    }
+
+    async function initHomeBanners() {
+        const wrapperDesktop = document.getElementById('bannerSliderWrapper');
+        const wrapperMobile = document.getElementById('bannerSliderWrapperMobile');
+        if (!wrapperDesktop && !wrapperMobile) return;
+
+        try {
+            const querySnapshot = await getDocs(collection(db, "banners"));
+            homeActiveBanners = [];
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                if (!data.status || data.status === 'active') {
+                    homeActiveBanners.push({
+                        title: data.title || "Banner RT",
+                        imageUrl: data.imageUrl || ""
+                    });
+                }
+            });
+
+            if (homeActiveBanners.length === 0) {
+                homeActiveBanners = [
+                    { title: "Gotong Royong Warga", imageUrl: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=600&q=80" },
+                    { title: "Kegiatan RT-Ku", imageUrl: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=600&q=80" }
+                ];
+            }
+
+            let slidesHtml = '';
+            homeActiveBanners.forEach((item) => {
+                slidesHtml += `
+                    <div class="min-w-[100%] md:min-w-[25%] px-1 shrink-0">
+                        <div class="bg-slate-50 dark:bg-slate-700 border border-slate-200/70 dark:border-slate-600 rounded-none overflow-hidden shadow-sm flex flex-col group h-full">
+                            <div class="w-full h-32 md:h-32 bg-slate-100 dark:bg-slate-800 overflow-hidden relative">
+                                <img src="${item.imageUrl}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                            </div>
+                            <div class="p-2 bg-white dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700 flex-1 flex items-center">
+                                <h4 class="font-bold text-slate-800 dark:text-slate-100 text-[11px] truncate w-full" title="${item.title}">${item.title}</h4>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (wrapperDesktop) wrapperDesktop.innerHTML = slidesHtml;
+            if (wrapperMobile) wrapperMobile.innerHTML = slidesHtml;
+
+            const visibleItems = window.innerWidth >= 768 ? 4 : 1;
+            const totalDots = Math.max(1, homeActiveBanners.length - (visibleItems - 1));
+            let dotsHtml = '';
+            for (let i = 0; i < totalDots; i++) {
+                const dotColor = i === 0 ? 'bg-emerald-600 dark:bg-emerald-400' : 'bg-slate-300 dark:bg-slate-600';
+                dotsHtml += `
+                    <button type="button" onclick="showBannerSlide(${i})" data-index="${i}" class="banner-dot-item w-2 h-2 rounded-full ${dotColor} transition-all cursor-pointer"></button>
+                `;
+            }
+
+            const dotsDesktop = document.getElementById('bannerSliderDots');
+            const dotsMobile = document.getElementById('bannerSliderDotsMobile');
+            if (dotsDesktop) dotsDesktop.innerHTML = dotsHtml;
+            if (dotsMobile) dotsMobile.innerHTML = dotsHtml;
+
+            homeCurrentIndex = 0;
+            window.showBannerSlide(0);
+            resetBannerTimer();
+
+        } catch (error) {
+            console.error("Gagal memuat banner beranda:", error);
+        }
+    }
+
+    window.renderHomeEvents = function() {
+        const containerDesktop = document.getElementById('homeEventContainerDesktop');
+        const containerMobile = document.getElementById('homeEventContainerMobile');
+        if (!containerDesktop && !containerMobile) return;
+
+        const bulanDesktop = document.getElementById('filterEventBulanDesktop')?.value ?? '10';
+        const tahunDesktop = document.getElementById('filterEventTahunDesktop')?.value ?? '2026';
+        const bulanMobile = document.getElementById('filterEventBulanMobile')?.value ?? '10';
+        const tahunMobile = document.getElementById('filterEventTahunMobile')?.value ?? '2026';
+
+        const bulanVal = window.innerWidth >= 768 ? bulanDesktop : bulanMobile;
+        const tahunVal = window.innerWidth >= 768 ? tahunDesktop : tahunMobile;
+
+        let filtered = globalEventsList.filter(item => {
+            if (!item.eventDate) return false;
+            const d = new Date(item.eventDate);
+            if (isNaN(d)) return false;
+
+            if (bulanVal !== 'all' && d.getMonth() !== parseInt(bulanVal)) return false;
+            if (tahunVal !== 'all' && d.getFullYear() !== parseInt(tahunVal)) return false;
+            return true;
+        });
+
+        if (filtered.length === 0) {
+            const emptyHtml = `
+                <div class="text-center py-6 bg-slate-50 dark:bg-slate-700/50 border border-slate-200/70 dark:border-slate-700 p-4 col-span-full">
+                    <i class="fa-solid fa-calendar-xmark text-slate-300 dark:text-slate-600 text-2xl mb-1.5"></i>
+                    <p class="text-slate-400 text-xs">Tidak ada agenda event pada periode ini.</p>
+                </div>
+            `;
+            if (containerDesktop) containerDesktop.innerHTML = emptyHtml;
+            if (containerMobile) containerMobile.innerHTML = emptyHtml;
+            return;
+        }
+
+        let html = '';
+        filtered.forEach(item => {
+            html += `
+                <div class="bg-slate-50 dark:bg-slate-700/50 border border-slate-200/70 dark:border-slate-700 p-3 flex flex-col justify-between space-y-2">
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center space-x-1">
+                                <i class="fa-regular fa-calendar"></i>
+                                <span>${formatDate(item.eventDate)}</span>
+                            </span>
+                            <span class="bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 text-[9px] font-bold px-1.5 py-0.5 uppercase">Event</span>
+                        </div>
+                        <h4 class="font-bold text-slate-800 dark:text-slate-100 text-xs">${item.title || '-'}</h4>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">${item.description || '-'}</p>
+                    </div>
+                </div>
+            `;
+        });
+
+        if (containerDesktop) containerDesktop.innerHTML = html;
+        if (containerMobile) containerMobile.innerHTML = html;
+    }
+
+    async function initHomeEvents() {
+        try {
+            const qEvents = query(collection(db, "events"), orderBy("createdAt", "desc"));
+            const querySnapshot = await getDocs(qEvents);
+            
+            globalEventsList = [];
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                if (data.isActive !== false) {
+                    globalEventsList.push({ id: docSnap.id, ...data });
+                }
+            });
+
+            const yearOptions = populateYearOptions(globalEventsList, 'eventDate');
+            const selDesktop = document.getElementById('filterEventTahunDesktop');
+            const selMobile = document.getElementById('filterEventTahunMobile');
+            if (selDesktop) selDesktop.innerHTML = yearOptions;
+            if (selMobile) selMobile.innerHTML = yearOptions;
+
+            window.renderHomeEvents();
+        } catch (error) {
+            console.error("Gagal memuat event beranda:", error);
+        }
+    }
+
+    window.renderHomeRapat = function() {
+        const containerDesktop = document.getElementById('homeRapatContainerDesktop');
+        const containerMobile = document.getElementById('homeRapatContainerMobile');
+        if (!containerDesktop && !containerMobile) return;
+
+        const bulanDesktop = document.getElementById('filterRapatBulanDesktop')?.value ?? '10';
+        const tahunDesktop = document.getElementById('filterRapatTahunDesktop')?.value ?? '2026';
+        const bulanMobile = document.getElementById('filterRapatBulanMobile')?.value ?? '10';
+        const tahunMobile = document.getElementById('filterRapatTahunMobile')?.value ?? '2026';
+
+        const bulanVal = window.innerWidth >= 768 ? bulanDesktop : bulanMobile;
+        const tahunVal = window.innerWidth >= 768 ? tahunDesktop : tahunMobile;
+
+        let filtered = globalRapatList.filter(item => {
+            if (!item.tanggal) return false;
+            const d = new Date(item.tanggal);
+            if (isNaN(d)) return false;
+
+            if (bulanVal !== 'all' && d.getMonth() !== parseInt(bulanVal)) return false;
+            if (tahunVal !== 'all' && d.getFullYear() !== parseInt(tahunVal)) return false;
+            return true;
+        });
+
+        if (filtered.length === 0) {
+            const emptyHtml = `
+                <div class="text-center py-6 bg-slate-50 dark:bg-slate-700/50 border border-slate-200/70 dark:border-slate-700 p-4 col-span-full">
+                    <i class="fa-solid fa-folder-open text-slate-300 dark:text-slate-600 text-2xl mb-1.5"></i>
+                    <p class="text-slate-400 text-xs">Tidak ada hasil rapat pada periode ini.</p>
+                </div>
+            `;
+            if (containerDesktop) containerDesktop.innerHTML = emptyHtml;
+            if (containerMobile) containerMobile.innerHTML = emptyHtml;
+            return;
+        }
+
+        let html = '';
+        filtered.forEach(item => {
+            html += `
+                <div class="bg-slate-50 dark:bg-slate-700/50 border border-slate-200/70 dark:border-slate-700 p-3 flex flex-col justify-between space-y-2">
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center space-x-1">
+                                <i class="fa-regular fa-calendar-days"></i>
+                                <span>${formatDate(item.tanggal)}</span>
+                            </span>
+                            <span class="bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-[9px] font-bold px-1.5 py-0.5 uppercase">${item.kategori || 'Rapat'}</span>
+                        </div>
+                        <h4 class="font-bold text-slate-800 dark:text-slate-100 text-xs">${item.judul || '-'}</h4>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed"><strong class="text-slate-700 dark:text-slate-200">Notulen:</strong> ${item.notulen || '-'}</p>
+                        <div class="text-[10px] text-slate-400 mt-2 flex items-center justify-between border-t border-slate-200/60 dark:border-slate-700 pt-1.5">
+                            <span>Penulis: <strong class="text-slate-600 dark:text-slate-300">${item.authorName || 'Admin'}</strong></span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        if (containerDesktop) containerDesktop.innerHTML = html;
+        if (containerMobile) containerMobile.innerHTML = html;
+    }
+
+    async function initHomeRapat() {
+        try {
+            const qRapat = query(collection(db, "rapat"), orderBy("createdAt", "desc"));
+            const querySnapshot = await getDocs(qRapat);
+            
+            globalRapatList = [];
+            querySnapshot.forEach((docSnap) => {
+                globalRapatList.push({ id: docSnap.id, ...docSnap.data() });
+            });
+
+            const yearOptions = populateYearOptions(globalRapatList, 'tanggal');
+            const selDesktop = document.getElementById('filterRapatTahunDesktop');
+            const selMobile = document.getElementById('filterRapatTahunMobile');
+            if (selDesktop) selDesktop.innerHTML = yearOptions;
+            if (selMobile) selMobile.innerHTML = yearOptions;
+
+            window.renderHomeRapat();
+        } catch (error) {
+            console.error("Gagal memuat hasil rapat beranda:", error);
+        }
+    }
+
+    initWargaStatistics();
+    initHomeBanners();
+    initHomeEvents();
+    initHomeRapat();
+</script>

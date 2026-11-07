@@ -1,0 +1,383 @@
+<!-- KONTEN UTAMA HALAMAN (DESKTOP) -->
+<div id="spaAppContainer" class="space-y-4 pb-20">
+    <!-- HEADER / JUDUL HALAMAN -->
+    <div class="bg-white dark:bg-slate-800 p-4 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div>
+            <h3 class="text-xs font-bold text-slate-800 dark:text-slate-100 uppercase tracking-wide">Kelola Event Kegiatan</h3>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Manajemen jadwal acara dan agenda kegiatan warga.</p>
+        </div>
+        <div class="flex items-center space-x-2">
+            <!-- Filter Bulan & Tahun -->
+            <select id="filterMonthDesktop" onchange="window.filterEventsData()" class="px-2.5 py-1.5 rounded-none border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600">
+                <option value="all">Semua Bulan</option>
+                <option value="01">Januari</option>
+                <option value="02">Februari</option>
+                <option value="03">Maret</option>
+                <option value="04">April</option>
+                <option value="05">Mei</option>
+                <option value="06">Juni</option>
+                <option value="07">Juli</option>
+                <option value="08">Agustus</option>
+                <option value="09">September</option>
+                <option value="10">Oktober</option>
+                <option value="11">November</option>
+                <option value="12">Desember</option>
+            </select>
+            <select id="filterYearDesktop" onchange="window.filterEventsData()" class="px-2.5 py-1.5 rounded-none border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600">
+                <!-- Tahun akan diisi otomatis via JS -->
+            </select>
+            <!-- Tombol Tambah Event -->
+            <button type="button" onclick="window.openTemplateModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-none text-xs font-bold transition-all shadow cursor-pointer shrink-0">
+                <i class="fa-solid fa-plus mr-1"><span>Tambah Event</span></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- AREA KONTEN UTAMA / TABEL / GRID -->
+    <div class="bg-white dark:bg-slate-800 p-4 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
+        <div id="desktopContentContainer" class="space-y-3">
+            <div class="p-6 bg-slate-50 dark:bg-slate-700/50 rounded-none border border-slate-200/70 dark:border-slate-700 shadow-sm text-center text-slate-400 text-xs">
+                Memuat data event...
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- KONTEN UTAMA HALAMAN (MOBILE) -->
+<div id="spaAppContainerMobile" class="space-y-3 pb-28">
+    <!-- HEADER / TOMBOL PINTAS (MOBILE) -->
+    <div class="bg-white dark:bg-slate-800 p-3.5 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 space-y-2.5">
+        <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-slate-800 dark:text-slate-100 uppercase tracking-wide">Kelola Event Kegiatan</h3>
+        </div>
+        <div class="flex items-center space-x-2">
+            <select id="filterMonthMobile" onchange="window.filterEventsData()" class="w-1/2 px-2 py-1.5 rounded-none border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600">
+                <option value="all">Semua Bulan</option>
+                <option value="01">Januari</option>
+                <option value="02">Februari</option>
+                <option value="03">Maret</option>
+                <option value="04">April</option>
+                <option value="05">Mei</option>
+                <option value="06">Juni</option>
+                <option value="07">Juli</option>
+                <option value="08">Agustus</option>
+                <option value="09">September</option>
+                <option value="10">Oktober</option>
+                <option value="11">November</option>
+                <option value="12">Desember</option>
+            </select>
+            <select id="filterYearMobile" onchange="window.filterEventsData()" class="w-1/2 px-2 py-1.5 rounded-none border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600">
+                <!-- Tahun akan diisi otomatis via JS -->
+            </select>
+        </div>
+        <button type="button" onclick="window.openTemplateModal()" class="w-full py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-none shadow-sm transition-all flex items-center justify-center space-x-2 text-xs cursor-pointer">
+            <i class="fa-solid fa-plus text-xs"></i>
+            <span>Tambah Event</span>
+        </button>
+    </div>
+
+    <!-- AREA KONTEN UTAMA (MOBILE) -->
+    <div class="bg-white dark:bg-slate-800 p-3.5 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 space-y-2.5">
+        <div id="mobileContentContainer" class="space-y-2.5">
+            <div class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-none border border-slate-200/70 dark:border-slate-700 shadow-sm text-center text-slate-400 text-xs">
+                Memuat data event...
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SKRIP LOGIKA & FIRESTORE -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, deleteDoc, updateDoc, doc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+        authDomain: "erte-979ca.firebaseapp.com",
+        projectId: "erte-979ca",
+        storageBucket: "erte-979ca.firebasestorage.app",
+        messagingSenderId: "329513636032",
+        appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let cachedEventsData = [];
+
+    // Inisialisasi Tahun dan Bulan Berjalan pada Dropdown Filter
+    function initFilters() {
+        const now = new Date();
+        const currentMonth = String(now.getMonth() + 1).padStart(2, '0');
+        const currentYear = String(now.getFullYear());
+
+        // Dropdown Desktop & Mobile
+        ['Desktop', 'Mobile'].forEach(suffix => {
+            const mSelect = document.getElementById(`filterMonth${suffix}`);
+            const ySelect = document.getElementById(`filterYear${suffix}`);
+            
+            if (mSelect && !mSelect.dataset.initialized) {
+                mSelect.value = currentMonth;
+                mSelect.dataset.initialized = 'true';
+            }
+
+            if (ySelect && ySelect.options.length === 0) {
+                let yHtml = '<option value="all">Semua Tahun</option>';
+                for (let y = 2024; y <= 2030; y++) {
+                    yHtml += `<option value="${y}">${y}</option>`;
+                }
+                ySelect.innerHTML = yHtml;
+                ySelect.value = currentYear;
+            }
+        });
+    }
+
+    // Sinkronisasi pilihan filter antara Desktop dan Mobile
+    window.filterEventsData = function() {
+        const source = event && event.target && event.target.id.includes('Mobile') ? 'Mobile' : 'Desktop';
+        const target = source === 'Desktop' ? 'Mobile' : 'Desktop';
+
+        const mVal = document.getElementById(`filterMonth${source}`).value;
+        const yVal = document.getElementById(`filterYear${source}`).value;
+
+        document.getElementById(`filterMonth${target}`).value = mVal;
+        document.getElementById(`filterYear${target}`).value = yVal;
+
+        renderEventsList(cachedEventsData);
+    };
+
+    // Inisialisasi Modal Melayang dari Bawah (Bottom Sheet) Secara Dinamis
+    function initBottomModal() {
+        if (document.getElementById('templateModal')) return;
+
+        const modalHTML = `
+        <div id="templateModal" class="fixed inset-0 bg-black/50 backdrop-blur-[2px] z-[9999] flex items-end justify-center hidden transition-opacity duration-300">
+            <div id="templateModalBox" class="w-full max-w-lg bg-white dark:bg-slate-800 rounded-t-2xl p-5 shadow-2xl flex flex-col max-h-[90vh] transform translate-y-full transition-transform duration-300 ease-out">
+                <div class="w-12 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full mx-auto mb-3"></div>
+                
+                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100 dark:border-slate-700">
+                    <h3 class="font-bold text-slate-800 dark:text-slate-100 text-xs uppercase tracking-wide">Form Tambah Event</h3>
+                    <button type="button" id="closeCustomModal" class="w-6 h-6 rounded-none bg-slate-100 dark:bg-slate-700 text-slate-500 hover:bg-slate-200 flex items-center justify-center text-xs cursor-pointer">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <form id="templateForm" class="space-y-3 text-xs overflow-y-auto flex-1 pb-2">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Judul Event</label>
+                        <input type="text" id="inputTitle" required placeholder="Contoh: Rapat RT..." class="w-full px-3 py-2 rounded-none border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Tanggal Event</label>
+                        <input type="date" id="inputEventDate" required class="w-full px-3 py-2 rounded-none border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Status Publikasi</label>
+                        <select id="inputIsActive" class="w-full px-3 py-2 rounded-none border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600">
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Deskripsi Event</label>
+                        <textarea id="inputDescription" rows="3" placeholder="Tuliskan keterangan detail event..." class="w-full px-3 py-2 rounded-none border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600"></textarea>
+                    </div>
+
+                    <div class="flex space-x-2 pt-2">
+                        <button type="button" id="cancelCustomModal" class="w-1/2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 text-slate-700 dark:text-slate-200 font-semibold py-2 rounded-none transition-all text-xs cursor-pointer">Batal</button>
+                        <button type="submit" id="btnSubmitEvent" class="w-1/2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-none shadow transition-all text-xs cursor-pointer">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>`;
+
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+        document.getElementById('closeCustomModal').addEventListener('click', window.closeTemplateModal);
+        document.getElementById('cancelCustomModal').addEventListener('click', window.closeTemplateModal);
+        document.getElementById('templateModal').addEventListener('click', (e) => {
+            if (e.target.id === 'templateModal') window.closeTemplateModal();
+        });
+
+        const today = new Date().toISOString().split('T')[0];
+        const dateInput = document.getElementById('inputEventDate');
+        if (dateInput) dateInput.value = today;
+
+        document.getElementById('templateForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const titleVal = document.getElementById('inputTitle').value.trim();
+            const dateVal = document.getElementById('inputEventDate').value;
+            const statusVal = document.getElementById('inputIsActive').value === 'true';
+            const descVal = document.getElementById('inputDescription').value.trim();
+            const submitBtn = document.getElementById('btnSubmitEvent');
+
+            if (!titleVal || !dateVal) return;
+
+            try {
+                submitBtn.disabled = true;
+                submitBtn.innerText = "Menyimpan...";
+
+                await addDoc(collection(db, "events"), {
+                    title: titleVal,
+                    eventDate: dateVal,
+                    isActive: statusVal,
+                    description: descVal,
+                    createdAt: serverTimestamp()
+                });
+
+                e.target.reset();
+                window.closeTemplateModal();
+                if (typeof showToast === 'function') showToast("Event berhasil disimpan!");
+            } catch (error) {
+                alert("Gagal menyimpan event: " + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Simpan";
+            }
+        });
+    }
+
+    window.openTemplateModal = function() {
+        initBottomModal();
+        const modal = document.getElementById('templateModal');
+        const box = document.getElementById('templateModalBox');
+        if (modal && box) {
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                box.classList.remove('translate-y-full');
+            }, 10);
+        }
+    }
+
+    window.closeTemplateModal = function() {
+        const modal = document.getElementById('templateModal');
+        const box = document.getElementById('templateModalBox');
+        if (modal && box) {
+            box.classList.add('translate-y-full');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                const form = document.getElementById('templateForm');
+                if (form) form.reset();
+            }, 300);
+        }
+    }
+
+    window.toggleEventStatus = async function(id, currentStatus) {
+        const newStatus = !currentStatus;
+        try {
+            await updateDoc(doc(db, "events", id), {
+                isActive: newStatus
+            });
+            if (typeof showToast === 'function') showToast(`Status diubah ke ${newStatus ? 'ACTIVE' : 'INACTIVE'}`);
+        } catch (error) {
+            alert("Gagal mengubah status: " + error.message);
+        }
+    }
+
+    window.deleteEvent = async function(id) {
+        if (confirm("Yakin ingin menghapus event ini?")) {
+            try {
+                await deleteDoc(doc(db, "events", id));
+                if (typeof showToast === 'function') showToast("Event berhasil dihapus.");
+            } catch (error) {
+                alert("Gagal menghapus: " + error.message);
+            }
+        }
+    }
+
+    // Fungsi Render Daftar Event Berdasarkan Filter Bulan & Tahun
+    function renderEventsList(snapshotDocs) {
+        initFilters();
+        const selectedMonth = document.getElementById('filterMonthDesktop').value;
+        const selectedYear = document.getElementById('filterYearDesktop').value;
+
+        let deskHtml = "";
+        let mobHtml = "";
+        let count = 0;
+
+        snapshotDocs.forEach((docSnap) => {
+            const data = docSnap.data();
+            const docId = docSnap.id;
+            const title = data.title || '-';
+            const description = data.description || '-';
+            const eventDate = data.eventDate || ''; // Format "YYYY-MM-DD"
+            const isActive = data.isActive === true;
+
+            // Logika Penyaringan (Filtering)
+            if (eventDate) {
+                const [partsY, partsM] = eventDate.split('-');
+                if (selectedMonth !== 'all' && partsM !== selectedMonth) return;
+                if (selectedYear !== 'all' && partsY !== selectedYear) return;
+            } else if (selectedMonth !== 'all' || selectedYear !== 'all') {
+                return;
+            }
+
+            count++;
+
+            deskHtml += `
+                <div class="p-3.5 bg-slate-50 dark:bg-slate-700/50 rounded-none border border-slate-200/70 dark:border-slate-700 shadow-sm flex items-center justify-between">
+                    <div class="space-y-1 pr-4 min-w-0">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold"><i class="fa-regular fa-calendar mr-1"></i>${eventDate}</span>
+                        </div>
+                        <h4 class="font-bold text-slate-800 dark:text-slate-100 text-xs truncate">${title}</h4>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2">${description}</p>
+                    </div>
+                    <div class="flex items-center space-x-3 shrink-0">
+                        <div class="inline-flex items-center bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 shadow-sm">
+                            <button type="button" onclick="window.toggleEventStatus('${docId}', ${isActive})" title="Ubah Status" class="px-1.5 py-1 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 text-[10px] cursor-pointer">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <span class="px-2 py-0.5 text-[10px] font-bold uppercase ${isActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-500'}">${isActive ? 'active' : 'inactive'}</span>
+                            <button type="button" onclick="window.toggleEventStatus('${docId}', ${isActive})" title="Ubah Status" class="px-1.5 py-1 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 text-[10px] cursor-pointer">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <button type="button" onclick="window.deleteEvent('${docId}')" class="bg-red-50 dark:bg-red-950/50 hover:bg-red-100 text-red-600 dark:text-red-400 p-2 rounded-none text-xs transition-all cursor-pointer">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            mobHtml += `
+                <div class="p-3 bg-slate-50 dark:bg-slate-700/50 rounded-none border border-slate-200/70 dark:border-slate-700 shadow-sm space-y-2">
+                    <div class="flex items-start justify-between">
+                        <div class="space-y-0.5 min-w-0 pr-2">
+                            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold"><i class="fa-regular fa-calendar mr-1"></i>${eventDate}</span>
+                            <h4 class="font-bold text-slate-800 dark:text-slate-100 text-xs truncate">${title}</h4>
+                        </div>
+                        <div class="inline-flex items-center bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 shadow-sm shrink-0">
+                            <button type="button" onclick="window.toggleEventStatus('${docId}', ${isActive})" class="px-1 py-0.5 text-slate-500 hover:bg-slate-100 text-[9px] cursor-pointer"><i class="fa-solid fa-chevron-left"></i></button>
+                            <span class="px-1.5 text-[9px] font-bold uppercase ${isActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-500'}">${isActive ? 'active' : 'inactive'}</span>
+                            <button type="button" onclick="window.toggleEventStatus('${docId}', ${isActive})" class="px-1 py-0.5 text-slate-500 hover:bg-slate-100 text-[9px] cursor-pointer"><i class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2">${description}</p>
+                    <div class="flex justify-end pt-1 border-t border-slate-200/60 dark:border-slate-700">
+                        <button type="button" onclick="window.deleteEvent('${docId}')" class="text-red-600 dark:text-red-400 text-[11px] font-semibold flex items-center space-x-1 cursor-pointer">
+                            <i class="fa-solid fa-trash text-[10px]"></i>
+                            <span>Hapus Event</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+
+        if (count === 0) {
+            const emptyMsg = '<div class="p-6 bg-slate-50 dark:bg-slate-700/50 rounded-none border border-slate-200/70 dark:border-slate-700 shadow-sm text-center text-slate-400 text-xs">Tidak ada event pada periode bulan ini.</div>';
+            document.getElementById('desktopContentContainer').innerHTML = emptyMsg;
+            document.getElementById('mobileContentContainer').innerHTML = emptyMsg;
+            return;
+        }
+
+        document.getElementById('desktopContentContainer').innerHTML = deskHtml;
+        document.getElementById('mobileContentContainer').innerHTML = mobHtml;
+    }
+
+    // Realtime Listener untuk Koleksi "events"[cite: 20]
+    onSnapshot(query(collection(db, "events"), orderBy("createdAt", "desc")), (snapshot) => {
+        cachedEventsData = snapshot.docs;
+        renderEventsList(snapshot.docs);
+    });
+</script>

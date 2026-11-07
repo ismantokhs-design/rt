@@ -1,0 +1,329 @@
+<!-- KONTEN UTAMA HALAMAN (DESKTOP) -->
+<div id="spaAppContainer" class="space-y-4 pb-20">
+    <!-- HEADER / JUDUL HALAMAN -->
+    <div class="bg-white dark:bg-slate-800 p-4 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+        <div>
+            <h3 class="text-xs font-bold text-slate-800 dark:text-slate-100 uppercase tracking-wide">Kelola Running Text</h3>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Pengaturan teks pengumuman berjalan dan daftar template pesan.</p>
+        </div>
+        <div>
+            <!-- Tombol Aksi (Desktop) -->
+            <button type="button" onclick="openTemplateModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-none text-xs font-bold transition-all shadow cursor-pointer">
+                <i class="fa-solid fa-plus mr-1"><span>Simpan Sebagai Template</span></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- AREA KONTEN UTAMA / FORM & PREVIEW -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Kolom Form & Preview -->
+        <div class="space-y-4">
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
+                <h4 class="font-bold text-slate-800 dark:text-slate-100 text-xs uppercase tracking-wide">Preview Tampilan Saat Ini</h4>
+                <div class="bg-emerald-800 dark:bg-slate-900 text-white py-2 px-3 rounded-none text-[10px] flex items-center overflow-hidden border border-emerald-700 dark:border-slate-700">
+                    <span class="bg-emerald-900 dark:bg-slate-800 text-white font-bold px-2 py-1 rounded-none text-[9px] mr-2 shrink-0 flex items-center">
+                        <i class="fa-solid fa-bullhorn mr-1 text-amber-300"></i> Info RT:
+                    </span>
+                    <marquee behavior="scroll" direction="left" scrollamount="4" id="previewMarquee" class="font-medium">
+                        Memuat pengumuman...
+                    </marquee>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
+                <form id="runningTextForm" class="space-y-3 text-xs">
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="font-semibold text-slate-700 dark:text-slate-300">Isi Pengumuman Running Text</label>
+                            <button type="button" onclick="document.getElementById('runningTextInput').value = ''" class="text-slate-400 hover:text-red-500 text-[10px] cursor-pointer">Bersihkan</button>
+                        </div>
+                        <textarea id="runningTextInput" rows="4" required placeholder="Masukkan teks pengumuman RT di sini..." class="w-full p-3 rounded-none border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600 resize-none"></textarea>
+                        <span class="text-[10px] text-slate-400 dark:text-slate-500 mt-1 block">Template yang dipilih akan otomatis digabungkan di akhir teks dengan pemisah titik (•).</span>
+                    </div>
+                    <button type="submit" id="btnSubmit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-none shadow transition-all cursor-pointer">
+                        Simpan ke Database
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Kolom Daftar Template -->
+        <div class="bg-white dark:bg-slate-800 p-4 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
+            <h4 class="font-bold text-slate-800 dark:text-slate-100 text-xs uppercase tracking-wide">Daftar Template Pengumuman</h4>
+            <div id="templateListContainer" class="space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
+                <div class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-none border border-slate-200/70 dark:border-slate-700 shadow-sm text-center text-slate-400 text-xs">
+                    Memuat daftar template...
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- KONTEN UTAMA HALAMAN (MOBILE) -->
+<div id="spaAppContainerMobile" class="space-y-3 pb-28">
+    <!-- HEADER / TOMBOL PINTAS (MOBILE) -->
+    <div class="bg-white dark:bg-slate-800 p-3.5 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 space-y-2.5">
+        <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-slate-800 dark:text-slate-100 uppercase tracking-wide">Kelola Running Text</h3>
+        </div>
+        <button type="button" onclick="openTemplateModal()" class="w-full py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-none shadow-sm transition-all flex items-center justify-center space-x-2 text-xs cursor-pointer">
+            <i class="fa-solid fa-plus text-xs"></i>
+            <span>Simpan Sebagai Template</span>
+        </button>
+    </div>
+
+    <!-- PREVIEW & FORM (MOBILE) -->
+    <div class="bg-white dark:bg-slate-800 p-3.5 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
+        <h4 class="font-bold text-slate-800 dark:text-slate-100 text-xs uppercase tracking-wide">Preview Tampilan</h4>
+        <div class="bg-emerald-800 dark:bg-slate-900 text-white py-2 px-3 rounded-none text-[10px] flex items-center overflow-hidden border border-emerald-700 dark:border-slate-700">
+            <span class="bg-emerald-900 dark:bg-slate-800 text-white font-bold px-2 py-1 rounded-none text-[9px] mr-2 shrink-0 flex items-center">
+                <i class="fa-solid fa-bullhorn mr-1 text-amber-300"></i> Info RT:
+            </span>
+            <marquee behavior="scroll" direction="left" scrollamount="4" id="previewMarqueeMobile" class="font-medium">
+                Memuat pengumuman...
+            </marquee>
+        </div>
+
+        <form id="runningTextFormMobile" class="space-y-3 text-xs pt-2">
+            <div>
+                <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Isi Pengumuman</label>
+                <textarea id="runningTextInputMobile" rows="4" required placeholder="Masukkan teks pengumuman RT..." class="w-full p-3 rounded-none border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600 resize-none"></textarea>
+            </div>
+            <button type="submit" id="btnSubmitMobile" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-none shadow transition-all cursor-pointer">
+                Simpan ke Database
+            </button>
+        </form>
+    </div>
+
+    <!-- DAFTAR TEMPLATE (MOBILE) -->
+    <div class="bg-white dark:bg-slate-800 p-3.5 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 space-y-2.5">
+        <h4 class="font-bold text-slate-800 dark:text-slate-100 text-xs uppercase tracking-wide">Daftar Template</h4>
+        <div id="templateListContainerMobile" class="space-y-2">
+            <div class="p-3 bg-slate-50 dark:bg-slate-700/50 rounded-none border border-slate-200/70 dark:border-slate-700 shadow-sm text-center text-slate-400 text-xs">
+                Memuat template...
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL SIMPAN TEMPLATE -->
+<div id="templateModal" class="fixed inset-0 bg-black/50 backdrop-blur-[2px] z-50 flex items-center justify-center hidden transition-all duration-300 p-4">
+    <div class="w-full max-w-md bg-white dark:bg-slate-800 rounded-none p-5 shadow-2xl flex flex-col max-h-[90vh]">
+        <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100 dark:border-slate-700">
+            <h3 class="font-bold text-slate-800 dark:text-slate-100 text-xs uppercase tracking-wide">Simpan Teks ke Template</h3>
+            <button type="button" onclick="closeTemplateModal()" class="w-6 h-6 rounded-none bg-slate-100 dark:bg-slate-700 text-slate-500 hover:bg-slate-200 flex items-center justify-center text-xs cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <form id="saveTemplateForm" class="space-y-3 text-xs overflow-y-auto flex-1 pb-1">
+            <div>
+                <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama / Judul Template</label>
+                <input type="text" id="inputTemplateName" required placeholder="Contoh: Sambutan Pagi..." class="w-full px-3 py-2 rounded-none border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600">
+            </div>
+            <p class="text-[10px] text-slate-400">Teks yang sedang aktif di kolom pengumuman saat ini akan disimpan sebagai isi template baru.</p>
+            <div class="flex space-x-2 pt-2">
+                <button type="button" onclick="closeTemplateModal()" class="w-1/2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 text-slate-700 dark:text-slate-200 font-semibold py-2 rounded-none transition-all text-xs cursor-pointer">Batal</button>
+                <button type="submit" class="w-1/2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-none shadow transition-all text-xs cursor-pointer">Simpan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- SKRIP LOGIKA & FIRESTORE -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, doc, getDoc, setDoc, addDoc, deleteDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+        authDomain: "erte-979ca.firebaseapp.com",
+        projectId: "erte-979ca",
+        storageBucket: "erte-979ca.firebasestorage.app",
+        messagingSenderId: "329513636032",
+        appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Fungsi Kontrol Modal
+    window.openTemplateModal = function() {
+        const currentText = document.getElementById('runningTextInput')?.value.trim() || document.getElementById('runningTextInputMobile')?.value.trim() || '';
+        if (!currentText) {
+            alert("Kolom pengumuman masih kosong, isi terlebih dahulu untuk disimpan sebagai template.");
+            return;
+        }
+        document.getElementById('templateModal')?.classList.remove('hidden');
+    }
+
+    window.closeTemplateModal = function() {
+        document.getElementById('templateModal')?.classList.add('hidden');
+    }
+
+    // Ambil data running text utama dari "settings/runningText"
+    async function loadRunningText() {
+        try {
+            const docRef = doc(db, "settings", "runningText");
+            const docSnap = await getDoc(docRef);
+            let textVal = "Selamat datang di Layanan Warga RT-Ku";
+            if (docSnap.exists() && docSnap.data().text) {
+                textVal = docSnap.data().text;
+            }
+
+            const inputDesktop = document.getElementById('runningTextInput');
+            const inputMobile = document.getElementById('runningTextInputMobile');
+            const previewDesk = document.getElementById('previewMarquee');
+            const previewMob = document.getElementById('previewMarqueeMobile');
+
+            if (inputDesktop) inputDesktop.value = textVal;
+            if (inputMobile) inputMobile.value = textVal;
+            if (previewDesk) previewDesk.innerText = textVal;
+            if (previewMob) previewMob.innerText = textVal;
+        } catch (error) {
+            console.error("Gagal memuat running text:", error);
+        }
+    }
+    loadRunningText();
+
+    // Fungsi Simpan Running Text Utama
+    async function saveRunningText(textVal) {
+        try {
+            await setDoc(doc(db, "settings", "runningText"), {
+                text: textVal,
+                updatedAt: serverTimestamp()
+            });
+            if (typeof showToast === 'function') {
+                showToast("Running text berhasil disimpan!");
+            } else {
+                alert("Running text berhasil disimpan!");
+            }
+        } catch (error) {
+            alert("Gagal menyimpan: " + error.message);
+        }
+    }
+
+    document.getElementById('runningTextForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const val = document.getElementById('runningTextInput').value.trim();
+        if (val) await saveRunningText(val);
+    });
+
+    document.getElementById('runningTextFormMobile')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const val = document.getElementById('runningTextInputMobile').value.trim();
+        if (val) await saveRunningText(val);
+    });
+
+    // Simpan Template Baru ke koleksi "runningTextTemplates" (fields: name, content)
+    document.getElementById('saveTemplateForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const nameVal = document.getElementById('inputTemplateName').value.trim();
+        const contentVal = document.getElementById('runningTextInput')?.value.trim() || document.getElementById('runningTextInputMobile')?.value.trim() || '';
+
+        if (!nameVal || !contentVal) return;
+
+        try {
+            await addDoc(collection(db, "runningTextTemplates"), {
+                name: nameVal,
+                content: contentVal,
+                createdAt: serverTimestamp()
+            });
+            e.target.reset();
+            closeTemplateModal();
+            if (typeof showToast === 'function') {
+                showToast("Template berhasil disimpan!");
+            } else {
+                alert("Template berhasil disimpan!");
+            }
+        } catch (error) {
+            alert("Gagal menyimpan template: " + error.message);
+        }
+    });
+
+    // Fungsi Gabungkan Template ke Kolom Input
+    window.appendTemplateText = function(content) {
+        const inputDesktop = document.getElementById('runningTextInput');
+        const inputMobile = document.getElementById('runningTextInputMobile');
+        const currentVal = inputDesktop?.value.trim() || inputMobile?.value.trim() || '';
+
+        const newVal = currentVal ? `${currentVal} • ${content}` : content;
+
+        if (inputDesktop) inputDesktop.value = newVal;
+        if (inputMobile) inputMobile.value = newVal;
+
+        if (typeof showToast === 'function') {
+            showToast("Template digabungkan ke teks!");
+        }
+    }
+
+    // Hapus Template
+    window.deleteTemplateItem = async function(docId) {
+        if (confirm("Yakin ingin menghapus template ini?")) {
+            try {
+                await deleteDoc(doc(db, "runningTextTemplates", docId));
+                if (typeof showToast === 'function') showToast("Template dihapus.");
+            } catch (error) {
+                alert("Gagal menghapus: " + error.message);
+            }
+        }
+    }
+
+    // Realtime Listener Daftar Template dari Koleksi "runningTextTemplates"
+    onSnapshot(query(collection(db, "runningTextTemplates"), orderBy("createdAt", "desc")), (snapshot) => {
+        let deskHtml = "";
+        let mobHtml = "";
+
+        if (snapshot.empty) {
+            const emptyMsg = '<div class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-none border border-slate-200/70 dark:border-slate-700 shadow-sm text-center text-slate-400 text-xs">Belum ada template tersimpan.</div>';
+            document.getElementById('templateListContainer').innerHTML = emptyMsg;
+            document.getElementById('templateListContainerMobile').innerHTML = emptyMsg;
+            return;
+        }
+
+        snapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            const docId = docSnap.id;
+            const name = data.name || '-';
+            const content = data.content || '-';
+            const escapedContent = content.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
+            deskHtml += `
+                <div class="p-3 bg-slate-50 dark:bg-slate-700/50 rounded-none border border-slate-200/70 dark:border-slate-700 shadow-sm space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-800 dark:text-slate-100 text-xs">${name}</span>
+                        <div class="flex space-x-1">
+                            <button type="button" onclick="window.appendTemplateText('${escapedContent}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-1 text-[10px] font-semibold transition-all cursor-pointer">
+                                <i class="fa-solid fa-plus mr-0.5"></i> Gabung
+                            </button>
+                            <button type="button" onclick="window.deleteTemplateItem('${docId}')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 text-[10px] font-semibold transition-all cursor-pointer">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-[11px] text-slate-600 dark:text-slate-300 italic">"${content}"</p>
+                </div>
+            `;
+
+            mobHtml += `
+                <div class="p-2.5 bg-slate-50 dark:bg-slate-700/50 rounded-none border border-slate-200/70 dark:border-slate-700 shadow-sm space-y-1">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-800 dark:text-slate-100 text-xs">${name}</span>
+                        <div class="flex space-x-1">
+                            <button type="button" onclick="window.appendTemplateText('${escapedContent}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-1 text-[10px] font-semibold transition-all cursor-pointer">
+                                <i class="fa-solid fa-plus mr-0.5"></i> Gabung
+                            </button>
+                            <button type="button" onclick="window.deleteTemplateItem('${docId}')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 text-[10px] font-semibold transition-all cursor-pointer">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-slate-600 dark:text-slate-300 italic">"${content}"</p>
+                </div>
+            `;
+        });
+
+        document.getElementById('templateListContainer').innerHTML = deskHtml;
+        document.getElementById('templateListContainerMobile').innerHTML = mobHtml;
+    });
+</script>
+```[cite: 12]

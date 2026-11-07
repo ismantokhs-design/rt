@@ -1,0 +1,272 @@
+<div id="spaAppContainer" class="space-y-6 pb-20">
+    <!-- Bagian Sambutan / Header Profil (Desktop & Umum) -->
+    <div class="bg-white dark:bg-slate-800 p-5 rounded-none shadow-sm border border-slate-200 dark:border-slate-700">
+        <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100 mb-1">Profil Wilayah RT-Ku</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400">Informasi lengkap mengenai wilayah sekretariat, alamat, keterangan rukun tetangga, dan susunan pengurus.</p>
+    </div>
+
+    <!-- KONTROL / TAMPILAN DESKTOP -->
+    <div class="hidden md:block bg-white dark:bg-slate-800 p-6 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-3">
+            <h3 class="font-bold text-xs text-slate-800 dark:text-slate-100 tracking-wide uppercase flex items-center space-x-2">
+                <i class="fa-solid fa-map-location-dot text-emerald-600 dark:text-emerald-400"></i>
+                <span id="desktopTitleRt">Profil Wilayah (Desktop)</span>
+            </h3>
+            <span id="desktopUpdatedAt" class="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Memuat waktu...</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+            <!-- Foto Wilayah -->
+            <div class="w-full h-48 bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 overflow-hidden relative shadow-sm">
+                <img id="desktopFoto" src="" alt="Foto Profil Wilayah" class="w-full h-full object-cover">
+            </div>
+
+            <!-- Detail Informasi -->
+            <div class="md:col-span-2 space-y-3 text-xs">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <span class="text-slate-400 dark:text-slate-500 block font-medium">RT / RW</span>
+                        <strong id="desktopRtRw" class="text-slate-800 dark:text-slate-100">-</strong>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 dark:text-slate-500 block font-medium">Kelurahan</span>
+                        <strong id="desktopKelurahan" class="text-slate-800 dark:text-slate-100">-</strong>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 dark:text-slate-500 block font-medium">Kecamatan</span>
+                        <strong id="desktopKecamatan" class="text-slate-800 dark:text-slate-100">-</strong>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 dark:text-slate-500 block font-medium">Kota / Kabupaten</span>
+                        <strong id="desktopKota" class="text-slate-800 dark:text-slate-100">-</strong>
+                    </div>
+                </div>
+
+                <div class="pt-2 border-t border-slate-100 dark:border-slate-700">
+                    <span class="text-slate-400 dark:text-slate-500 block font-medium mb-1">Alamat Sekretariat</span>
+                    <p id="desktopAlamat" class="text-slate-700 dark:text-slate-300 font-medium">-</p>
+                </div>
+
+                <div class="pt-2 border-t border-slate-100 dark:border-slate-700">
+                    <span class="text-slate-400 dark:text-slate-500 block font-medium mb-1">Keterangan / Deskripsi</span>
+                    <p id="desktopDesc" class="text-slate-600 dark:text-slate-400 leading-relaxed">-</p>
+                </div>
+
+                <div class="pt-3">
+                    <a id="desktopMapsBtn" href="#" target="_blank" class="inline-flex items-center space-x-2 px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-none text-[11px] font-medium transition-all shadow-sm">
+                        <i class="fa-solid fa-location-arrow"></i>
+                        <span>Buka Lokasi di Google Maps</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Susunan Pengurus Desktop -->
+        <div class="pt-6 border-t border-slate-100 dark:border-slate-700 space-y-3">
+            <h4 class="font-bold text-xs text-slate-800 dark:text-slate-100 uppercase tracking-wider flex items-center space-x-2">
+                <i class="fa-solid fa-users-gear text-emerald-600 dark:text-emerald-400"></i>
+                <span>Susunan Pengurus RT</span>
+            </h4>
+            <div id="desktopPengurusContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <!-- Data Pengurus akan dimuat secara dinamis di sini -->
+                <p class="text-xs text-slate-400 italic">Memuat data pengurus...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CONTAINER MOBILE -->
+<div id="spaAppContainerMobile" class="block md:hidden space-y-4 pb-24">
+    <div class="bg-white dark:bg-slate-800 p-4 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
+        <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-2">
+            <h3 class="font-bold text-xs text-slate-800 dark:text-slate-100 tracking-wide uppercase flex items-center space-x-2">
+                <i class="fa-solid fa-map-location-dot text-emerald-600 dark:text-emerald-400"></i>
+                <span id="mobileTitleRt">Profil Wilayah (HP)</span>
+            </h3>
+        </div>
+
+        <!-- Foto Wilayah Mobile -->
+        <div class="w-full h-40 bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 overflow-hidden relative shadow-sm">
+            <img id="mobileFoto" src="" alt="Foto Profil Wilayah" class="w-full h-full object-cover">
+        </div>
+
+        <!-- Detail Informasi Mobile -->
+        <div class="space-y-2.5 text-xs">
+            <div class="bg-slate-50 dark:bg-slate-700/50 p-2.5 border border-slate-200/70 dark:border-slate-600 space-y-2">
+                <div class="flex justify-between">
+                    <span class="text-slate-400 dark:text-slate-400">RT / RW:</span>
+                    <strong id="mobileRtRw" class="text-slate-800 dark:text-slate-100">-</strong>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-400 dark:text-slate-400">Kelurahan:</span>
+                    <strong id="mobileKelurahan" class="text-slate-800 dark:text-slate-100">-</strong>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-400 dark:text-slate-400">Kecamatan:</span>
+                    <strong id="mobileKecamatan" class="text-slate-800 dark:text-slate-100">-</strong>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-400 dark:text-slate-400">Kota:</span>
+                    <strong id="mobileKota" class="text-slate-800 dark:text-slate-100">-</strong>
+                </div>
+            </div>
+
+            <div>
+                <span class="text-slate-400 dark:text-slate-500 block font-medium mb-0.5">Alamat Sekretariat</span>
+                <p id="mobileAlamat" class="text-slate-700 dark:text-slate-300 font-medium">-</p>
+            </div>
+
+            <div>
+                <span class="text-slate-400 dark:text-slate-500 block font-medium mb-0.5">Keterangan</span>
+                <p id="mobileDesc" class="text-slate-600 dark:text-slate-400 leading-relaxed">-</p>
+            </div>
+
+            <div class="pt-2">
+                <a id="mobileMapsBtn" href="#" target="_blank" class="w-full inline-flex items-center justify-center space-x-2 px-3 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-none text-[11px] font-medium transition-all shadow-sm">
+                    <i class="fa-solid fa-location-arrow"></i>
+                    <span>Buka Lokasi di Google Maps</span>
+                </a>
+            </div>
+            
+            <div class="text-center pt-1">
+                <span id="mobileUpdatedAt" class="text-[10px] text-slate-400 dark:text-slate-500">Memuat waktu...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Susunan Pengurus Mobile -->
+    <div class="bg-white dark:bg-slate-800 p-4 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
+        <h4 class="font-bold text-xs text-slate-800 dark:text-slate-100 uppercase tracking-wider flex items-center space-x-2 border-b border-slate-100 dark:border-slate-700 pb-2">
+            <i class="fa-solid fa-users-gear text-emerald-600 dark:text-emerald-400"></i>
+            <span>Susunan Pengurus RT</span>
+        </h4>
+        <div id="mobilePengurusContainer" class="space-y-3">
+            <!-- Data Pengurus Mobile akan dimuat secara dinamis di sini -->
+            <p class="text-xs text-slate-400 italic">Memuat data pengurus...</p>
+        </div>
+    </div>
+</div>
+
+<!-- SKRIP MANDIRI KHUSUS HALAMAN PROFIL WILAYAH -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+        authDomain: "erte-979ca.firebaseapp.com",
+        projectId: "erte-979ca",
+        storageBucket: "erte-979ca.firebasestorage.app",
+        messagingSenderId: "329513636032",
+        appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function initProfilWilayah() {
+        try {
+            // 1. Ambil Profil Wilayah
+            const docRef = doc(db, "settings", "profilWilayah");
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                
+                const rtRwText = `${data.rtNumber || 'RT -'} / ${data.rwNumber || 'RW -'}`;
+                const kelurahanText = data.kelurahan || '-';
+                const kecamatanText = data.kecamatan || '-';
+                const kotaText = data.kota || '-';
+                const alamatText = data.alamatSekretariat || '-';
+                const descText = data.description || '-';
+                const mapsUrl = data.alamatMaps || '#';
+                const fotoVal = data.fotoUrl || 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=600&q=80';
+                
+                let updatedStr = '-';
+                if (data.updatedAt) {
+                    const dateObj = data.updatedAt.toDate ? data.updatedAt.toDate() : new Date(data.updatedAt);
+                    updatedStr = `Terakhir diperbarui: ${dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+                }
+
+                // ISI ELEMEN DESKTOP
+                document.getElementById('desktopTitleRt').innerText = `Profil Wilayah (${data.rtNumber || 'RT'})`;
+                document.getElementById('desktopRtRw').innerText = rtRwText;
+                document.getElementById('desktopKelurahan').innerText = kelurahanText;
+                document.getElementById('desktopKecamatan').innerText = kecamatanText;
+                document.getElementById('desktopKota').innerText = kotaText;
+                document.getElementById('desktopAlamat').innerText = alamatText;
+                document.getElementById('desktopDesc').innerText = descText;
+                document.getElementById('desktopFoto').src = fotoVal;
+                document.getElementById('desktopMapsBtn').href = mapsUrl;
+                document.getElementById('desktopUpdatedAt').innerText = updatedStr;
+
+                // ISI ELEMEN MOBILE
+                document.getElementById('mobileTitleRt').innerText = `Profil Wilayah (${data.rtNumber || 'RT'})`;
+                document.getElementById('mobileRtRw').innerText = rtRwText;
+                document.getElementById('mobileKelurahan').innerText = kelurahanText;
+                document.getElementById('mobileKecamatan').innerText = kecamatanText;
+                document.getElementById('mobileKota').innerText = kotaText;
+                document.getElementById('mobileAlamat').innerText = alamatText;
+                document.getElementById('mobileDesc').innerText = descText;
+                document.getElementById('mobileFoto').src = fotoVal;
+                document.getElementById('mobileMapsBtn').href = mapsUrl;
+                document.getElementById('mobileUpdatedAt').innerText = updatedStr;
+            }
+
+            // 2. Ambil Susunan Pengurus dari Koleksi 'dataPengurus'
+            const pengurusSnapshot = await getDocs(collection(db, "dataPengurus"));
+            let pengurusHtmlDesktop = '';
+            let pengurusHtmlMobile = '';
+
+            if (pengurusSnapshot.empty) {
+                pengurusHtmlDesktop = `<p class="text-xs text-slate-400 italic col-span-full">Belum ada data pengurus.</p>`;
+                pengurusHtmlMobile = `<p class="text-xs text-slate-400 italic">Belum ada data pengurus.</p>`;
+            } else {
+                pengurusSnapshot.forEach((doc) => {
+                    const p = doc.data();
+                    const nama = p.nama || 'Tanpa Nama';
+                    const kategori = p.kategori || 'Pengurus';
+                    const phone = p.phone || '-';
+                    const nik = p.nik || '-';
+
+                    // Kartu Grid untuk Desktop
+                    pengurusHtmlDesktop += `
+                        <div class="bg-slate-50 dark:bg-slate-700/50 p-3.5 border border-slate-200 dark:border-slate-600 rounded-none flex flex-col justify-between space-y-2">
+                            <div>
+                                <span class="inline-block px-2 py-0.5 bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-semibold text-[10px] uppercase mb-1">${kategori}</span>
+                                <h5 class="font-bold text-slate-800 dark:text-slate-100 text-xs">${nama}</h5>
+                            </div>
+                            <div class="text-[11px] text-slate-500 dark:text-slate-400 space-y-0.5 pt-2 border-t border-slate-200/60 dark:border-slate-600">
+                                <p><i class="fa-solid fa-id-card w-4 text-slate-400"></i> NIK: ${nik}</p>
+                                <p><i class="fa-solid fa-phone w-4 text-slate-400"></i> ${phone}</p>
+                            </div>
+                        </div>
+                    `;
+
+                    // List Compact untuk Mobile
+                    pengurusHtmlMobile += `
+                        <div class="bg-slate-50 dark:bg-slate-700/50 p-3 border border-slate-200 dark:border-slate-600 rounded-none space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <span class="px-2 py-0.5 bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-semibold text-[10px] uppercase">${kategori}</span>
+                                <span class="text-[10px] text-slate-400">NIK: ${nik}</span>
+                            </div>
+                            <h5 class="font-bold text-slate-800 dark:text-slate-100 text-xs">${nama}</h5>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400"><i class="fa-solid fa-phone w-4 text-slate-400"></i> ${phone}</p>
+                        </div>
+                    `;
+                });
+            }
+
+            const desktopContainer = document.getElementById('desktopPengurusContainer');
+            const mobileContainer = document.getElementById('mobilePengurusContainer');
+
+            if (desktopContainer) desktopContainer.innerHTML = pengurusHtmlDesktop;
+            if (mobileContainer) mobileContainer.innerHTML = pengurusHtmlMobile;
+
+        } catch (error) {
+            console.error("Gagal memuat profil wilayah atau pengurus:", error);
+        }
+    }
+
+    initProfilWilayah();
+</script>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Koreksi Penulisan Data Warga - RT-Ku</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none !important;
+            width: 0px !important;
+            height: 0px !important;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 font-['Inter'] flex justify-center items-center h-screen overflow-hidden m-0">
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-slate-900/95 border border-slate-700 text-white px-4 py-2.5 rounded-none shadow-2xl text-xs font-medium flex items-center space-x-2 z-50 transition-all duration-300 opacity-0 pointer-events-none translate-y-[-20px]">
+        <div class="w-5 h-5 rounded-none bg-emerald-500 text-white flex items-center justify-center text-[10px] shadow">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <span id="toastText">Berhasil!</span>
+    </div>
+
+    <!-- Container HP Frame -->
+    <div class="w-full h-screen sm:max-w-[400px] sm:h-[92vh] sm:max-h-[820px] bg-slate-50 sm:rounded-[35px] shadow-2xl flex flex-col justify-between relative overflow-hidden sm:border-[6px] sm:border-slate-800">
+        
+        <!-- Header -->
+        <div class="bg-gradient-to-b from-emerald-600 to-emerald-700 text-white p-5 rounded-b-[28px] flex items-center justify-between shrink-0">
+            <a href="data-warga.html" class="w-9 h-9 rounded-none bg-white/10 flex items-center justify-center text-white backdrop-blur-sm transition-all hover:bg-white/20">
+                <i class="fa-solid fa-arrow-left text-xs"></i>
+            </a>
+            <h1 class="font-bold text-sm tracking-wide">Koreksi Penulisan Warga</h1>
+            <div class="w-9"></div>
+        </div>
+
+        <!-- Content (Scrollable) -->
+        <div class="p-4 flex-1 overflow-y-auto no-scrollbar pb-6 space-y-4 text-xs">
+            
+            <!-- Kotak Pencarian NIK dengan Dropdown Autocomplete & Keyboard Navigation -->
+            <div class="bg-white p-3.5 rounded-none shadow-sm border border-slate-200/70 space-y-2 relative">
+                <label class="block text-[10px] font-semibold text-slate-700"><i class="fa-solid fa-magnifying-glass mr-1 text-emerald-600"></i> Cari Berdasarkan NIK atau Nama Warga:</label>
+                <div class="relative">
+                    <input type="text" id="inputCariNik" autocomplete="off" placeholder="Ketik NIK (contoh: 1...) atau Nama Warga..." class="w-full pl-3 pr-8 py-2 rounded-none border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600 font-semibold text-slate-800">
+                    <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 pointer-events-none">
+                        <i class="fa-solid fa-search"></i>
+                    </span>
+                </div>
+                <!-- Dropdown Hasil Pencarian NIK/Nama -->
+                <div id="nikDropdownList" class="absolute left-3 right-3 mt-1 bg-white border border-slate-200 rounded-none shadow-lg max-h-48 overflow-y-auto z-50 hidden"></div>
+                <p class="text-[9px] text-slate-400">Gunakan panah Bawah/Atas di keyboard lalu tekan Enter untuk memilih.</p>
+            </div>
+
+            <!-- Kontainer Form Koreksi -->
+            <div id="formKoreksiContainer" class="hidden">
+                <form id="koreksiForm" autocomplete="off" class="bg-white p-4 rounded-none border border-slate-200/70 shadow-sm space-y-3">
+                    <input type="hidden" id="wargaDocId" autocomplete="off">
+
+                    <div class="bg-emerald-50/75 p-2.5 rounded-none border border-emerald-100 flex items-center justify-between">
+                        <span class="font-bold text-emerald-900 text-[11px]"><i class="fa-solid fa-user-pen mr-1"></i> Form Koreksi Data Warga</span>
+                        <span id="statusWargaBadge" class="text-[9px] bg-emerald-200 text-emerald-800 px-2 py-0.5 rounded-none font-bold">Aktif</span>
+                    </div>
+
+                    <!-- Seluruh Kolom DataWarga -->
+                    <div class="space-y-2.5">
+                        <div>
+                            <label class="block text-[9px] font-semibold text-slate-700 mb-0.5">Nama Lengkap</label>
+                            <input type="text" id="namaLengkap" autocomplete="off" required class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 text-xs bg-white focus:outline-none focus:border-emerald-600 font-medium text-slate-800">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-700 mb-0.5">NIK</label>
+                                <input type="text" id="nik" autocomplete="off" required class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 text-xs bg-white focus:outline-none focus:border-emerald-600 font-medium text-slate-800">
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-700 mb-0.5">No. Kartu Keluarga (KK)</label>
+                                <input type="text" id="noKk" autocomplete="off" required class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 text-xs bg-white focus:outline-none focus:border-emerald-600 font-medium text-slate-800">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-700 mb-0.5">Jenis Kelamin</label>
+                                <select id="jenisKelamin" autocomplete="off" class="appearance-none w-full px-2.5 py-1.5 rounded-none border border-slate-200 text-xs bg-white font-medium text-slate-800 focus:outline-none focus:border-emerald-600 cursor-pointer">
+                                    <option value="LAKI-LAKI">LAKI-LAKI</option>
+                                    <option value="PEREMPUAN">PEREMPUAN</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-700 mb-0.5">Hubungan Keluarga</label>
+                                <input type="text" id="statusHubungan" autocomplete="off" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 text-xs bg-white focus:outline-none focus:border-emerald-600 font-medium text-slate-800">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-700 mb-0.5">Tempat Lahir</label>
+                                <input type="text" id="tempatLahir" autocomplete="off" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 text-xs bg-white focus:outline-none focus:border-emerald-600 font-medium text-slate-800">
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-700 mb-0.5">Tanggal Lahir</label>
+                                <input type="date" id="tanggalLahir" autocomplete="off" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 text-xs bg-white focus:outline-none focus:border-emerald-600 font-medium text-slate-800">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-700 mb-0.5">Agama</label>
+                                <input type="text" id="agama" autocomplete="off" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 text-xs bg-white focus:outline-none focus:border-emerald-600 font-medium text-slate-800">
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-700 mb-0.5">Pendidikan</label>
+                                <input type="text" id="pendidikan" autocomplete="off" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 text-xs bg-white focus:outline-none focus:border-emerald-600 font-medium text-slate-800">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-700 mb-0.5">Pekerjaan</label>
+                                <input type="text" id="jenisPekerjaan" autocomplete="off" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 text-xs bg-white focus:outline-none focus:border-emerald-600 font-medium text-slate-800">
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-700 mb-0.5">Gol. Darah</label>
+                                <input type="text" id="golDarah" autocomplete="off" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 text-xs bg-white focus:outline-none focus:border-emerald-600 font-medium text-slate-800">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-700 mb-0.5">Status Perkawinan</label>
+                                <input type="text" id="statusPerkawinan" autocomplete="off" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 text-xs bg-white focus:outline-none focus:border-emerald-600 font-medium text-slate-800">
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-700 mb-0.5">Kewarganegaraan</label>
+                                <input type="text" id="kewarganegaraan" autocomplete="off" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 text-xs bg-white focus:outline-none focus:border-emerald-600 font-medium text-slate-800">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-700 mb-0.5">Nama Ayah</label>
+                                <input type="text" id="namaAyah" autocomplete="off" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 text-xs bg-white focus:outline-none focus:border-emerald-600 font-medium text-slate-800">
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-700 mb-0.5">Nama Ibu</label>
+                                <input type="text" id="namaIbu" autocomplete="off" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 text-xs bg-white focus:outline-none focus:border-emerald-600 font-medium text-slate-800">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-700 mb-0.5">No. Telepon</label>
+                                <input type="text" id="phone" autocomplete="off" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 text-xs bg-white focus:outline-none focus:border-emerald-600 font-medium text-slate-800">
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-700 mb-0.5">Email</label>
+                                <input type="text" id="email" autocomplete="off" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 text-xs bg-white focus:outline-none focus:border-emerald-600 font-medium text-slate-800">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[9px] font-semibold text-slate-700 mb-0.5">Alamat / RT / RW</label>
+                            <input type="text" id="rtRw" autocomplete="off" class="w-full px-2.5 py-1.5 rounded-none border border-slate-200 text-xs bg-white focus:outline-none focus:border-emerald-600 font-medium text-slate-800">
+                        </div>
+                    </div>
+
+                    <!-- Tombol Simpan Perubahan -->
+                    <div class="pt-2">
+                        <button type="submit" autocomplete="off" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-none shadow-md transition-all text-xs cursor-pointer">
+                            Simpan Koreksi Data
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Pesan Panduan Awal / Kosong -->
+            <div id="emptyState" class="text-center py-12 text-slate-400 text-xs bg-white rounded-none border border-slate-200/70 p-4">
+                <i class="fa-solid fa-address-card text-3xl mb-2 text-slate-300"></i>
+                <p class="font-medium text-slate-600">Silakan ketik NIK warga di atas</p>
+                <p class="text-[10px] text-slate-400 mt-0.5">Pilih dari daftar untuk menampilkan seluruh kolom data warga.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Skrip Utama Firebase & Firestore -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, doc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        window.showToast = function(message) {
+            const toast = document.getElementById('toastNotification');
+            const toastText = document.getElementById('toastText');
+            toastText.innerText = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            }, 1800);
+        }
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+            authDomain: "erte-979ca.firebaseapp.com",
+            projectId: "erte-979ca",
+            storageBucket: "erte-979ca.firebasestorage.app",
+            messagingSenderId: "329513636032",
+            appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const inputCariNik = document.getElementById('inputCariNik');
+        const nikDropdownList = document.getElementById('nikDropdownList');
+        const formKoreksiContainer = document.getElementById('formKoreksiContainer');
+        const emptyState = document.getElementById('emptyState');
+        const koreksiForm = document.getElementById('koreksiForm');
+
+        let allWargaMasterData = [];
+        let currentSelectedIndex = -1;
+
+        // Ambil seluruh data warga secara real-time untuk pencarian fleksibel
+        onSnapshot(collection(db, "dataWarga"), (snapshot) => {
+            allWargaMasterData = [];
+            snapshot.forEach((docSnap) => {
+                allWargaMasterData.push({ id: docSnap.id, ...docSnap.data() });
+            });
+        });
+
+        // Event listener saat mengetik di input pencarian NIK
+        inputCariNik.addEventListener('input', () => {
+            currentSelectedIndex = -1;
+            const keyword = inputCariNik.value.toLowerCase().trim();
+            if (!keyword) {
+                nikDropdownList.classList.add('hidden');
+                return;
+            }
+
+            const matchedWarga = allWargaMasterData.filter(w => {
+                const nikStr = (w.nik || "").toLowerCase();
+                const namaStr = (w.namaLengkap || w.nama || "").toLowerCase();
+                return nikStr.includes(keyword) || namaStr.includes(keyword);
+            });
+
+            if (matchedWarga.length === 0) {
+                nikDropdownList.innerHTML = `<div class="p-2 text-slate-400 text-[10px] text-center">Warga tidak ditemukan</div>`;
+                nikDropdownList.classList.remove('hidden');
+                return;
+            }
+
+            let html = "";
+            matchedWarga.forEach((w, idx) => {
+                const safeId = w.id;
+                const safeNik = w.nik || "-";
+                const safeNama = w.namaLengkap || w.nama || "Tanpa Nama";
+                const safeKk = w.noKk || "-";
+                
+                html += `
+                    <div class="nik-dropdown-item p-2 hover:bg-emerald-50 cursor-pointer border-b border-slate-100 last:border-none" data-index="${idx}" onclick="selectWarga('${safeId}')">
+                        <p class="font-bold text-slate-800 text-[11px]">${safeNama} <span class="font-normal text-slate-500">(NIK: ${safeNik})</span></p>
+                        <p class="text-[9px] text-slate-400">No. KK: ${safeKk}</p>
+                    </div>
+                `;
+            });
+            nikDropdownList.innerHTML = html;
+            nikDropdownList.classList.remove('hidden');
+        });
+
+        // Navigasi Keyboard (ArrowDown, ArrowUp, Enter) pada input pencarian
+        inputCariNik.addEventListener('keydown', (e) => {
+            const items = nikDropdownList.querySelectorAll('.nik-dropdown-item');
+            if (items.length === 0 || nikDropdownList.classList.contains('hidden')) return;
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                currentSelectedIndex++;
+                if (currentSelectedIndex >= items.length) currentSelectedIndex = 0;
+                updateDropdownHighlight(items);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                currentSelectedIndex--;
+                if (currentSelectedIndex < 0) currentSelectedIndex = items.length - 1;
+                updateDropdownHighlight(items);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (currentSelectedIndex >= 0 && items[currentSelectedIndex]) {
+                    items[currentSelectedIndex].click();
+                } else if (items.length > 0) {
+                    items[0].click(); // Pilih item pertama jika belum ada yang disorot
+                }
+            }
+        });
+
+        function updateDropdownHighlight(items) {
+            items.forEach((item, idx) => {
+                if (idx === currentSelectedIndex) {
+                    item.classList.add('bg-emerald-100');
+                    item.scrollIntoView({ block: 'nearest' });
+                } else {
+                    item.classList.remove('bg-emerald-100');
+                }
+            });
+        }
+
+        // Fungsi ketika salah satu warga dari dropdown dipilih
+        window.selectWarga = function(docId) {
+            const data = allWargaMasterData.find(w => w.id === docId);
+            if (!data) return;
+
+            inputCariNik.value = `${data.namaLengkap || data.nama || ''} (${data.nik || ''})`;
+            nikDropdownList.classList.add('hidden');
+            currentSelectedIndex = -1;
+
+            document.getElementById('wargaDocId').value = data.id;
+            document.getElementById('namaLengkap').value = data.namaLengkap || data.nama || "";
+            document.getElementById('nik').value = data.nik || "";
+            document.getElementById('noKk').value = data.noKk || "";
+            document.getElementById('jenisKelamin').value = data.jenisKelamin || "LAKI-LAKI";
+            document.getElementById('statusHubungan').value = data.statusHubungan || "";
+            document.getElementById('tempatLahir').value = data.tempatLahir || "";
+            document.getElementById('tanggalLahir').value = data.tanggalLahir || "";
+            document.getElementById('agama').value = data.agama || "";
+            document.getElementById('pendidikan').value = data.pendidikan || "";
+            document.getElementById('jenisPekerjaan').value = data.jenisPekerjaan || "";
+            document.getElementById('golDarah').value = data.golDarah || "";
+            document.getElementById('statusPerkawinan').value = data.statusPerkawinan || "";
+            document.getElementById('kewarganegaraan').value = data.kewarganegaraan || "WNI";
+            document.getElementById('namaAyah').value = data.namaAyah || "";
+            document.getElementById('namaIbu').value = data.namaIbu || "";
+            document.getElementById('phone').value = data.phone || "";
+            document.getElementById('email').value = data.email || "";
+            document.getElementById('rtRw').value = data.rtRw || "";
+
+            formKoreksiContainer.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+            showToast('Data warga berhasil dimuat untuk dikoreksi!');
+        };
+
+        // Tutup dropdown jika klik di luar
+        window.addEventListener('click', (e) => {
+            if (!inputCariNik.contains(e.target) && !nikDropdownList.contains(e.target)) {
+                nikDropdownList.classList.add('hidden');
+            }
+        });
+
+        // Simpan Koreksi Data Warga ke koleksi dataWarga tanpa membuat riwayat baru
+        koreksiForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const docId = document.getElementById('wargaDocId').value;
+            if (!docId) {
+                alert("ID Warga tidak valid!");
+                return;
+            }
+
+            const updatedData = {
+                namaLengkap: document.getElementById('namaLengkap').value.trim(),
+                nik: document.getElementById('nik').value.trim(),
+                noKk: document.getElementById('noKk').value.trim(),
+                jenisKelamin: document.getElementById('jenisKelamin').value,
+                statusHubungan: document.getElementById('statusHubungan').value.trim(),
+                tempatLahir: document.getElementById('tempatLahir').value.trim(),
+                tanggalLahir: document.getElementById('tanggalLahir').value,
+                agama: document.getElementById('agama').value.trim(),
+                pendidikan: document.getElementById('pendidikan').value.trim(),
+                jenisPekerjaan: document.getElementById('jenisPekerjaan').value.trim(),
+                golDarah: document.getElementById('golDarah').value.trim(),
+                statusPerkawinan: document.getElementById('statusPerkawinan').value.trim(),
+                kewarganegaraan: document.getElementById('kewarganegaraan').value.trim(),
+                namaAyah: document.getElementById('namaAyah').value.trim(),
+                namaIbu: document.getElementById('namaIbu').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                rtRw: document.getElementById('rtRw').value.trim(),
+                updatedAt: new Date()
+            };
+
+            try {
+                await updateDoc(doc(db, "dataWarga", docId), updatedData);
+                showToast('Koreksi penulisan data warga berhasil disimpan!');
+            } catch (error) {
+                alert("Gagal menyimpan koreksi: " + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Laporan Sewa Aset - Aplikasi RT-Ku</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none !important;
+            width: 0px !important;
+            height: 0px !important;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 font-['Inter'] flex justify-center items-center h-screen overflow-hidden m-0">
+
+    <!-- Container HP Frame -->
+    <div class="w-full h-screen sm:max-w-[400px] sm:h-[92vh] sm:max-h-[820px] bg-slate-50 sm:rounded-[35px] shadow-2xl flex flex-col justify-between relative overflow-hidden sm:border-[6px] sm:border-slate-800">
+        
+        <!-- Header -->
+        <div class="bg-gradient-to-b from-emerald-600 to-emerald-700 text-white p-4 rounded-none flex items-center justify-between shrink-0 z-25">
+            <a href="inventaris.html" class="w-9 h-9 rounded-none bg-white/10 flex items-center justify-center text-white backdrop-blur-sm transition-all hover:bg-white/20" title="Kembali ke Inventaris">
+                <i class="fa-solid fa-arrow-left text-xs"></i>
+            </a>
+            <h1 class="font-bold text-sm tracking-wide">Laporan Sewa Aset</h1>
+            <div class="w-9 h-9"></div>
+        </div>
+
+        <!-- Ringkasan & Filter Card -->
+        <div class="p-4 pb-2 bg-white border-b border-slate-200 shrink-0 space-y-2">
+            <div class="bg-emerald-50 p-3 border border-emerald-100 flex items-center justify-between">
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-8 h-8 bg-emerald-600 text-white flex items-center justify-center text-xs">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-emerald-800 block font-medium">Total Transaksi Sewa</span>
+                        <b id="totalTransaksi" class="text-xs text-emerald-900 font-bold">0 Transaksi</b>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <span class="text-[10px] text-emerald-800 block font-medium">Total Pendapatan</span>
+                    <b id="totalPendapatan" class="text-xs text-emerald-700 font-bold">Rp 0</b>
+                </div>
+            </div>
+
+            <!-- Filter Tanggal Transaksi -->
+            <div class="space-y-1.5 pt-1">
+                <div class="grid grid-cols-2 gap-2 text-[10px]">
+                    <div>
+                        <span class="text-slate-500 font-semibold block mb-0.5">Dari Tanggal Transaksi</span>
+                        <input type="date" id="filterTglDari" onchange="filterLaporan()" class="w-full px-2 py-1.5 border border-slate-200 bg-slate-50 rounded text-xs focus:outline-none focus:border-emerald-600 font-medium">
+                    </div>
+                    <div>
+                        <span class="text-slate-500 font-semibold block mb-0.5">Sampai Tanggal Transaksi</span>
+                        <input type="date" id="filterTglSampai" onchange="filterLaporan()" class="w-full px-2 py-1.5 border border-slate-200 bg-slate-50 rounded text-xs focus:outline-none focus:border-emerald-600 font-medium">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content (Scrollable List Laporan) -->
+        <div class="p-4 flex-1 overflow-y-auto no-scrollbar space-y-3 text-xs">
+            <div class="space-y-2.5" id="listLaporanContainer">
+                <div class="text-center py-8 text-slate-400">Memuat laporan sewa...</div>
+            </div>
+        </div>
+
+        <!-- Footer Info -->
+        <div class="p-3 text-center border-t border-slate-200 bg-white/50 text-[10px] text-slate-400 shrink-0">
+            Aplikasi RT-Ku &copy; 2026
+        </div>
+
+    </div>
+
+    <!-- Modal Edit Transaksi & Daftar Produk -->
+    <div id="modalEditSewa" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-[360px] rounded-xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[85vh] p-4 space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2 shrink-0">
+                <h3 class="font-bold text-slate-800 text-sm">Edit Transaksi & Produk</h3>
+                <button onclick="tutupModalEdit()" class="text-slate-400 hover:text-slate-600 cursor-pointer">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto no-scrollbar space-y-3 text-xs pr-1">
+                <input type="hidden" id="editTransaksiId">
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Nama Peminjam</label>
+                    <input type="text" id="editNamaPeminjam" required class="w-full px-3 py-1.5 border border-slate-200 rounded bg-slate-50 text-xs focus:outline-none focus:border-emerald-600">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">No. WhatsApp / HP</label>
+                    <input type="tel" id="editTelpPeminjam" class="w-full px-3 py-1.5 border border-slate-200 rounded bg-slate-50 text-xs focus:outline-none focus:border-emerald-600">
+                </div>
+
+                <!-- Bagian Daftar Produk dalam Nota -->
+                <div class="space-y-1.5 pt-1 border-t border-slate-100">
+                    <div class="flex items-center justify-between">
+                        <label class="font-semibold text-slate-700 text-[11px]">Daftar Produk Disewa</label>
+                        <button type="button" onclick="bukaModalTambahProdukEdit()" class="px-2 py-1 bg-emerald-50 text-emerald-700 font-bold rounded text-[10px] hover:bg-emerald-100 cursor-pointer">
+                            <i class="fa-solid fa-plus mr-1"></i> Tambah Produk
+                        </button>
+                    </div>
+                    <div id="containerProdukEdit" class="space-y-2 max-h-[140px] overflow-y-auto border border-slate-100 p-2 bg-slate-50 rounded">
+                        <!-- Render produk aktif di sini -->
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-100">
+                    <div>
+                        <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Metode Pembayaran</label>
+                        <select id="editMetodePembayaran" class="w-full px-2 py-1.5 border border-slate-200 rounded bg-slate-50 text-xs focus:outline-none focus:border-emerald-600">
+                            <option value="Tunai">Tunai</option>
+                            <option value="Transfer">Transfer</option>
+                            <option value="Piutang">Piutang</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Total Biaya Nota</label>
+                        <input type="text" id="editTotalBiayaDisplay" readonly class="w-full px-2 py-1.5 border border-slate-200 rounded bg-slate-100 text-xs font-bold text-emerald-700">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Tanggal Mulai</label>
+                        <input type="date" id="editTglMulai" required class="w-full px-2 py-1.5 border border-slate-200 rounded bg-slate-50 text-xs focus:outline-none focus:border-emerald-600">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">Tanggal Selesai</label>
+                        <input type="date" id="editTglSelesai" required class="w-full px-2 py-1.5 border border-slate-200 rounded bg-slate-50 text-xs focus:outline-none focus:border-emerald-600">
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-2 border-t border-slate-100 flex space-x-2 shrink-0">
+                <button type="button" onclick="tutupModalEdit()" class="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded cursor-pointer text-xs">
+                    Batal
+                </button>
+                <button type="button" onclick="simpanEditTransaksiFinal()" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded cursor-pointer text-xs shadow">
+                    Simpan Perubahan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Sub-Pilih Produk Tambahan saat Edit -->
+    <div id="modalTambahProdukEdit" class="fixed inset-0 bg-slate-900/70 z-60 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-[300px] rounded-xl shadow-2xl border border-slate-200 p-4 space-y-3 text-xs">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                <h3 class="font-bold text-slate-800 text-sm">Pilih Produk</h3>
+                <button onclick="tutupModalTambahProdukEdit()" class="text-slate-400 hover:text-slate-600 cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div>
+                <label class="block text-[10px] font-semibold text-slate-600 mb-1">Produk Aset RT</label>
+                <select id="selectAsetBaruEdit" class="w-full px-2.5 py-1.5 border border-slate-200 rounded bg-slate-50 text-xs">
+                    <option value="">-- Pilih Aset --</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-[10px] font-semibold text-slate-600 mb-1">Jumlah (Qty)</label>
+                <input type="number" id="inputQtyBaruEdit" min="1" value="1" class="w-full px-2.5 py-1.5 border border-slate-200 rounded bg-slate-50 text-xs">
+            </div>
+            <div class="flex space-x-2 pt-1">
+                <button onclick="tutupModalTambahProdukEdit()" class="flex-1 py-2 bg-slate-100 rounded text-slate-700 font-bold">Batal</button>
+                <button onclick="tambahProdukKeEditList()" class="flex-1 py-2 bg-emerald-600 text-white rounded font-bold shadow">Tambahkan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Konfirmasi Hapus Kustom (Smooth) -->
+    <div id="modalKonfirmasiHapus" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm transition-all">
+        <div class="bg-white w-full max-w-[300px] rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col p-5 text-center space-y-4">
+            <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto text-lg shadow-inner">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div class="space-y-1">
+                <h3 class="font-bold text-slate-800 text-sm">Hapus Transaksi</h3>
+                <p class="text-slate-500 text-xs">Apakah Anda yakin ingin menghapus data laporan transaksi sewa ini?</p>
+            </div>
+            <div class="flex space-x-2 pt-1">
+                <button onclick="tutupModalKonfirmasiHapus()" class="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl cursor-pointer text-xs transition-all">
+                    Batal
+                </button>
+                <button id="btnKonfirmasiHapusAksi" class="flex-1 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl cursor-pointer text-xs shadow transition-all">
+                    Hapus
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Alert / Pemberitahuan Kustom (Smooth) -->
+    <div id="modalAlert" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm transition-all">
+        <div class="bg-white w-full max-w-[300px] rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col p-5 text-center space-y-4">
+            <div id="modalAlertIcon" class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-lg shadow-inner">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div class="space-y-1">
+                <h3 id="modalAlertTitle" class="font-bold text-slate-800 text-sm">Informasi</h3>
+                <p id="modalAlertMessage" class="text-slate-500 text-xs">Pesan informasi...</p>
+            </div>
+            <button onclick="tutupModalAlert()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl cursor-pointer text-xs shadow transition-all">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Prompt Input No WA Kustom (Smooth) -->
+    <div id="modalPromptWa" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm transition-all">
+        <div class="bg-white w-full max-w-[320px] rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col p-5 space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                <h3 class="font-bold text-slate-800 text-sm"><i class="fa-brands fa-whatsapp text-emerald-600 mr-1.5"></i> Masukkan No. WhatsApp</h3>
+                <button onclick="tutupModalPromptWa()" class="text-slate-400 hover:text-slate-600 cursor-pointer">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+            </div>
+            <p class="text-slate-500 text-xs">Nomor WhatsApp peminjam belum tersedia. Masukkan nomor HP:</p>
+            <input type="tel" id="inputNomorWaCustom" placeholder="Contoh: 08123456789" class="w-full px-3 py-2 border border-slate-200 rounded-lg bg-slate-50 text-xs focus:outline-none focus:border-emerald-600 font-medium">
+            <div class="flex space-x-2 pt-1">
+                <button onclick="tutupModalPromptWa()" class="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl cursor-pointer text-xs">
+                    Batal
+                </button>
+                <button onclick="prosesKirimWaCustom()" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl cursor-pointer text-xs shadow">
+                    Kirim WA
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skrip Firebase & Logika Laporan Sewa -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, query, orderBy, deleteDoc, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+            authDomain: "erte-979ca.firebaseapp.com",
+            projectId: "erte-979ca",
+            storageBucket: "erte-979ca.firebasestorage.app",
+            messagingSenderId: "329513636032",
+            appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let dataLaporanList = [];
+        let dataAsetList = [];
+        let pendingWaData = null;
+        let idHapusPending = null;
+        let editCurrentItems = [];
+        let editActiveItemStatus = 'Umum';
+
+        const todayStr = new Date().toISOString().split('T')[0];
+        document.getElementById('filterTglDari').value = todayStr;
+        document.getElementById('filterTglSampai').value = todayStr;
+
+        function showCustomAlert(title, message, isSuccess = true) {
+            document.getElementById('modalAlertTitle').innerText = title;
+            document.getElementById('modalAlertMessage').innerText = message;
+            const iconContainer = document.getElementById('modalAlertIcon');
+            if (isSuccess) {
+                iconContainer.className = "w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-lg shadow-inner";
+                iconContainer.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+            } else {
+                iconContainer.className = "w-12 h-12 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto text-lg shadow-inner";
+                iconContainer.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+            }
+            document.getElementById('modalAlert').classList.remove('hidden');
+        }
+
+        window.tutupModalAlert = function() {
+            document.getElementById('modalAlert').classList.add('hidden');
+        }
+
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(angka).replace('Rp', 'Rp ');
+        }
+
+        window.filterLaporan = function() {
+            const tglDari = document.getElementById('filterTglDari').value;
+            const tglSampai = document.getElementById('filterTglSampai').value;
+
+            const filtered = dataLaporanList.filter(item => {
+                let matchTransaksi = true;
+                const tglTransaksi = item.createdAt || "";
+                if (tglDari && tglTransaksi && tglTransaksi < tglDari) matchTransaksi = false;
+                if (tglSampai && tglTransaksi && tglTransaksi > tglSampai) matchTransaksi = false;
+                return matchTransaksi;
+            });
+            renderLaporan(filtered);
+        }
+
+        window.bukaModalEdit = function(id) {
+            const item = dataLaporanList.find(d => d.id === id);
+            if (!item) return;
+
+            document.getElementById('editTransaksiId').value = item.id;
+            document.getElementById('editNamaPeminjam').value = item.namaPeminjam || '';
+            document.getElementById('editTelpPeminjam').value = item.telpPeminjam || '';
+            document.getElementById('editTglMulai').value = item.tglMulai || '';
+            document.getElementById('editTglSelesai').value = item.tglSelesai || '';
+            document.getElementById('editMetodePembayaran').value = item.metodePembayaran || 'Tunai';
+
+            editActiveItemStatus = item.statusPeminjam || 'Umum';
+
+            // Ambil array items atau fallback ke format single produk lama
+            if (item.items && Array.isArray(item.items)) {
+                editCurrentItems = JSON.parse(JSON.stringify(item.items));
+            } else if (item.namaAset) {
+                editCurrentItems = [{
+                    asetId: item.asetId || '',
+                    namaAset: item.namaAset,
+                    hargaSewa: item.hargaSewa || 0,
+                    jumlahSewa: item.jumlahSewa || 1,
+                    totalBiaya: item.totalBiaya || 0
+                }];
+            } else {
+                editCurrentItems = [];
+            }
+
+            renderContainerProdukEdit();
+            document.getElementById('modalEditSewa').classList.remove('hidden');
+        }
+
+        window.tutupModalEdit = function() {
+            document.getElementById('modalEditSewa').classList.add('hidden');
+        }
+
+        function renderContainerProdukEdit() {
+            const container = document.getElementById('containerProdukEdit');
+            let html = "";
+            let totalSemua = 0;
+
+            editCurrentItems.forEach((prod, index) => {
+                const subtotal = Number(prod.hargaSewa || 0) * Number(prod.jumlahSewa || 1);
+                totalSemua += subtotal;
+
+                html += `
+                    <div class="flex items-center justify-between bg-white p-2 border border-slate-200 rounded">
+                        <div>
+                            <div class="font-bold text-slate-800">${prod.namaAset || 'Produk'}</div>
+                            <div class="text-[10px] text-slate-500">${formatRupiah(prod.hargaSewa || 0)} x ${prod.jumlahSewa || 1} = <b class="text-emerald-700">${formatRupiah(subtotal)}</b></div>
+                        </div>
+                        <div class="flex items-center space-x-1.5">
+                            <button type="button" onclick="ubahQtyProdukEdit(${index}, -1)" class="w-5 h-5 bg-slate-100 hover:bg-slate-200 font-bold rounded flex items-center justify-center">-</button>
+                            <span class="font-bold text-xs">${prod.jumlahSewa || 1}</span>
+                            <button type="button" onclick="ubahQtyProdukEdit(${index}, 1)" class="w-5 h-5 bg-slate-100 hover:bg-slate-200 font-bold rounded flex items-center justify-center">+</button>
+                            <button type="button" onclick="hapusProdukEdit(${index})" class="text-red-500 hover:text-red-700 p-1 ml-1" title="Hapus Produk"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (editCurrentItems.length === 0) {
+                html = `<div class="text-center py-3 text-slate-400 text-[10px]">Belum ada produk dalam nota.</div>`;
+            }
+
+            container.innerHTML = html;
+            document.getElementById('editTotalBiayaDisplay').value = formatRupiah(totalSemua);
+        }
+
+        window.ubahQtyProdukEdit = function(index, delta) {
+            if (editCurrentItems[index]) {
+                editCurrentItems[index].jumlahSewa = Number(editCurrentItems[index].jumlahSewa || 1) + delta;
+                if (editCurrentItems[index].jumlahSewa <= 0) {
+                    editCurrentItems[index].jumlahSewa = 1;
+                }
+                renderContainerProdukEdit();
+            }
+        }
+
+        window.hapusProdukEdit = function(index) {
+            editCurrentItems.splice(index, 1);
+            renderContainerProdukEdit();
+        }
+
+        window.bukaModalTambahProdukEdit = function() {
+            const select = document.getElementById('selectAsetBaruEdit');
+            let html = `<option value="">-- Pilih Aset --</option>`;
+            dataAsetList.forEach(aset => {
+                const harga = (editActiveItemStatus === 'Warga') ? Number(aset.hargaWarga || 0) : Number(aset.hargaUmum || 0);
+                html += `<option value="${aset.id}" data-nama="${aset.nama}" data-harga="${harga}">${aset.nama} (${formatRupiah(harga)})</option>`;
+            });
+            select.innerHTML = html;
+            document.getElementById('inputQtyBaruEdit').value = 1;
+            document.getElementById('modalTambahProdukEdit').classList.remove('hidden');
+        }
+
+        window.tutupModalTambahProdukEdit = function() {
+            document.getElementById('modalTambahProdukEdit').classList.add('hidden');
+        }
+
+        window.tambahProdukKeEditList = function() {
+            const select = document.getElementById('selectAsetBaruEdit');
+            const selectedOpt = select.options[select.selectedIndex];
+            if (!selectedOpt.value) {
+                showCustomAlert("Perhatian", "Pilih produk terlebih dahulu!", false);
+                return;
+            }
+
+            const asetId = selectedOpt.value;
+            const namaAset = selectedOpt.getAttribute('data-nama');
+            const hargaSewa = Number(selectedOpt.getAttribute('data-harga'));
+            const qty = Number(document.getElementById('inputQtyBaruEdit').value) || 1;
+
+            // Cek apakah produk sudah ada di list edit
+            const existing = editCurrentItems.find(p => p.asetId === asetId);
+            if (existing) {
+                existing.jumlahSewa += qty;
+            } else {
+                editCurrentItems.push({
+                    asetId: asetId,
+                    namaAset: namaAset,
+                    hargaSewa: hargaSewa,
+                    jumlahSewa: qty,
+                    totalBiaya: hargaSewa * qty
+                });
+            }
+
+            tutupModalTambahProdukEdit();
+            renderContainerProdukEdit();
+        }
+
+        window.simpanEditTransaksiFinal = async function() {
+            const id = document.getElementById('editTransaksiId').value;
+            if (editCurrentItems.length === 0) {
+                showCustomAlert("Perhatian", "Minimal harus ada 1 produk dalam nota transaksi!", false);
+                return;
+            }
+
+            let totalSemuaBiaya = 0;
+            editCurrentItems.forEach(p => {
+                totalSemuaBiaya += (Number(p.hargaSewa || 0) * Number(p.jumlahSewa || 1));
+            });
+
+            const payload = {
+                namaPeminjam: document.getElementById('editNamaPeminjam').value.trim(),
+                telpPeminjam: document.getElementById('editTelpPeminjam').value.trim(),
+                tglMulai: document.getElementById('editTglMulai').value,
+                tglSelesai: document.getElementById('editTglSelesai').value,
+                metodePembayaran: document.getElementById('editMetodePembayaran').value,
+                items: editCurrentItems,
+                totalBiaya: totalSemuaBiaya
+            };
+
+            try {
+                await updateDoc(doc(db, "transaksiSewaAset", id), payload);
+                tutupModalEdit();
+                showCustomAlert("Berhasil", "Data transaksi dan rincian produk berhasil diperbarui!");
+            } catch (error) {
+                console.error("Gagal mengupdate transaksi:", error);
+                showCustomAlert("Kesalahan", "Terjadi kesalahan saat memperbarui data.", false);
+            }
+        }
+
+        window.kirimWhatsApp = function(noTransaksi, namaPeminjam, daftarAsetStr, tglMulai, tglSelesai, totalBiaya, metodePembayaran, noTelp) {
+            let telp = noTelp ? noTelp.trim() : "";
+            if (!telp || telp === "-") {
+                pendingWaData = { noTransaksi, namaPeminjam, daftarAsetStr, tglMulai, tglSelesai, totalBiaya, metodePembayaran };
+                document.getElementById('inputNomorWaCustom').value = "";
+                document.getElementById('modalPromptWa').classList.remove('hidden');
+                return;
+            }
+            eksekusiKirimWa(telp, noTransaksi, namaPeminjam, daftarAsetStr, tglMulai, tglSelesai, totalBiaya, metodePembayaran);
+        }
+
+        window.tutupModalPromptWa = function() {
+            document.getElementById('modalPromptWa').classList.add('hidden');
+            pendingWaData = null;
+        }
+
+        window.prosesKirimWaCustom = function() {
+            const telpCustom = document.getElementById('inputNomorWaCustom').value.trim();
+            if (!telpCustom) {
+                showCustomAlert("Perhatian", "Nomor WhatsApp tidak boleh kosong!", false);
+                return;
+            }
+            tutupModalPromptWa();
+            if (pendingWaData) {
+                eksekusiKirimWa(telpCustom, pendingWaData.noTransaksi, pendingWaData.namaPeminjam, pendingWaData.daftarAsetStr, pendingWaData.tglMulai, pendingWaData.tglSelesai, pendingWaData.totalBiaya, pendingWaData.metodePembayaran);
+            }
+        }
+
+        function eksekusiKirimWa(telp, noTransaksi, namaPeminjam, daftarAsetStr, tglMulai, tglSelesai, totalBiaya, metodePembayaran) {
+            if (telp.startsWith('0')) {
+                telp = '62' + telp.slice(1);
+            } else if (telp.startsWith('+')) {
+                telp = telp.slice(1);
+            }
+
+            const pesan = `Halo Bpk/Ibu *${namaPeminjam}*,\n\nNo. Transaksi: *${noTransaksi}*\nBerikut adalah rincian tagihan Sewa Aset RT Anda:\n\n📦 *Aset:* \n${daftarAsetStr}\n📅 *Periode:* ${tglMulai} s/d ${tglSelesai}\n💰 *Total Biaya:* ${formatRupiah(totalBiaya)}\n💳 *Metode Pembayaran:* ${metodePembayaran}\n\nTerima kasih telah menggunakan fasilitas aset RT kami. 🙏`;
+
+            const urlWA = `https://wa.me/${telp}?text=${encodeURIComponent(pesan)}`;
+            window.open(urlWA, '_blank');
+        }
+
+        window.hapusTransaksiSewa = function(id) {
+            idHapusPending = id;
+            document.getElementById('modalKonfirmasiHapus').classList.remove('hidden');
+        }
+
+        window.tutupModalKonfirmasiHapus = function() {
+            document.getElementById('modalKonfirmasiHapus').classList.add('hidden');
+            idHapusPending = null;
+        }
+
+        document.getElementById('btnKonfirmasiHapusAksi').onclick = async function() {
+            if (!idHapusPending) return;
+            const id = idHapusPending;
+            tutupModalKonfirmasiHapus();
+            try {
+                await deleteDoc(doc(db, "transaksiSewaAset", id));
+                showCustomAlert("Berhasil", "Data laporan transaksi sewa berhasil dihapus.");
+            } catch (error) {
+                console.error("Gagal menghapus transaksi:", error);
+                showCustomAlert("Kesalahan", "Terjadi kesalahan saat menghapus data.", false);
+            }
+        };
+
+        function renderLaporan(list) {
+            const container = document.getElementById('listLaporanContainer');
+            let html = "";
+            let totalPendapatanSemua = 0;
+
+            list.forEach(item => {
+                const totalBiaya = Number(item.totalBiaya || 0);
+                totalPendapatanSemua += totalBiaya;
+
+                let badgeMetode = "bg-emerald-100 text-emerald-700";
+                if (item.metodePembayaran === "Transfer") badgeMetode = "bg-sky-100 text-sky-700";
+                else if (item.metodePembayaran === "Piutang") badgeMetode = "bg-amber-100 text-amber-700";
+
+                let itemsHtml = "";
+                let daftarAsetPlainText = "";
+                if (item.items && Array.isArray(item.items) && item.items.length > 0) {
+                    item.items.forEach(prod => {
+                        itemsHtml += `<div>- ${prod.namaAset || 'Memuat...'} (x${prod.jumlahSewa || 1})</div>`;
+                        daftarAsetPlainText += `- ${prod.namaAset || 'Memuat...'} (x${prod.jumlahSewa || 1})\n`;
+                    });
+                } else if (item.namaAset) {
+                    itemsHtml = `<div>- ${item.namaAset} (x${item.jumlahSewa || 1})</div>`;
+                    daftarAsetPlainText += `- ${item.namaAset} (x${item.jumlahSewa || 1})\n`;
+                } else {
+                    itemsHtml = `<div>Memuat...</div>`;
+                    daftarAsetPlainText = `Memuat...\n`;
+                }
+
+                html += `
+                    <div class="bg-white p-3 border border-slate-200/70 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-1.5">
+                            <div>
+                                <span class="text-[9px] bg-emerald-50 text-emerald-800 px-1.5 py-0.5 rounded font-bold mr-1">${item.statusPeminjam || 'Umum'}</span>
+                                <span class="font-bold text-slate-800 text-[11px]">${item.namaPeminjam || 'Tanpa Nama'}</span>
+                            </div>
+                            <span class="text-[9px] px-2 py-0.5 rounded font-bold ${badgeMetode}">${item.metodePembayaran || 'Tunai'}</span>
+                        </div>
+                        <div class="space-y-1 text-[11px] text-slate-600">
+                            <div class="text-[10px] text-emerald-700 font-bold"><i class="fa-solid fa-receipt mr-1"></i> No. Transaksi: ${item.noTransaksi || 'Memuat...'}</div>
+                            <div>
+                                <span class="font-semibold text-slate-700">Aset Disewa:</span>
+                                <div class="pl-2 font-medium text-slate-800">${itemsHtml}</div>
+                            </div>
+                            <div class="flex justify-between pt-1 border-t border-slate-100">
+                                <span>Periode: ${item.tglMulai || '-'} s/d ${item.tglSelesai || '-'}</span>
+                                <b class="text-emerald-600">${formatRupiah(totalBiaya)}</b>
+                            </div>
+                            ${item.metodePembayaran === 'Piutang' && item.tglPiutang ? `<div class="text-[10px] text-amber-700 font-semibold">Jatuh Tempo Piutang: ${item.tglPiutang}</div>` : ''}
+                        </div>
+                        <div class="flex items-center justify-between pt-1 border-t border-slate-50 text-[10px] text-slate-400">
+                            <span>Tgl: ${item.createdAt || '-'}</span>
+                            <div class="flex space-x-1">
+                                <button onclick="kirimWhatsApp('${item.noTransaksi || 'Memuat...'}', '${item.namaPeminjam || ''}', \`${daftarAsetPlainText}\`, '${item.tglMulai || ''}', '${item.tglSelesai || ''}', ${totalBiaya}, '${item.metodePembayaran || 'Tunai'}', '${item.telpPeminjam || ''}')" class="px-2 py-1 bg-emerald-50 text-emerald-700 font-semibold hover:bg-emerald-100 cursor-pointer rounded" title="Kirim WA">
+                                    <i class="fa-brands fa-whatsapp mr-1"></i> WA
+                                </button>
+                                <button onclick="bukaModalEdit('${item.id}')" class="px-2 py-1 bg-sky-50 text-sky-600 font-semibold hover:bg-sky-100 cursor-pointer rounded" title="Edit">
+                                    <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+                                </button>
+                                <button onclick="hapusTransaksiSewa('${item.id}')" class="px-2 py-1 bg-red-50 text-red-600 font-semibold hover:bg-red-100 cursor-pointer rounded" title="Hapus">
+                                    <i class="fa-solid fa-trash mr-1"></i> Hapus
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (html === "") {
+                html = `<div class="text-center py-8 text-slate-400">Belum ada laporan transaksi sewa.</div>`;
+            }
+
+            container.innerHTML = html;
+            document.getElementById('totalTransaksi').innerText = `${list.length} Transaksi`;
+            document.getElementById('totalPendapatan').innerText = formatRupiah(totalPendapatanSemua);
+        }
+
+        // Real-time listener koleksi 'transaksiSewaAset'
+        const qLaporan = query(collection(db, "transaksiSewaAset"), orderBy("createdAt", "desc"));
+        onSnapshot(qLaporan, (snapshot) => {
+            dataLaporanList = [];
+            snapshot.forEach((docSnap) => {
+                dataLaporanList.push({ id: docSnap.id, ...docSnap.data() });
+            });
+            filterLaporan();
+        });
+
+        // Real-time listener koleksi 'asetRt' untuk opsi pilihan produk pada modal edit
+        const qAset = query(collection(db, "asetRt"));
+        onSnapshot(qAset, (snapshot) => {
+            dataAsetList = [];
+            snapshot.forEach((docSnap) => {
+                dataAsetList.push({ id: docSnap.id, ...docSnap.data() });
+            });
+        });
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = "../index.html";
+            }
+        });
+    </script>
+</body>
+</html>

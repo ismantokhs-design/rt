@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Reset Data Sistem - Aplikasi RT-Ku</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none !important;
+            width: 0px !important;
+            height: 0px !important;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+        body {
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+    </style>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            document.body.style.opacity = '1';
+        });
+    </script>
+</head>
+<body class="bg-slate-900 font-['Inter'] h-screen overflow-hidden m-0 flex flex-col items-center justify-center">
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-slate-900/95 border border-slate-700 text-white px-4 py-2.5 rounded-none shadow-2xl text-xs font-medium flex items-center space-x-2 z-50 transition-all duration-300 opacity-0 pointer-events-none translate-y-[-20px]">
+        <div id="toastIconContainer" class="w-5 h-5 rounded-none bg-emerald-500 text-white flex items-center justify-center text-[10px] shadow">
+            <i id="toastIcon" class="fa-solid fa-check"></i>
+        </div>
+        <span id="toastText">Berhasil!</span>
+    </div>
+
+    <!-- TAMPILAN DESKTOP -->
+    <div class="hidden md:flex w-full h-screen bg-slate-100 overflow-hidden flex-col">
+        <header class="hidden bg-white border-b border-slate-200 px-8 py-4 items-center justify-between shrink-0 shadow-sm">
+            <div class="flex items-center space-x-3">
+                <a href="layout.html?page=home" class="w-9 h-9 rounded-none bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-all cursor-pointer border border-slate-200">
+                    <i class="fa-solid fa-arrow-left text-xs"></i>
+                </a>
+                <div>
+                    <h1 class="font-bold text-slate-800 text-sm tracking-wide">Reset Data Sistem</h1>
+                    <p class="text-[10px] text-slate-400">Pusat kontrol pembersihan database aplikasi RT-Ku</p>
+                </div>
+            </div>
+            <div class="bg-red-50 border border-red-200 px-3 py-1.5 rounded-none flex items-center space-x-2">
+                <i class="fa-solid fa-triangle-exclamation text-red-600 text-xs"></i>
+                <span class="text-xs font-bold text-red-800">Mode Administrator Aktif</span>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-8 bg-slate-50 flex justify-center items-center">
+            <div class="w-full max-w-4xl space-y-6">
+                <!-- Warning Box Desktop -->
+                <div class="bg-red-50 border border-red-200 rounded-none p-4 flex items-start space-x-4 shadow-sm">
+                    <div class="w-10 h-10 rounded-none bg-red-600 text-white flex items-center justify-center shrink-0 text-sm shadow-md">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-red-900 text-xs sm:text-sm">Peringatan Berbahaya!</h2>
+                        <p class="text-xs text-red-700 mt-1 leading-relaxed">Pilih data yang ingin direset. Seluruh proses bersifat permanen dan tidak dapat dikembalikan. Akun ber-role <b>Administrator</b> akan tetap dipertahankan meskipun opsi <i>users</i> dicentang.</p>
+                    </div>
+                </div>
+
+                <!-- Grid dengan items-stretch agar tinggi kedua kotak sejajar -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                    <!-- Pilihan Koleksi Data Desktop -->
+                    <div class="bg-white rounded-none p-5 shadow-sm border border-slate-200/75 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3 shrink-0">
+                                <span class="font-bold text-slate-800 text-xs uppercase tracking-wider">Pilih Data yang Akan Dihapus:</span>
+                                <div class="flex items-center space-x-2">
+                                    <button type="button" onclick="selectAllReset(true)" class="text-[10px] bg-red-50 text-red-700 hover:bg-red-100 px-3 py-1 rounded font-semibold transition-all cursor-pointer">Pilih Semua</button>
+                                    <button type="button" onclick="selectAllReset(false)" class="text-[10px] bg-slate-100 text-slate-600 hover:bg-slate-200 px-3 py-1 rounded font-semibold transition-all cursor-pointer">Batal</button>
+                                </div>
+                            </div>
+
+                            <!-- Daftar dengan scroll vertikal -->
+                            <div class="space-y-2 max-h-[220px] overflow-y-auto pr-1">
+                                <label class="flex items-center space-x-3 p-2.5 bg-slate-50 border border-slate-200/60 cursor-pointer hover:bg-red-50/40 transition-all">
+                                    <input type="checkbox" name="resetItem" value="dataWarga" class="w-4 h-4 text-red-600 rounded-none border-slate-300 focus:ring-red-500">
+                                    <div>
+                                        <span class="font-bold text-slate-800 block text-xs">dataWarga</span>
+                                        <span class="text-[10px] text-slate-400">Seluruh data kependudukan</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-center space-x-3 p-2.5 bg-slate-50 border border-slate-200/60 cursor-pointer hover:bg-red-50/40 transition-all">
+                                    <input type="checkbox" name="resetItem" value="iuranPending" class="w-4 h-4 text-red-600 rounded-none border-slate-300 focus:ring-red-500">
+                                    <div>
+                                        <span class="font-bold text-slate-800 block text-xs">iuranPending</span>
+                                        <span class="text-[10px] text-slate-400">Daftar iuran tertunda</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-center space-x-3 p-2.5 bg-slate-50 border border-slate-200/60 cursor-pointer hover:bg-red-50/40 transition-all">
+                                    <input type="checkbox" name="resetItem" value="kasRt" class="w-4 h-4 text-red-600 rounded-none border-slate-300 focus:ring-red-500">
+                                    <div>
+                                        <span class="font-bold text-slate-800 block text-xs">kasRt</span>
+                                        <span class="text-[10px] text-slate-400">Pencatatan kas RT</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-center space-x-3 p-2.5 bg-slate-50 border border-slate-200/60 cursor-pointer hover:bg-red-50/40 transition-all">
+                                    <input type="checkbox" name="resetItem" value="riwayatMutasi" class="w-4 h-4 text-red-600 rounded-none border-slate-300 focus:ring-red-500">
+                                    <div>
+                                        <span class="font-bold text-slate-800 block text-xs">riwayatMutasi</span>
+                                        <span class="text-[10px] text-slate-400">Riwayat kas & keuangan</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-center space-x-3 p-2.5 bg-slate-50 border border-slate-200/60 cursor-pointer hover:bg-red-50/40 transition-all">
+                                    <input type="checkbox" name="resetItem" value="riwayatWarga" class="w-4 h-4 text-red-600 rounded-none border-slate-300 focus:ring-red-500">
+                                    <div>
+                                        <span class="font-bold text-slate-800 block text-xs">riwayatWarga</span>
+                                        <span class="text-[10px] text-slate-400">Riwayat peristiwa penting warga (kelahiran, kematian, dll)</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-center space-x-3 p-2.5 bg-slate-50 border border-slate-200/60 cursor-pointer hover:bg-red-50/40 transition-all">
+                                    <input type="checkbox" name="resetItem" value="transaksiSewaAset" class="w-4 h-4 text-red-600 rounded-none border-slate-300 focus:ring-red-500">
+                                    <div>
+                                        <span class="font-bold text-slate-800 block text-xs">transaksiSewaAset</span>
+                                        <span class="text-[10px] text-slate-400">Data penyewaan aset RT</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-center space-x-3 p-2.5 bg-slate-50 border border-slate-200/60 cursor-pointer hover:bg-red-50/40 transition-all">
+                                    <input type="checkbox" name="resetItem" value="users" class="w-4 h-4 text-red-600 rounded-none border-slate-300 focus:ring-red-500">
+                                    <div>
+                                        <span class="font-bold text-slate-800 block text-xs">users</span>
+                                        <span class="text-[10px] text-slate-400">Akun warga selain Administrator</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Konfirmasi & Eksekusi Desktop -->
+                    <div class="bg-white rounded-none p-5 shadow-sm border border-slate-200/75 flex flex-col justify-between space-y-4">
+                        <div class="space-y-4">
+                            <h3 class="font-bold text-slate-800 text-xs uppercase tracking-wider border-b border-slate-100 pb-3">Otorisasi Keamanan</h3>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Ketik <span class="text-red-600 font-bold">RESET DATA</span> untuk konfirmasi:</label>
+                                <input type="text" id="confirmInputDesktop" placeholder="Ketik di sini..." class="w-full px-3 py-2.5 rounded-none border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-red-600 font-medium uppercase">
+                            </div>
+                            <p class="text-[11px] text-slate-500 leading-relaxed">Tombol eksekusi hanya akan aktif setelah Anda mengetikkan frasa konfirmasi dengan benar dan memilih setidaknya satu target data.</p>
+                        </div>
+
+                        <button type="button" id="triggerResetBtnDesktop" disabled class="w-full bg-slate-300 text-slate-500 font-semibold py-2.5 rounded-none transition-all text-xs cursor-not-allowed shadow-none">
+                            <i class="fa-solid fa-trash-can mr-1.5"></i> Hapus Data Terpilih
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- TAMPILAN MOBILE (Frame HP) -->
+    <div class="flex md:hidden w-full h-screen sm:max-w-[400px] sm:h-[92vh] sm:max-h-[820px] bg-slate-50 sm:rounded-[35px] shadow-2xl flex-col justify-between relative overflow-hidden sm:border-[6px] sm:border-slate-800">
+        <!-- Header Mobile -->
+        <div class="bg-gradient-to-b from-red-600 to-red-700 text-white p-4 rounded-none flex items-center justify-between shrink-0">
+            <a href="layout.html?page=home" class="w-9 h-9 rounded-none bg-white/10 flex items-center justify-center text-white backdrop-blur-sm transition-all hover:bg-white/25">
+                <i class="fa-solid fa-arrow-left text-xs"></i>
+            </a>
+            <h1 class="font-bold text-sm tracking-wide">Reset Data Sistem</h1>
+            <div class="w-9"></div>
+        </div>
+
+        <!-- Content Mobile (Scrollable) -->
+        <div class="p-4 flex-1 overflow-y-auto no-scrollbar pb-6 space-y-4 text-xs">
+            <!-- Warning Box Mobile -->
+            <div class="bg-red-50 border border-red-200 rounded-none p-3.5 flex items-start space-x-3">
+                <div class="w-8 h-8 rounded-none bg-red-600 text-white flex items-center justify-center shrink-0 text-xs shadow-md">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div>
+                    <h2 class="font-bold text-red-900 text-xs">Peringatan Berbahaya!</h2>
+                    <p class="text-[11px] text-red-700 mt-0.5 leading-relaxed">Pilih data yang ingin direset. Akun ber-role <b>Administrator</b> akan tetap dipertahankan meskipun opsi <i>users</i> dicentang.</p>
+                </div>
+            </div>
+
+            <!-- Daftar Checkbox Koleksi Data Mobile -->
+            <div class="bg-white rounded-none p-4 shadow-sm border border-slate-200/65 space-y-3">
+                <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                    <span class="font-bold text-slate-800 text-xs">Pilih Data yang Akan Dihapus:</span>
+                    <div class="flex items-center space-x-1.5 shrink-0">
+                        <button type="button" onclick="selectAllReset(true)" class="text-[10px] bg-red-50 text-red-700 hover:bg-red-100 px-2.5 py-1 rounded font-semibold transition-all cursor-pointer">Pilih Semua</button>
+                        <button type="button" onclick="selectAllReset(false)" class="text-[10px] bg-slate-100 text-slate-600 hover:bg-slate-200 px-2.5 py-1 rounded font-semibold transition-all cursor-pointer">Batal</button>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="flex items-center space-x-2.5 p-2 bg-slate-50 border border-slate-200/60 cursor-pointer hover:bg-red-50/40 transition-all">
+                        <input type="checkbox" name="resetItem" value="dataWarga" class="w-4 h-4 text-red-600 rounded-none border-slate-300 focus:ring-red-500">
+                        <div>
+                            <span class="font-bold text-slate-800 block text-[11px]">dataWarga</span>
+                            <span class="text-[9px] text-slate-400">Seluruh data kependudukan</span>
+                        </div>
+                    </label>
+                    <label class="flex items-center space-x-2.5 p-2 bg-slate-50 border border-slate-200/60 cursor-pointer hover:bg-red-50/40 transition-all">
+                        <input type="checkbox" name="resetItem" value="iuranPending" class="w-4 h-4 text-red-600 rounded-none border-slate-300 focus:ring-red-500">
+                        <div>
+                            <span class="font-bold text-slate-800 block text-[11px]">iuranPending</span>
+                            <span class="text-[9px] text-slate-400">Daftar iuran tertunda</span>
+                        </div>
+                    </label>
+                    <label class="flex items-center space-x-2.5 p-2 bg-slate-50 border border-slate-200/60 cursor-pointer hover:bg-red-50/40 transition-all">
+                        <input type="checkbox" name="resetItem" value="kasRt" class="w-4 h-4 text-red-600 rounded-none border-slate-300 focus:ring-red-500">
+                        <div>
+                            <span class="font-bold text-slate-800 block text-[11px]">kasRt</span>
+                            <span class="text-[9px] text-slate-400">Pencatatan kas RT</span>
+                        </div>
+                    </label>
+                    <label class="flex items-center space-x-2.5 p-2 bg-slate-50 border border-slate-200/60 cursor-pointer hover:bg-red-50/40 transition-all">
+                        <input type="checkbox" name="resetItem" value="riwayatMutasi" class="w-4 h-4 text-red-600 rounded-none border-slate-300 focus:ring-red-500">
+                        <div>
+                            <span class="font-bold text-slate-800 block text-[11px]">riwayatMutasi</span>
+                            <span class="text-[9px] text-slate-400">Riwayat kas & keuangan</span>
+                        </div>
+                    </label>
+                    <label class="flex items-center space-x-2.5 p-2 bg-slate-50 border border-slate-200/60 cursor-pointer hover:bg-red-50/40 transition-all">
+                        <input type="checkbox" name="resetItem" value="riwayatWarga" class="w-4 h-4 text-red-600 rounded-none border-slate-300 focus:ring-red-500">
+                        <div>
+                            <span class="font-bold text-slate-800 block text-[11px]">riwayatWarga</span>
+                            <span class="text-[9px] text-slate-400">Riwayat peristiwa penting warga (kelahiran, kematian, dll)</span>
+                        </div>
+                    </label>
+                    <label class="flex items-center space-x-2.5 p-2 bg-slate-50 border border-slate-200/60 cursor-pointer hover:bg-red-50/40 transition-all">
+                        <input type="checkbox" name="resetItem" value="transaksiSewaAset" class="w-4 h-4 text-red-600 rounded-none border-slate-300 focus:ring-red-500">
+                        <div>
+                            <span class="font-bold text-slate-800 block text-[11px]">transaksiSewaAset</span>
+                            <span class="text-[9px] text-slate-400">Data penyewaan aset RT</span>
+                        </div>
+                    </label>
+                    <label class="flex items-center space-x-2.5 p-2 bg-slate-50 border border-slate-200/60 cursor-pointer hover:bg-red-50/40 transition-all">
+                        <input type="checkbox" name="resetItem" value="users" class="w-4 h-4 text-red-600 rounded-none border-slate-300 focus:ring-red-500">
+                        <div>
+                            <span class="font-bold text-slate-800 block text-[11px]">users</span>
+                            <span class="text-[9px] text-slate-400">Akun warga selain Administrator</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Form Konfirmasi Teks & Tombol Eksekusi Mobile -->
+            <div class="bg-white rounded-none p-4 shadow-sm border border-slate-200/65 space-y-3">
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Ketik <span class="text-red-600 font-bold">RESET DATA</span> untuk konfirmasi:</label>
+                    <input type="text" id="confirmInputMobile" placeholder="Ketik di sini..." class="w-full px-3 py-2 rounded-none border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-red-600 font-medium uppercase">
+                </div>
+
+                <button type="button" id="triggerResetBtnMobile" disabled class="w-full bg-slate-300 text-slate-500 font-semibold py-2.5 rounded-none transition-all text-xs cursor-not-allowed shadow-none">
+                    <i class="fa-solid fa-trash-can mr-1.5"></i> Hapus Data Terpilih
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL KONFIRMASI CUSTOM -->
+    <div id="customConfirmModal" class="fixed inset-0 bg-black/60 backdrop-blur-[3px] z-50 flex items-center justify-center p-4 hidden transition-all duration-300 opacity-0">
+        <div id="confirmModalBox" class="w-full max-w-[320px] bg-white rounded-xl p-5 shadow-2xl transform scale-95 transition-all duration-300 space-y-4">
+            <div class="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto text-lg shadow-inner">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div class="text-center space-y-1">
+                <h3 class="font-bold text-slate-900 text-sm">Konfirmasi Reset Data</h3>
+                <p id="confirmModalText" class="text-[11px] text-slate-500 leading-relaxed">Apakah Anda yakin ingin menghapus data terpilih secara permanen?</p>
+            </div>
+            <div class="grid grid-cols-2 gap-2 pt-1">
+                <button type="button" onclick="closeConfirmModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 rounded-lg text-xs transition-all cursor-pointer">
+                    Batal
+                </button>
+                <button type="button" id="confirmYesBtn" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 rounded-lg text-xs transition-all shadow-md shadow-red-600/30 cursor-pointer">
+                    Ya, Hapus
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SKRIP FIREBASE & LOGIKA RESET -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        window.showToast = function(message, isError = false) {
+            const toast = document.getElementById('toastNotification');
+            const toastText = document.getElementById('toastText');
+            const iconContainer = document.getElementById('toastIconContainer');
+            const icon = document.getElementById('toastIcon');
+            
+            toastText.innerText = message;
+            if (isError) {
+                iconContainer.classList.remove('bg-emerald-500');
+                iconContainer.classList.add('bg-red-500');
+                icon.className = "fa-solid fa-xmark";
+            } else {
+                iconContainer.classList.remove('bg-red-500');
+                iconContainer.classList.add('bg-emerald-500');
+                icon.className = "fa-solid fa-check";
+            }
+
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            }, 3000);
+        }
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+            authDomain: "erte-979ca.firebaseapp.com",
+            projectId: "erte-979ca",
+            storageBucket: "erte-979ca.firebasestorage.app",
+            messagingSenderId: "329513636032",
+            appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const confirmInputDesktop = document.getElementById('confirmInputDesktop');
+        const confirmInputMobile = document.getElementById('confirmInputMobile');
+        const triggerResetBtnDesktop = document.getElementById('triggerResetBtnDesktop');
+        const triggerResetBtnMobile = document.getElementById('triggerResetBtnMobile');
+        const checkboxes = document.querySelectorAll('input[name="resetItem"]');
+        
+        const customConfirmModal = document.getElementById('customConfirmModal');
+        const confirmModalBox = document.getElementById('confirmModalBox');
+        const confirmModalText = document.getElementById('confirmModalText');
+        const confirmYesBtn = document.getElementById('confirmYesBtn');
+
+        window.selectAllReset = function(status) {
+            checkboxes.forEach(cb => cb.checked = status);
+        }
+
+        function handleInputConfirmation(e) {
+            const val = e.target.value.trim().toUpperCase();
+            if (confirmInputDesktop) confirmInputDesktop.value = val;
+            if (confirmInputMobile) confirmInputMobile.value = val;
+
+            const isValid = (val === "RESET DATA");
+
+            [triggerResetBtnDesktop, triggerResetBtnMobile].forEach(btn => {
+                if (!btn) return;
+                if (isValid) {
+                    btn.disabled = false;
+                    btn.classList.remove('bg-slate-300', 'text-slate-500', 'cursor-not-allowed', 'shadow-none');
+                    btn.classList.add('bg-red-600', 'hover:bg-red-700', 'text-white', 'cursor-pointer', 'shadow-md', 'shadow-red-600/35');
+                } else {
+                    btn.disabled = true;
+                    btn.classList.add('bg-slate-300', 'text-slate-500', 'cursor-not-allowed', 'shadow-none');
+                    btn.classList.remove('bg-red-600', 'hover:bg-red-700', 'text-white', 'cursor-pointer', 'shadow-md', 'shadow-red-600/35');
+                }
+            });
+        }
+
+        if (confirmInputDesktop) confirmInputDesktop.addEventListener('input', handleInputConfirmation);
+        if (confirmInputMobile) confirmInputMobile.addEventListener('input', handleInputConfirmation);
+
+        let selectedCollectionsToReset = [];
+
+        function triggerResetAction() {
+            const currentVal = (confirmInputDesktop ? confirmInputDesktop.value : confirmInputMobile.value).trim().toUpperCase();
+            if (currentVal !== "RESET DATA") return;
+
+            selectedCollectionsToReset = [];
+            checkboxes.forEach(cb => {
+                if (cb.checked) selectedCollectionsToReset.push(cb.value);
+            });
+
+            if (selectedCollectionsToReset.length === 0) {
+                showToast("Pilih minimal satu data yang ingin direset!", true);
+                return;
+            }
+
+            confirmModalText.innerHTML = `Anda akan menghapus <b>${selectedCollectionsToReset.length}</b> kategori data terpilih secara permanen. Lanjutkan?`;
+            
+            customConfirmModal.classList.remove('hidden');
+            setTimeout(() => {
+                customConfirmModal.classList.remove('opacity-0');
+                confirmModalBox.classList.remove('scale-95');
+                confirmModalBox.classList.add('scale-100');
+            }, 10);
+        }
+
+        if (triggerResetBtnDesktop) triggerResetBtnDesktop.addEventListener('click', triggerResetAction);
+        if (triggerResetBtnMobile) triggerResetBtnMobile.addEventListener('click', triggerResetAction);
+
+        window.closeConfirmModal = function() {
+            customConfirmModal.classList.add('opacity-0');
+            confirmModalBox.classList.remove('scale-100');
+            confirmModalBox.classList.add('scale-95');
+            setTimeout(() => {
+                customConfirmModal.classList.add('hidden');
+            }, 300);
+        }
+
+        confirmYesBtn.addEventListener('click', async () => {
+            closeConfirmModal();
+
+            [triggerResetBtnDesktop, triggerResetBtnMobile].forEach(btn => {
+                if (btn) {
+                    btn.disabled = true;
+                    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> Sedang Mereset Data...`;
+                }
+            });
+
+            try {
+                for (const colName of selectedCollectionsToReset) {
+                    if (colName === "users") {
+                        const usersSnap = await getDocs(collection(db, "users"));
+                        const userDeletePromises = [];
+                        usersSnap.usersSnap?.forEach((userDoc) => {
+                            const uData = userDoc.data();
+                            const role = (uData.role || "").trim().toLowerCase();
+                            if (role !== "administrator" && role !== "admin") {
+                                userDeletePromises.push(deleteDoc(doc(db, "users", userDoc.id)));
+                            }
+                        });
+                        await Promise.all(userDeletePromises);
+                    } else {
+                        const snap = await getDocs(collection(db, colName));
+                        const deletePromises = snap.docs.map((document) => deleteDoc(doc(db, colName, document.id)));
+                        await Promise.all(deletePromises);
+                    }
+                }
+
+                showToast("Data terpilih berhasil direset!");
+                setTimeout(() => {
+                    window.location.href = "layout.html?page=home";
+                }, 2000);
+
+            } catch (error) {
+                console.error("Gagal melakukan reset data:", error);
+                showToast("Terjadi kesalahan sistem saat mereset data: " + error.message, true);
+                
+                [triggerResetBtnDesktop, triggerResetBtnMobile].forEach(btn => {
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = `<i class="fa-solid fa-trash-can mr-1.5"></i> Hapus Data Terpilih`;
+                    }
+                });
+            }
+        });
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = "index.html";
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Master Akun - Aplikasi RT-Ku</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none !important;
+            width: 0px !important;
+            height: 0px !important;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 font-['Inter'] flex justify-center items-center h-screen overflow-hidden m-0">
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-slate-900/95 border border-slate-700 text-white px-4 py-2.5 rounded-none shadow-2xl text-xs font-medium flex items-center space-x-2 z-50 transition-all duration-300 opacity-0 pointer-events-none translate-y-[-20px]">
+        <div class="w-5 h-5 rounded-none bg-emerald-500 text-white flex items-center justify-center text-[10px] shadow">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <span id="toastText">Berhasil!</span>
+    </div>
+
+    <!-- Container HP Frame -->
+    <div class="w-full h-screen sm:max-w-[400px] sm:h-[92vh] sm:max-h-[820px] bg-slate-50 sm:rounded-[35px] shadow-2xl flex flex-col justify-between relative overflow-hidden sm:border-[6px] sm:border-slate-800">
+        
+        <!-- Header -->
+        <div class="bg-gradient-to-b from-emerald-600 to-emerald-700 text-white p-5 rounded-b-[28px] flex items-center justify-between shrink-0">
+            <a href="pengaturan-keuangan.html" class="w-9 h-9 rounded-none bg-white/10 flex items-center justify-center text-white backdrop-blur-sm transition-all hover:bg-white/20">
+                <i class="fa-solid fa-arrow-left text-xs"></i>
+            </a>
+            <h1 class="font-bold text-sm tracking-wide">Master Akun (COA)</h1>
+            <div class="w-9"></div>
+        </div>
+
+        <!-- Content (Scrollable) -->
+        <div class="p-4 flex-1 overflow-y-auto no-scrollbar pb-6 space-y-4 text-xs">
+            
+            <!-- Tombol Buka Modal Tambah Akun -->
+            <button type="button" onclick="openAkunModal()" class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-none shadow-sm transition-all flex items-center justify-center space-x-2 cursor-pointer">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>Tambah Akun Baru</span>
+            </button>
+
+            <!-- Daftar Akun / Tabel Akun -->
+            <div class="bg-white rounded-none p-3.5 shadow-sm border border-slate-200/70 space-y-3">
+                <div class="flex items-center space-x-2 pb-2 border-b border-slate-100">
+                    <div class="w-7 h-7 rounded-none bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs">
+                        <i class="fa-solid fa-list"></i>
+                    </div>
+                    <h2 class="font-bold text-slate-800 text-xs">Daftar Akun Keuangan</h2>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-[10px]">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                                <th class="p-2 font-semibold">Kode</th>
+                                <th class="p-2 font-semibold">Nama Akun</th>
+                                <th class="p-2 font-semibold">Kategori</th>
+                                <th class="p-2 font-semibold text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelAkunContainer" class="divide-y divide-slate-100">
+                            <tr>
+                                <td colspan="4" class="p-3 text-center text-slate-400">Memuat data akun...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- MODAL TAMBAH / EDIT AKUN -->
+        <div id="akunModal" class="absolute inset-0 bg-black/50 backdrop-blur-[2px] z-50 flex items-end justify-center hidden transition-all duration-300">
+            <div class="w-full bg-white rounded-t-[25px] p-5 shadow-2xl transform translate-y-full transition-transform duration-300 max-h-[90vh] overflow-y-auto no-scrollbar" id="akunModalContent">
+                
+                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-7 h-7 rounded-none bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-file-circle-plus"></i>
+                        </div>
+                        <h2 id="modalAkunTitle" class="font-bold text-slate-800 text-xs">Tambah Akun Baru</h2>
+                    </div>
+                    <button type="button" onclick="closeAkunModal()" class="w-6 h-6 rounded-none bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center text-[10px] transition-all cursor-pointer">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <form id="akunForm" class="space-y-3 pb-2">
+                    <input type="hidden" id="editAkunId">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Kategori Akun</label>
+                        <select id="kategoriAkun" required class="w-full px-3 py-2 rounded-none border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600 text-slate-700 font-medium cursor-pointer">
+                            <option value="Aset">Aset</option>
+                            <option value="Pendapatan">Pendapatan</option>
+                            <option value="Pengeluaran">Pengeluaran</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Kode Akun</label>
+                        <input type="text" id="kodeAkun" required readonly class="w-full px-3 py-2 rounded-none border border-slate-200 text-xs bg-slate-100 text-slate-600 font-bold focus:outline-none" placeholder="Otomatis">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Nama Akun</label>
+                        <input type="text" id="namaAkun" required placeholder="Contoh: Kas RT / Pendapatan Iuran Wajib" class="w-full px-3 py-2 rounded-none border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600">
+                    </div>
+
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-none shadow-md transition-all text-xs cursor-pointer mt-2">
+                        Simpan Akun
+                    </button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal Konfirmasi Hapus Kustom (Smooth) -->
+    <div id="modalKonfirmasiHapus" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm transition-all">
+        <div class="bg-white w-full max-w-[300px] rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col p-5 text-center space-y-4">
+            <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto text-lg shadow-inner">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div class="space-y-1">
+                <h3 class="font-bold text-slate-800 text-sm">Hapus Akun</h3>
+                <p class="text-slate-500 text-xs">Apakah Anda yakin ingin menghapus data akun ini?</p>
+            </div>
+            <div class="flex space-x-2 pt-1">
+                <button type="button" onclick="tutupModalKonfirmasiHapus()" class="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl cursor-pointer text-xs transition-all">
+                    Batal
+                </button>
+                <button type="button" id="btnKonfirmasiHapusAksi" class="flex-1 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl cursor-pointer text-xs shadow transition-all">
+                    Hapus
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skrip Firebase & Logika -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+            authDomain: "erte-979ca.firebaseapp.com",
+            projectId: "erte-979ca",
+            storageBucket: "erte-979ca.firebasestorage.app",
+            messagingSenderId: "329513636032",
+            appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let listAkunData = [];
+        let cacheAkun = {};
+        let idHapusPending = null;
+
+        // Toast Notification
+        window.showToast = function(message) {
+            const toast = document.getElementById('toastNotification');
+            const toastText = document.getElementById('toastText');
+            toastText.innerText = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            }, 1800);
+        }
+
+        // Generate Kode Akun Otomatis Berdasarkan Kategori (Hanya saat tambah baru)
+        function generateKodeAkun(kategori) {
+            let prefix = "1";
+            if (kategori === "Pendapatan") prefix = "4";
+            if (kategori === "Pengeluaran") prefix = "5";
+
+            let maxNum = 0;
+            listAkunData.forEach(item => {
+                if (item.kode && item.kode.startsWith(prefix)) {
+                    const num = parseInt(item.kode.substring(1)) || 0;
+                    if (num > maxNum) maxNum = num;
+                }
+            });
+
+            const nextNum = maxNum + 1;
+            return prefix + String(nextNum).padStart(3, '0');
+        }
+
+        document.getElementById('kategoriAkun').addEventListener('change', () => {
+            const editId = document.getElementById('editAkunId').value;
+            if (!editId) {
+                const kategori = document.getElementById('kategoriAkun').value;
+                document.getElementById('kodeAkun').value = generateKodeAkun(kategori);
+            }
+        });
+
+        // Kontrol Modal Tambah/Edit
+        window.openAkunModal = function(id = null) {
+            const modal = document.getElementById('akunModal');
+            const content = document.getElementById('akunModalContent');
+            const form = document.getElementById('akunForm');
+            const modalTitle = document.getElementById('modalAkunTitle');
+
+            form.reset();
+            document.getElementById('editAkunId').value = "";
+
+            if (id && cacheAkun[id]) {
+                modalTitle.innerText = "Edit Akun Keuangan";
+                const data = cacheAkun[id];
+                document.getElementById('editAkunId').value = id;
+                document.getElementById('kategoriAkun').value = data.kategori || "Aset";
+                document.getElementById('kodeAkun').value = data.kode || "";
+                document.getElementById('namaAkun').value = data.nama || "";
+            } else {
+                modalTitle.innerText = "Tambah Akun Baru";
+                document.getElementById('kategoriAkun').value = "Aset";
+                document.getElementById('kodeAkun').value = generateKodeAkun("Aset");
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('translate-y-full');
+            }, 10);
+        }
+
+        window.closeAkunModal = function() {
+            const modal = document.getElementById('akunModal');
+            const content = document.getElementById('akunModalContent');
+            content.classList.add('translate-y-full');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        // Simpan / Update Akun ke Firestore
+        const akunForm = document.getElementById('akunForm');
+        akunForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const editId = document.getElementById('editAkunId').value;
+            const kode = document.getElementById('kodeAkun').value.trim();
+            const nama = document.getElementById('namaAkun').value.trim();
+            const kategori = document.getElementById('kategoriAkun').value;
+
+            try {
+                if (editId) {
+                    await updateDoc(doc(db, "masterAkun", editId), {
+                        kode: kode,
+                        nama: nama,
+                        kategori: kategori,
+                        updatedAt: serverTimestamp()
+                    });
+                    showToast('Akun berhasil diperbarui!');
+                } else {
+                    await addDoc(collection(db, "masterAkun"), {
+                        kode: kode,
+                        nama: nama,
+                        kategori: kategori,
+                        createdAt: serverTimestamp()
+                    });
+                    showToast('Akun berhasil ditambahkan!');
+                }
+
+                closeAkunModal();
+            } catch (error) {
+                alert("Gagal menyimpan akun: " + error.message);
+            }
+        });
+
+        // Kontrol Modal Konfirmasi Hapus Kustom
+        window.hapusAkun = function(id) {
+            idHapusPending = id;
+            document.getElementById('modalKonfirmasiHapus').classList.remove('hidden');
+        }
+
+        window.tutupModalKonfirmasiHapus = function() {
+            document.getElementById('modalKonfirmasiHapus').classList.add('hidden');
+            idHapusPending = null;
+        }
+
+        document.getElementById('btnKonfirmasiHapusAksi').onclick = async function() {
+            if (!idHapusPending) return;
+            const id = idHapusPending;
+            tutupModalKonfirmasiHapus();
+
+            try {
+                await deleteDoc(doc(db, "masterAkun", id));
+                showToast('Akun berhasil dihapus!');
+            } catch (error) {
+                alert("Gagal menghapus akun: " + error.message);
+            }
+        };
+
+        // Ambil Data Akun secara Real-time
+        const q = query(collection(db, "masterAkun"), orderBy("kode", "asc"));
+        onSnapshot(q, (snapshot) => {
+            listAkunData = [];
+            cacheAkun = {};
+            let html = "";
+            snapshot.forEach((docSnap) => {
+                const id = docSnap.id;
+                const data = docSnap.data();
+                cacheAkun[id] = data;
+                listAkunData.push({ id, ...data });
+
+                let badgeColor = "bg-blue-100 text-blue-700";
+                if (data.kategori === "Pendapatan") badgeColor = "bg-emerald-100 text-emerald-700";
+                if (data.kategori === "Pengeluaran") badgeColor = "bg-red-100 text-red-700";
+
+                html += `
+                    <tr class="hover:bg-slate-50 border-b border-slate-100">
+                        <td class="p-2 font-bold text-slate-700 align-middle">${data.kode}</td>
+                        <td class="p-2 text-slate-800 font-medium align-middle">${data.nama}</td>
+                        <td class="p-2 align-middle"><span class="px-2 py-0.5 rounded-none font-bold text-[9px] ${badgeColor}">${data.kategori}</span></td>
+                        <td class="p-2 text-center align-middle whitespace-nowrap">
+                            <button type="button" onclick="openAkunModal('${id}')" class="w-6 h-6 bg-amber-50 hover:bg-amber-100 text-amber-600 rounded-none inline-flex items-center justify-center text-[10px] mr-1 transition-all cursor-pointer" title="Edit">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button type="button" onclick="hapusAkun('${id}')" class="w-6 h-6 bg-red-50 hover:bg-red-100 text-red-600 rounded-none inline-flex items-center justify-center text-[10px] transition-all cursor-pointer" title="Hapus">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            if (html === "") {
+                html = `<tr><td colspan="4" class="p-4 text-center text-slate-400">Belum ada data akun yang terdaftar.</td></tr>`;
+            }
+
+            document.getElementById('tabelAkunContainer').innerHTML = html;
+        });
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "../index.html";
+            }
+        });
+    </script>
+</body>
+</html>

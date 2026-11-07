@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pengaturan Keuangan - Aplikasi RT-Ku</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none !important;
+            width: 0px !important;
+            height: 0px !important;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 font-['Inter'] flex justify-center items-center h-screen overflow-hidden m-0">
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-slate-900/95 border border-slate-700 text-white px-4 py-2.5 rounded-none shadow-2xl text-xs font-medium flex items-center space-x-2 z-50 transition-all duration-300 opacity-0 pointer-events-none translate-y-[-20px]">
+        <div class="w-5 h-5 rounded-none bg-emerald-500 text-white flex items-center justify-center text-[10px] shadow">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <span id="toastText">Berhasil!</span>
+    </div>
+
+    <!-- Container HP Frame -->
+    <div class="w-full h-screen sm:max-w-[400px] sm:h-[92vh] sm:max-h-[820px] bg-slate-50 sm:rounded-[35px] shadow-2xl flex flex-col justify-between relative overflow-hidden sm:border-[6px] sm:border-slate-800">
+        
+        <!-- Header -->
+        <div class="bg-gradient-to-b from-emerald-600 to-emerald-700 text-white p-5 rounded-b-[28px] flex items-center justify-between shrink-0">
+            <a href="keuangan.html" class="w-9 h-9 rounded-none bg-white/10 flex items-center justify-center text-white backdrop-blur-sm transition-all hover:bg-white/20">
+                <i class="fa-solid fa-arrow-left text-xs"></i>
+            </a>
+            <h1 class="font-bold text-sm tracking-wide">Pengaturan Keuangan</h1>
+            <div class="w-9"></div>
+        </div>
+
+        <!-- Content (Scrollable) -->
+        <div class="p-4 flex-1 overflow-y-auto no-scrollbar pb-6 space-y-4 text-xs">
+            
+            <!-- Tombol Akses Master Akun (COA) -->
+            <a href="master-akun.html" class="flex items-center justify-between p-3.5 bg-white hover:bg-emerald-50 rounded-none border border-slate-200/70 shadow-sm transition-all group cursor-pointer">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-none bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                        <i class="fa-solid fa-sitemap"></i>
+                    </div>
+                    <div>
+                        <span class="font-bold block text-slate-800 text-xs group-hover:text-emerald-700">Master Akun (COA)</span>
+                        <span class="text-[10px] text-slate-400">Kelola daftar akun akuntansi</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-chevron-right text-xs text-slate-400 group-hover:text-emerald-600"></i>
+            </a>
+
+            <!-- Konfigurasi Nominal Iuran Wajib Per Tahun -->
+            <div class="bg-white p-4 rounded-none shadow-sm border border-slate-200/70 space-y-3">
+                <div class="flex items-center space-x-2 pb-2 border-b border-slate-100">
+                    <div class="w-7 h-7 rounded-none bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs">
+                        <i class="fa-solid fa-calendar-days"></i>
+                    </div>
+                    <h2 class="font-bold text-slate-800 text-xs">Konfigurasi Nominal Iuran Wajib Per Tahun</h2>
+                </div>
+
+                <form id="formPengaturanKas" class="space-y-3">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Pilih / Ketik Tahun Anggaran</label>
+                        <div class="flex space-x-2">
+                            <input type="number" id="tahunAnggaran" required class="w-full px-3 py-2 rounded-none border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600 font-bold" placeholder="Contoh: 2026">
+                            <button type="button" onclick="muatDataTahun()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-2 text-xs font-semibold rounded-none transition-all cursor-pointer">
+                                Muat
+                            </button>
+                        </div>
+                        <span class="text-[9px] text-slate-400 mt-1 block">Mengganti tahun akan memuat atau membuat data baru untuk tahun tersebut.</span>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-700 mb-1">Nominal Iuran Per Bulan (Rp)</label>
+                        <input type="text" id="iuranBulan" autocomplete="off" required class="w-full px-3 py-2 rounded-none border border-slate-200 text-xs bg-slate-50 focus:outline-none focus:border-emerald-600 font-semibold" placeholder="Contoh: 10.000" onkeyup="formatRupiahInput(this)">
+                    </div>
+
+                    <div class="bg-emerald-50 p-3 rounded-none border border-emerald-100 text-emerald-800 space-y-1">
+                        <span class="font-semibold block">Total Iuran Wajib 1 Tahun (12 Bulan):</span>
+                        <b id="totalSetahun" class="text-sm font-bold text-emerald-700">Rp 0</b>
+                    </div>
+
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-none shadow-md transition-all text-xs cursor-pointer">
+                        Simpan Pengaturan Tahun Ini
+                    </button>
+                </form>
+            </div>
+
+            <!-- Histori / Daftar Tahun yang Telah Disimpan -->
+            <div class="bg-white p-4 rounded-none shadow-sm border border-slate-200/70 space-y-2.5">
+                <h3 class="font-bold text-slate-800 text-xs flex items-center">
+                    <i class="fa-solid fa-clock-rotate-left text-emerald-600 mr-1.5"></i> Histori Pengaturan Per Tahun
+                </h3>
+                <div id="listHistoriTahun" class="space-y-1.5 max-h-40 overflow-y-auto no-scrollbar">
+                    <div class="text-slate-400 text-center py-2 text-[11px]">Memuat histori...</div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Skrip Firebase & Logika -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+            authDomain: "erte-979ca.firebaseapp.com",
+            projectId: "erte-979ca",
+            storageBucket: "erte-979ca.firebasestorage.app",
+            messagingSenderId: "329513636032",
+            appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const tahunInput = document.getElementById('tahunAnggaran');
+        const iuranBulanInput = document.getElementById('iuranBulan');
+        const totalSetahunEl = document.getElementById('totalSetahun');
+        const listHistoriTahun = document.getElementById('listHistoriTahun');
+
+        // Set otomatis tahun berjalan
+        const currentYear = new Date().getFullYear();
+        tahunInput.value = currentYear;
+
+        // Toast Notification
+        window.showToast = function(message) {
+            const toast = document.getElementById('toastNotification');
+            const toastText = document.getElementById('toastText');
+            toastText.innerText = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            }, 1800);
+        }
+
+        function formatRupiahNum(angka) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(angka).replace('Rp', 'Rp ');
+        }
+
+        window.formatRupiahInput = function(input) {
+            let value = input.value.replace(/[^,\d]/g, '').toString();
+            let split = value.split(',');
+            let sisa = split[0].length % 3;
+            let rupiah = split[0].substr(0, sisa);
+            let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                let separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+            input.value = rupiah;
+
+            hitungTotalSetahun();
+        }
+
+        function hitungTotalSetahun() {
+            const rawVal = parseFloat(iuranBulanInput.value.replace(/[^0-9]/g, '')) || 0;
+            totalSetahunEl.innerText = formatRupiahNum(rawVal * 12);
+        }
+
+        // Ambil data berdasarkan tahun yang dipilih/diketik
+        window.muatDataTahun = async function() {
+            const tahun = tahunInput.value.trim();
+            if (!tahun) return;
+
+            try {
+                const docRef = doc(db, "settings", `iuran_${tahun}`);
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    const iuranBulanVal = Number(data.iuranBulan || 0);
+                    iuranBulanInput.value = iuranBulanVal > 0 ? iuranBulanVal.toLocaleString('id-ID') : "";
+                    hitungTotalSetahun();
+                    showToast(`Data tahun ${tahun} dimuat.`);
+                } else {
+                    iuranBulanInput.value = "";
+                    totalSetahunEl.innerText = "Rp 0";
+                    showToast(`Belum ada data untuk tahun ${tahun}.`);
+                }
+            } catch (error) {
+                console.error("Gagal memuat data tahun:", error);
+            }
+        }
+
+        // Muat daftar histori tahun yang tersimpan
+        async function loadHistoriTahun() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "settings"));
+                let html = "";
+                let adaData = false;
+
+                querySnapshot.forEach((docSnap) => {
+                    const id = docSnap.id;
+                    if (id.startsWith("iuran_")) {
+                        adaData = true;
+                        const tahunData = id.replace("iuran_", "");
+                        const data = docSnap.data();
+                        
+                        html += `
+                            <div onclick="pilihTahunHistori('${tahunData}', ${data.iuranBulan})" class="p-2.5 bg-slate-50 hover:bg-emerald-50 border border-slate-200/60 rounded-none flex items-center justify-between cursor-pointer transition-all">
+                                <div>
+                                    <span class="font-bold text-slate-800 block text-xs"><i class="fa-solid fa-calendar mr-1.5 text-emerald-600"></i>Tahun Anggaran: ${tahunData}</span>
+                                    <span class="text-[10px] text-slate-500">Iuran/bln: ${formatRupiahNum(data.iuranBulan || 0)} | Total/thn: ${formatRupiahNum(data.totalSetahun || 0)}</span>
+                                </div>
+                                <span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-1 font-semibold rounded-none">Pilih</span>
+                            </div>
+                        `;
+                    }
+                });
+
+                if (!adaData) {
+                    html = `<div class="text-slate-400 text-center py-2 text-[11px]">Belum ada histori tersimpan.</div>`;
+                }
+
+                listHistoriTahun.innerHTML = html;
+            } catch (error) {
+                console.error("Gagal memuat histori:", error);
+                listHistoriTahun.innerHTML = `<div class="text-rose-500 text-center py-2 text-[11px]">Gagal memuat histori.</div>`;
+            }
+        }
+
+        window.pilihTahunHistori = function(tahun, iuranBln) {
+            tahunInput.value = tahun;
+            iuranBulanInput.value = Number(iuranBln || 0).toLocaleString('id-ID');
+            hitungTotalSetahun();
+            showToast(`Tahun ${tahun} dipilih.`);
+        }
+
+        // Simpan ke Firestore berdasarkan tahun
+        document.getElementById('formPengaturanKas').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const tahun = tahunInput.value.trim();
+            const iuranBulan = parseFloat(iuranBulanInput.value.replace(/[^0-9]/g, '')) || 0;
+            const totalSetahun = iuranBulan * 12;
+
+            if (!tahun) {
+                alert("Tahun anggaran wajib diisi!");
+                return;
+            }
+
+            try {
+                await setDoc(doc(db, "settings", `iuran_${tahun}`), {
+                    tahun: tahun,
+                    iuranBulan: iuranBulan,
+                    totalSetahun: totalSetahun,
+                    updatedAt: new Date()
+                });
+
+                await setDoc(doc(db, "settings", "pengaturanKeuangan"), {
+                    tahun: tahun,
+                    iuranBulan: iuranBulan,
+                    totalSetahun: totalSetahun,
+                    updatedAt: new Date()
+                }, { merge: true });
+
+                showToast(`Pengaturan tahun ${tahun} berhasil disimpan!`);
+                loadHistoriTahun();
+            } catch (error) {
+                alert("Gagal menyimpan pengaturan: " + error.message);
+            }
+        });
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                muatDataTahun();
+                loadHistoriTahun();
+            } else {
+                window.location.href = "../index.html";
+            }
+        });
+    </script>
+</body>
+</html>

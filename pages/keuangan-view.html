@@ -1,0 +1,688 @@
+<!-- KELOMPOK UTAMA DESKTOP -->
+<div id="spaAppContainer" class="space-y-6">
+    <!-- Banner Desktop -->
+    <div class="hidden md:flex bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-none p-6 text-white shadow-sm items-center justify-between gap-4 shrink-0">
+        <div>
+            <h2 class="text-lg font-bold">Laporan Keuangan RT</h2>
+            <p class="text-xs text-emerald-100 mt-1">Transparansi arus kas, posisi aset, dan rekapitulasi laba rugi keuangan RT secara berkala.</p>
+        </div>
+        <div class="w-14 h-14 bg-white/10 rounded-none flex items-center justify-center shrink-0">
+            <i class="fa-solid fa-file-invoice-dollar text-xl text-white"></i>
+        </div>
+    </div>
+
+    <!-- Filter Periode Global & Tab Navigasi (Desktop) -->
+    <div class="bg-white dark:bg-slate-800 rounded-none p-4 shadow-sm border border-slate-200/70 dark:border-slate-700 space-y-3">
+        <div class="grid grid-cols-2 gap-3">
+            <div>
+                <label class="block text-[10px] font-semibold text-slate-500 dark:text-slate-400 mb-1">Bulan</label>
+                <select id="filterBulanDesktop" class="w-full px-2.5 py-2 rounded-none border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600 font-medium cursor-pointer">
+                    <option value="ALL">Semua Bulan</option>
+                    <option value="01">Januari</option>
+                    <option value="02">Februari</option>
+                    <option value="03">Maret</option>
+                    <option value="04">April</option>
+                    <option value="05">Mei</option>
+                    <option value="06">Juni</option>
+                    <option value="07">Juli</option>
+                    <option value="08">Agustus</option>
+                    <option value="09">September</option>
+                    <option value="10">Oktober</option>
+                    <option value="11">November</option>
+                    <option value="12">Desember</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-[10px] font-semibold text-slate-500 dark:text-slate-400 mb-1">Tahun</label>
+                <select id="filterTahunDesktop" class="w-full px-2.5 py-2 rounded-none border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600 font-medium cursor-pointer">
+                    <option value="ALL">Semua Tahun</option>
+                    <option value="2025">2025</option>
+                    <option value="2026" selected>2026</option>
+                    <option value="2027">2027</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Tab Navigasi Desktop -->
+        <div class="border-t border-slate-100 dark:border-slate-700 pt-3 flex space-x-2">
+            <button type="button" onclick="switchTab('arusKas')" id="tabArusKasDesktop" class="flex-1 py-2 text-center text-xs font-bold bg-emerald-600 text-white rounded-none transition-all cursor-pointer shadow-sm">
+                <i class="fa-solid fa-right-left mr-1"></i> Arus Kas
+            </button>
+            <button type="button" onclick="switchTab('posisiAset')" id="tabPosisiAsetDesktop" class="flex-1 py-2 text-center text-xs font-semibold bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-none transition-all cursor-pointer">
+                <i class="fa-solid fa-vault mr-1"></i> Posisi Aset
+            </button>
+            <button type="button" onclick="switchTab('labaRugi')" id="tabLabaRugiDesktop" class="flex-1 py-2 text-center text-xs font-semibold bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-none transition-all cursor-pointer">
+                <i class="fa-solid fa-chart-line mr-1"></i> Laba / Rugi
+            </button>
+        </div>
+    </div>
+
+    <!-- KONTEN TAB 1: ARUS KAS (DESKTOP) -->
+    <div id="sectionArusKasDesktop" class="space-y-4">
+        <div class="bg-amber-50 dark:bg-amber-950/40 p-3.5 rounded-none border border-amber-200 dark:border-amber-800 flex items-center justify-between text-xs shadow-sm">
+            <div class="flex items-center space-x-2">
+                <div class="w-7 h-7 rounded-none bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-200 flex items-center justify-center text-xs">
+                    <i class="fa-solid fa-wallet"></i>
+                </div>
+                <span class="font-medium text-amber-900 dark:text-amber-200">Saldo Awal (S.D. Bulan Lalu)</span>
+            </div>
+            <b id="saldoAwalValDesktop" class="font-bold text-amber-800 dark:text-amber-300 text-sm">Rp 0</b>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div class="bg-emerald-50 dark:bg-emerald-950/40 p-3 rounded-none border border-emerald-100 dark:border-emerald-800 space-y-1 shadow-sm">
+                <span class="text-[10px] text-emerald-800 dark:text-emerald-300 block font-medium">Total Pemasukan</span>
+                <b id="totalMasukValDesktop" class="text-xs text-emerald-700 dark:text-emerald-400 font-bold block truncate">Rp 0</b>
+            </div>
+            <div class="bg-red-50 dark:bg-red-950/40 p-3 rounded-none border border-red-100 dark:border-red-800 space-y-1 shadow-sm">
+                <span class="text-[10px] text-red-800 dark:text-red-300 block font-medium">Total Pengeluaran</span>
+                <b id="totalKeluarValDesktop" class="text-xs text-red-600 dark:text-red-400 font-bold block truncate">Rp 0</b>
+            </div>
+            <div class="bg-sky-50 dark:bg-sky-950/40 p-3 rounded-none border border-sky-100 dark:border-sky-800 space-y-1 shadow-sm">
+                <span class="text-[10px] text-sky-800 dark:text-sky-300 block font-medium">Saldo Akhir</span>
+                <b id="saldoBersihValDesktop" class="text-xs text-sky-700 dark:text-sky-400 font-bold block truncate">Rp 0</b>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-800 rounded-none p-4 shadow-sm border border-slate-200/70 dark:border-slate-700 space-y-3">
+            <div class="flex items-center space-x-2 pb-2 border-b border-slate-100 dark:border-slate-700">
+                <div class="w-7 h-7 rounded-none bg-emerald-50 dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                </div>
+                <h2 class="font-bold text-slate-800 dark:text-slate-100 text-xs">Rekapitulasi Berdasarkan Akun</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead>
+                        <tr class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-b border-slate-200 dark:border-slate-600">
+                            <th class="p-2.5 font-semibold">Akun / Uraian</th>
+                            <th class="p-2.5 font-semibold text-center">Jenis</th>
+                            <th class="p-2.5 font-semibold text-right">Jumlah (Rp)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelRekapAkunDesktop" class="divide-y divide-slate-100 dark:divide-slate-700 text-slate-800 dark:text-slate-200">
+                        <tr><td colspan="3" class="p-4 text-center text-slate-400">Memuat rekapitulasi...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- KONTEN TAB 2: POSISI ASET (DESKTOP) -->
+    <div id="sectionPosisiAsetDesktop" class="space-y-4 hidden">
+        <div class="bg-white dark:bg-slate-800 p-4 rounded-none shadow-sm border border-slate-200/70 dark:border-slate-700 space-y-3">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-700">
+                <div class="flex items-center space-x-2">
+                    <div class="w-7 h-7 rounded-none bg-emerald-50 dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs">
+                        <i class="fa-solid fa-vault"></i>
+                    </div>
+                    <h2 class="font-bold text-slate-800 dark:text-slate-100 text-xs">Posisi Saldo Aset / Kas RT</h2>
+                </div>
+                <span class="text-[9px] bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300 px-2 py-0.5 rounded font-bold">Periode Terpilih</span>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead>
+                        <tr class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-b border-slate-200 dark:border-slate-600">
+                            <th class="p-2.5 font-semibold">Kode & Nama Akun Aset</th>
+                            <th class="p-2.5 font-semibold text-right">Saldo Berjalan (Rp)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelPosisiAsetDesktop" class="divide-y divide-slate-100 dark:divide-slate-700 text-slate-800 dark:text-slate-200">
+                        <tr><td colspan="2" class="p-4 text-center text-slate-400">Memuat posisi aset...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="bg-sky-50 dark:bg-sky-950/40 p-3.5 rounded-none border border-sky-200 dark:border-sky-800 flex items-center justify-between text-xs shadow-sm">
+            <span class="font-bold text-sky-900 dark:text-sky-200">Total Keseluruhan Aset RT</span>
+            <b id="totalAsetValDesktop" class="font-bold text-sky-700 dark:text-sky-400 text-sm">Rp 0</b>
+        </div>
+    </div>
+
+    <!-- KONTEN TAB 3: LABA / RUGI (DESKTOP) -->
+    <div id="sectionLabaRugiDesktop" class="space-y-4 hidden">
+        <div class="bg-white dark:bg-slate-800 p-4 rounded-none shadow-sm border border-slate-200/70 dark:border-slate-700 space-y-3">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-700">
+                <div class="flex items-center space-x-2">
+                    <div class="w-7 h-7 rounded-none bg-emerald-50 dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <h2 class="font-bold text-slate-800 dark:text-slate-100 text-xs">Laporan Laba / Rugi</h2>
+                </div>
+                <span class="text-[9px] bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded font-bold">Periode Terpilih</span>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead>
+                        <tr class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-b border-slate-200 dark:border-slate-600">
+                            <th class="p-2.5 font-semibold">Akun Pendapatan / Beban</th>
+                            <th class="p-2.5 font-semibold text-center">Kategori</th>
+                            <th class="p-2.5 font-semibold text-right">Jumlah (Rp)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelLabaRugiDesktop" class="divide-y divide-slate-100 dark:divide-slate-700 text-slate-800 dark:text-slate-200">
+                        <tr><td colspan="3" class="p-4 text-center text-slate-400">Memuat laporan laba rugi...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="bg-emerald-50 dark:bg-emerald-950/40 p-3.5 rounded-none border border-emerald-200 dark:border-emerald-800 flex items-center justify-between text-xs shadow-sm">
+            <span class="font-bold text-emerald-900 dark:text-emerald-200">Total Pendapatan Bersih (Laba)</span>
+            <b id="totalLabaRugiValDesktop" class="font-bold text-emerald-700 dark:text-emerald-400 text-sm">Rp 0</b>
+        </div>
+    </div>
+</div>
+
+<!-- KELOMPOK UTAMA MOBILE -->
+<div id="spaAppContainerMobile" class="space-y-4">
+    <!-- Filter Periode Global & Tab Navigasi (Mobile) -->
+    <div class="bg-white dark:bg-slate-800 rounded-none p-4 shadow-sm border border-slate-200/70 dark:border-slate-700 space-y-3">
+        <h3 class="font-bold text-xs text-slate-800 dark:text-slate-100 tracking-wide uppercase flex items-center space-x-2">
+            <i class="fa-solid fa-file-invoice-dollar text-emerald-600 dark:text-emerald-400"></i>
+            <span>Laporan Keuangan (HP)</span>
+        </h3>
+
+        <div class="grid grid-cols-2 gap-3">
+            <div>
+                <label class="block text-[10px] font-semibold text-slate-500 dark:text-slate-400 mb-1">Bulan</label>
+                <select id="filterBulanMobile" class="w-full px-2.5 py-2.5 rounded-none border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600 font-medium cursor-pointer">
+                    <option value="ALL">Semua Bulan</option>
+                    <option value="01">Januari</option>
+                    <option value="02">Februari</option>
+                    <option value="03">Maret</option>
+                    <option value="04">April</option>
+                    <option value="05">Mei</option>
+                    <option value="06">Juni</option>
+                    <option value="07">Juli</option>
+                    <option value="08">Agustus</option>
+                    <option value="09">September</option>
+                    <option value="10">Oktober</option>
+                    <option value="11">November</option>
+                    <option value="12">Desember</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-[10px] font-semibold text-slate-500 dark:text-slate-400 mb-1">Tahun</label>
+                <select id="filterTahunMobile" class="w-full px-2.5 py-2.5 rounded-none border border-slate-200 dark:border-slate-600 text-xs bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-600 font-medium cursor-pointer">
+                    <option value="ALL">Semua Tahun</option>
+                    <option value="2025">2025</option>
+                    <option value="2026" selected>2026</option>
+                    <option value="2027">2027</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Tab Navigasi Mobile -->
+        <div class="border-t border-slate-100 dark:border-slate-700 pt-3 flex space-x-1">
+            <button type="button" onclick="switchTab('arusKas')" id="tabArusKasMobile" class="flex-1 py-2 text-center text-[11px] font-bold bg-emerald-600 text-white rounded-none transition-all cursor-pointer shadow-sm">
+                Arus Kas
+            </button>
+            <button type="button" onclick="switchTab('posisiAset')" id="tabPosisiAsetMobile" class="flex-1 py-2 text-center text-[11px] font-semibold bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-none transition-all cursor-pointer">
+                Aset
+            </button>
+            <button type="button" onclick="switchTab('labaRugi')" id="tabLabaRugiMobile" class="flex-1 py-2 text-center text-[11px] font-semibold bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-none transition-all cursor-pointer">
+                Laba/Rugi
+            </button>
+        </div>
+    </div>
+
+    <!-- KONTEN TAB 1: ARUS KAS (MOBILE) -->
+    <div id="sectionArusKasMobile" class="space-y-3">
+        <div class="bg-amber-50 dark:bg-amber-950/40 p-3 rounded-none border border-amber-200 dark:border-amber-800 flex items-center justify-between text-xs shadow-sm">
+            <span class="font-medium text-amber-900 dark:text-amber-200">Saldo Awal</span>
+            <b id="saldoAwalValMobile" class="font-bold text-amber-800 dark:text-amber-300 text-xs">Rp 0</b>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+            <div class="bg-emerald-50 dark:bg-emerald-950/40 p-2.5 rounded-none border border-emerald-100 dark:border-emerald-800 space-y-0.5">
+                <span class="text-[9px] text-emerald-800 dark:text-emerald-300 block font-medium">Masuk</span>
+                <b id="totalMasukValMobile" class="text-[11px] text-emerald-700 dark:text-emerald-400 font-bold block truncate">Rp 0</b>
+            </div>
+            <div class="bg-red-50 dark:bg-red-950/40 p-2.5 rounded-none border border-red-100 dark:border-red-800 space-y-0.5">
+                <span class="text-[9px] text-red-800 dark:text-red-300 block font-medium">Keluar</span>
+                <b id="totalKeluarValMobile" class="text-[11px] text-red-600 dark:text-red-400 font-bold block truncate">Rp 0</b>
+            </div>
+            <div class="bg-sky-50 dark:bg-sky-950/40 p-2.5 rounded-none border border-sky-100 dark:border-sky-800 space-y-0.5">
+                <span class="text-[9px] text-sky-800 dark:text-sky-300 block font-medium">Akhir</span>
+                <b id="saldoBersihValMobile" class="text-[11px] text-sky-700 dark:text-sky-400 font-bold block truncate">Rp 0</b>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-none p-3 shadow-sm border border-slate-200/70 dark:border-slate-700 space-y-2">
+            <h4 class="font-bold text-slate-800 dark:text-slate-100 text-xs pb-2 border-b border-slate-100 dark:border-slate-700">Rekap Akun</h4>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead>
+                        <tr class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200">
+                            <th class="p-2 font-semibold">Akun</th>
+                            <th class="p-2 font-semibold text-right">Jumlah</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelRekapAkunMobile" class="divide-y divide-slate-100 dark:divide-slate-700 text-slate-800 dark:text-slate-200">
+                        <tr><td colspan="2" class="p-3 text-center text-slate-400">Memuat...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- KONTEN TAB 2: POSISI ASET (MOBILE) -->
+    <div id="sectionPosisiAsetMobile" class="space-y-3 hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-none p-3 shadow-sm border border-slate-200/70 dark:border-slate-700 space-y-2">
+            <h4 class="font-bold text-slate-800 dark:text-slate-100 text-xs pb-2 border-b border-slate-100 dark:border-slate-700">Posisi Saldo Aset / Kas</h4>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead>
+                        <tr class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200">
+                            <th class="p-2 font-semibold">Akun Aset</th>
+                            <th class="p-2 font-semibold text-right">Saldo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelPosisiAsetMobile" class="divide-y divide-slate-100 dark:divide-slate-700 text-slate-800 dark:text-slate-200">
+                        <tr><td colspan="2" class="p-3 text-center text-slate-400">Memuat...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="bg-sky-50 dark:bg-sky-950/40 p-3 rounded-none border border-sky-200 dark:border-sky-800 flex items-center justify-between text-xs shadow-sm">
+            <span class="font-bold text-sky-900 dark:text-sky-200">Total Aset</span>
+            <b id="totalAsetValMobile" class="font-bold text-sky-700 dark:text-sky-400 text-xs">Rp 0</b>
+        </div>
+    </div>
+
+    <!-- KONTEN TAB 3: LABA / RUGI (MOBILE) -->
+    <div id="sectionLabaRugiMobile" class="space-y-3 hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-none p-3 shadow-sm border border-slate-200/70 dark:border-slate-700 space-y-2">
+            <h4 class="font-bold text-slate-800 dark:text-slate-100 text-xs pb-2 border-b border-slate-100 dark:border-slate-700">Laporan Laba / Rugi</h4>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead>
+                        <tr class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200">
+                            <th class="p-2 font-semibold">Akun</th>
+                            <th class="p-2 font-semibold text-right">Jumlah</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelLabaRugiMobile" class="divide-y divide-slate-100 dark:divide-slate-700 text-slate-800 dark:text-slate-200">
+                        <tr><td colspan="2" class="p-3 text-center text-slate-400">Memuat...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="bg-emerald-50 dark:bg-emerald-950/40 p-3 rounded-none border border-emerald-200 dark:border-emerald-800 flex items-center justify-between text-xs shadow-sm">
+            <span class="font-bold text-emerald-900 dark:text-emerald-200">Laba Bersih</span>
+            <b id="totalLabaRugiValMobile" class="font-bold text-emerald-700 dark:text-emerald-400 text-xs">Rp 0</b>
+        </div>
+    </div>
+</div>
+
+<!-- Skrip Firebase & Logika Laporan Keuangan -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+        authDomain: "erte-979ca.firebaseapp.com",
+        projectId: "erte-979ca",
+        storageBucket: "erte-979ca.firebasestorage.app",
+        messagingSenderId: "329513636032",
+        appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let masterDataTransaksi = [];
+    let listMasterAkun = [];
+    let listDataWarga = [];
+    let listPembayaranIuran = [];
+    let listTransaksiSewa = [];
+    let activeTab = 'arusKas';
+
+    const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
+    ['Desktop', 'Mobile'].forEach(s => {
+        const el = document.getElementById(`filterBulan${s}`);
+        if (el) el.value = currentMonth;
+    });
+
+    function formatRupiah(angka) {
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(angka).replace('Rp', 'Rp ');
+    }
+
+    window.switchTab = function(tabName) {
+        activeTab = tabName;
+        const tabs = ['arusKas', 'posisiAset', 'labaRugi'];
+        tabs.forEach(t => {
+            const cap = t.charAt(0).toUpperCase() + t.slice(1);
+            ['Desktop', 'Mobile'].forEach(suffix => {
+                const btn = document.getElementById(`tab${cap}${suffix}`);
+                const sec = document.getElementById(`section${cap}${suffix}`);
+                if (!btn || !sec) return;
+
+                if (t === tabName) {
+                    btn.className = suffix === 'Desktop' 
+                        ? "flex-1 py-2 text-center text-xs font-bold bg-emerald-600 text-white rounded-none transition-all cursor-pointer shadow-sm"
+                        : "flex-1 py-2 text-center text-[11px] font-bold bg-emerald-600 text-white rounded-none transition-all cursor-pointer shadow-sm";
+                    sec.classList.remove('hidden');
+                } else {
+                    btn.className = suffix === 'Desktop'
+                        ? "flex-1 py-2 text-center text-xs font-semibold bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-none transition-all cursor-pointer"
+                        : "flex-1 py-2 text-center text-[11px] font-semibold bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-none transition-all cursor-pointer";
+                    sec.classList.add('hidden');
+                }
+            });
+        });
+        renderAktifTab();
+    }
+
+    async function loadMasterDataPendukung() {
+        try {
+            const snapAkun = await getDocs(collection(db, "masterAkun"));
+            listMasterAkun = [];
+            snapAkun.forEach(doc => listMasterAkun.push(doc.data()));
+            listMasterAkun.sort((a, b) => String(a.kode || "").localeCompare(String(b.kode || ""), undefined, { numeric: true }));
+
+            const snapWarga = await getDocs(collection(db, "dataWarga"));
+            listDataWarga = [];
+            snapWarga.forEach(doc => listDataWarga.push(doc.data()));
+
+            const snapBayar = await getDocs(collection(db, "iuran_2026"));
+            listPembayaranIuran = [];
+            snapBayar.forEach(doc => listPembayaranIuran.push(doc.data()));
+
+            const snapSewa = await getDocs(collection(db, "transaksiSewaAset"));
+            listTransaksiSewa = [];
+            snapSewa.forEach(doc => listTransaksiSewa.push(doc.data()));
+        } catch (error) {
+            console.error("Gagal memuat data pendukung:", error);
+        }
+    }
+
+    function renderAktifTab() {
+        if (activeTab === 'arusKas') prosesDanRenderLaporan();
+        else if (activeTab === 'posisiAset') hitungDanRenderPosisiAset();
+        else if (activeTab === 'labaRugi') hitungDanRenderLabaRugi();
+    }
+
+    function getFilterValue(idBase) {
+        const desktopEl = document.getElementById(`${idBase}Desktop`);
+        const mobileEl = document.getElementById(`${idBase}Mobile`);
+        if (desktopEl && window.innerWidth >= 768) return desktopEl.value;
+        if (mobileEl && window.innerWidth < 768) return mobileEl.value;
+        return desktopEl ? desktopEl.value : 'ALL';
+    }
+
+    function syncFilters(changedId, val) {
+        const otherId = changedId.includes('Desktop') ? changedId.replace('Desktop', 'Mobile') : changedId.replace('Mobile', 'Desktop');
+        const otherEl = document.getElementById(otherId);
+        if (otherEl) otherEl.value = val;
+    }
+
+    function prosesDanRenderLaporan() {
+        const filterBulan = getFilterValue('filterBulan');
+        const filterTahun = getFilterValue('filterTahun');
+
+        let saldoAwal = 0;
+        let totalMasuk = 0;
+        let totalKeluar = 0;
+        let rekapAkunMap = {};
+
+        masterDataTransaksi.forEach(data => {
+            const tgl = data.tanggal || ""; 
+            const thnData = tgl.split("-")[0];
+            const blnData = tgl.split("-")[1];
+            const nominal = Number(data.nominal || 0);
+            const isMasuk = data.jenis === "Pemasukan";
+
+            if (filterBulan !== "ALL" && filterTahun !== "ALL") {
+                const currentPeriodStr = `${filterTahun}-${filterBulan}`;
+                const trxPeriodStr = `${thnData}-${blnData}`;
+
+                if (trxPeriodStr < currentPeriodStr) {
+                    if (isMasuk) saldoAwal += nominal;
+                    else saldoAwal -= nominal;
+                    return;
+                }
+            } else if (filterTahun !== "ALL" && filterBulan === "ALL") {
+                if (thnData < filterTahun) {
+                    if (isMasuk) saldoAwal += nominal;
+                    else saldoAwal -= nominal;
+                    return;
+                }
+            }
+
+            const matchBulan = (filterBulan === "ALL" || blnData === filterBulan);
+            const matchTahun = (filterTahun === "ALL" || thnData === filterTahun);
+
+            if (matchBulan && matchTahun) {
+                const akun = data.akun || data.keterangan || "Lain-lain";
+                if (isMasuk) totalMasuk += nominal;
+                else totalKeluar += nominal;
+
+                if (!rekapAkunMap[akun]) {
+                    rekapAkunMap[akun] = { jenis: data.jenis || (isMasuk ? "Pemasukan" : "Pengeluaran"), total: 0 };
+                }
+                rekapAkunMap[akun].total += nominal;
+            }
+        });
+
+        const saldoAkhir = saldoAwal + totalMasuk - totalKeluar;
+
+        // Update UI Arus Kas Desktop & Mobile
+        ['Desktop', 'Mobile'].forEach(s => {
+            const isMob = s === 'Mobile';
+            const sAwal = document.getElementById(`saldoAwalVal${s}`);
+            const tMasuk = document.getElementById(`totalMasukVal${s}`);
+            const tKeluar = document.getElementById(`totalKeluarVal${s}`);
+            const sBersih = document.getElementById(`saldoBersihVal${s}`);
+            const tbRekap = document.getElementById(`tabelRekapAkun${s}`);
+
+            if (sAwal) sAwal.innerText = formatRupiah(saldoAwal);
+            if (tMasuk) tMasuk.innerText = formatRupiah(totalMasuk);
+            if (tKeluar) tKeluar.innerText = formatRupiah(totalKeluar);
+            if (sBersih) sBersih.innerText = formatRupiah(saldoAkhir);
+
+            if (tbRekap) {
+                const sortedRekapEntries = Object.entries(rekapAkunMap).sort((a, b) => a[0].localeCompare(b[0], undefined, { numeric: true }));
+                let htmlRekap = "";
+                for (const [akun, val] of sortedRekapEntries) {
+                    const isMasukAkun = val.jenis === "Pemasukan";
+                    htmlRekap += `
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                            <td class="p-2.5 text-slate-800 dark:text-slate-200 font-medium">${akun}</td>
+                            ${!isMob ? `<td class="p-2.5 text-center"><span class="text-[9px] px-2 py-0.5 rounded ${isMasukAkun ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300'} font-bold">${val.jenis}</span></td>` : ''}
+                            <td class="p-2.5 text-right font-bold ${isMasukAkun ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}">${formatRupiah(val.total)}</td>
+                        </tr>
+                    `;
+                }
+                if (htmlRekap === "") {
+                    htmlRekap = `<tr><td colspan="${isMob ? 2 : 3}" class="p-4 text-center text-slate-400">Tidak ada data transaksi pada periode ini.</td></tr>`;
+                }
+                tbRekap.innerHTML = htmlRekap;
+            }
+        });
+    }
+
+    function hitungDanRenderPosisiAset() {
+        const filterBulan = getFilterValue('filterBulan');
+        const filterTahun = getFilterValue('filterTahun');
+
+        let saldoKasMap = { "1001 - Kas": 0, "1002 - Bank BRI": 0 };
+
+        masterDataTransaksi.forEach(data => {
+            const tgl = data.tanggal || "";
+            const thnData = tgl.split("-")[0];
+            const blnData = tgl.split("-")[1];
+
+            let includeTrx = false;
+            if (filterBulan !== "ALL" && filterTahun !== "ALL") {
+                const targetPeriod = `${filterTahun}-${filterBulan}`;
+                const trxPeriod = `${thnData}-${blnData}`;
+                if (trxPeriod <= targetPeriod) includeTrx = true;
+            } else if (filterTahun !== "ALL" && filterBulan === "ALL") {
+                if (thnData <= filterTahun) includeTrx = true;
+            } else {
+                includeTrx = true;
+            }
+
+            if (includeTrx) {
+                const nominal = Number(data.nominal || 0);
+                const sumber = data.sumberKas || "1001 - Kas";
+                if (saldoKasMap[sumber] !== undefined) {
+                    if (data.jenis === "Pemasukan") saldoKasMap[sumber] += nominal;
+                    else saldoKasMap[sumber] -= nominal;
+                }
+            }
+        });
+
+        let jumlahKKWajib = 0;
+        listDataWarga.forEach(w => {
+            const statusHub = String(w.statusHubungan || "").trim().toUpperCase();
+            const statusWajib = String(w.statusWajibIuran || "").trim().toUpperCase();
+            if (statusHub.includes("KEPALA KELUARGA") && statusWajib.includes("WAJIB")) jumlahKKWajib++;
+        });
+        if (jumlahKKWajib === 0 && listDataWarga.length > 0) jumlahKKWajib = listDataWarga.length;
+
+        const totalTagihanSeharusnya = jumlahKKWajib * 60000;
+        let totalPembayaranWarga = 0;
+        listPembayaranIuran.forEach(b => { totalPembayaranWarga += Number(b.nominal || b.jumlah || 0); });
+        let nilaiPiutangIuran = Math.max(0, totalTagihanSeharusnya - totalPembayaranWarga);
+
+        let nilaiPiutangUsaha = 0;
+        listTransaksiSewa.forEach(sewa => {
+            if (sewa.metodePembayaran === "Piutang") {
+                const tgl = sewa.tglMulai || sewa.createdAt || "";
+                const thnData = tgl.split("-")[0];
+                const blnData = tgl.split("-")[1];
+                let includeSewa = (filterBulan !== "ALL" && filterTahun !== "ALL") ? (`${thnData}-${blnData}` <= `${filterTahun}-${filterBulan}`) : (filterTahun !== "ALL" ? thnData <= filterTahun : true);
+                if (includeSewa) nilaiPiutangUsaha += Number(sewa.totalBiaya || 0);
+            }
+        });
+
+        let asetMap = {};
+        listMasterAkun.forEach(akunObj => {
+            const kode = String(akunObj.kode || "").trim();
+            const kategori = (akunObj.kategori || "").toLowerCase();
+            if (kode.startsWith('1') || kategori.includes('aset') || kategori.includes('kas') || kategori.includes('bank') || kategori.includes('piutang')) {
+                asetMap[`${kode} - ${akunObj.nama}`] = { kode: kode, nama: akunObj.nama };
+            }
+        });
+
+        let totalSemuaAset = 0;
+        let htmlAset = "";
+
+        if (Object.keys(asetMap).length > 0) {
+            const sortedAsetEntries = Object.entries(asetMap).sort((a, b) => a[1].kode.localeCompare(b[1].kode, undefined, { numeric: true }));
+            sortedAsetEntries.forEach(([akunNama, valObj]) => {
+                let saldoAkun = 0;
+                const namaLower = akunNama.toLowerCase();
+                if (namaLower.includes('kas')) saldoAkun = saldoKasMap["1001 - Kas"] || 0;
+                else if (namaLower.includes('bank')) saldoAkun = saldoKasMap["1002 - Bank BRI"] || 0;
+                else if (namaLower.includes('piutang iuran') || namaLower.includes('1003')) saldoAkun = nilaiPiutangIuran;
+                else if (namaLower.includes('piutang usaha') || namaLower.includes('1004')) saldoAkun = nilaiPiutangUsaha;
+                else if (namaLower.includes('piutang')) saldoAkun = nilaiPiutangIuran + nilaiPiutangUsaha;
+
+                totalSemuaAset += saldoAkun;
+                htmlAset += `<tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50"><td class="p-2.5 text-slate-800 dark:text-slate-200 font-medium">${akunNama}</td><td class="p-2.5 text-right font-bold text-sky-600 dark:text-sky-400">${formatRupiah(saldoAkun)}</td></tr>`;
+            });
+        } else {
+            totalSemuaAset = (saldoKasMap["1001 - Kas"] || 0) + (saldoKasMap["1002 - Bank BRI"] || 0) + nilaiPiutangIuran + nilaiPiutangUsaha;
+            htmlAset = `
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50"><td class="p-2.5 text-slate-800 dark:text-slate-200 font-medium">1001 - Kas</td><td class="p-2.5 text-right font-bold text-sky-600 dark:text-sky-400">${formatRupiah(saldoKasMap["1001 - Kas"] || 0)}</td></tr>
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50"><td class="p-2.5 text-slate-800 dark:text-slate-200 font-medium">1002 - Bank BRI</td><td class="p-2.5 text-right font-bold text-sky-600 dark:text-sky-400">${formatRupiah(saldoKasMap["1002 - Bank BRI"] || 0)}</td></tr>
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50"><td class="p-2.5 text-slate-800 dark:text-slate-200 font-medium">1003 - Piutang Iuran</td><td class="p-2.5 text-right font-bold text-sky-600 dark:text-sky-400">${formatRupiah(nilaiPiutangIuran)}</td></tr>
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50"><td class="p-2.5 text-slate-800 dark:text-slate-200 font-medium">1004 - Piutang Usaha</td><td class="p-2.5 text-right font-bold text-sky-600 dark:text-sky-400">${formatRupiah(nilaiPiutangUsaha)}</td></tr>
+            `;
+        }
+
+        ['Desktop', 'Mobile'].forEach(s => {
+            const tb = document.getElementById(`tabelPosisiAset${s}`);
+            const tot = document.getElementById(`totalAsetVal${s}`);
+            if (tb) tb.innerHTML = htmlAset;
+            if (tot) tot.innerText = formatRupiah(totalSemuaAset);
+        });
+    }
+
+    function hitungDanRenderLabaRugi() {
+        const filterBulan = getFilterValue('filterBulan');
+        const filterTahun = getFilterValue('filterTahun');
+
+        let labaRugiList = [];
+        let totalPendapatan = 0;
+        let totalBeban = 0;
+        let tempMap = {};
+
+        masterDataTransaksi.forEach(data => {
+            const tgl = data.tanggal || "";
+            const thnData = tgl.split("-")[0];
+            const blnData = tgl.split("-")[1];
+
+            if ((filterBulan === "ALL" || blnData === filterBulan) && (filterTahun === "ALL" || thnData === filterTahun)) {
+                const akun = data.akun || "Lain-lain";
+                const nominal = Number(data.nominal || 0);
+                const isMasuk = data.jenis === "Pemasukan";
+                if (!tempMap[akun]) tempMap[akun] = { kategori: isMasuk ? "Pendapatan" : "Beban", total: 0 };
+                tempMap[akun].total += nominal;
+            }
+        });
+
+        for (const [akunNama, val] of Object.entries(tempMap)) {
+            labaRugiList.push({ akun: akunNama, kategori: val.kategori, total: val.total });
+        }
+        labaRugiList.sort((a, b) => a.akun.localeCompare(b.akun, undefined, { numeric: true }));
+
+        let htmlLR = "";
+        labaRugiList.forEach(item => {
+            if (item.kategori === "Pendapatan") totalPendapatan += item.total;
+            else totalBeban += item.total;
+
+            htmlLR += `
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                    <td class="p-2.5 text-slate-800 dark:text-slate-200 font-medium">${item.akun}</td>
+                    <td class="p-2.5 text-center"><span class="text-[9px] px-2 py-0.5 rounded ${item.kategori === 'Pendapatan' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300'} font-bold">${item.kategori}</span></td>
+                    <td class="p-2.5 text-right font-bold ${item.kategori === 'Pendapatan' ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}">${formatRupiah(item.total)}</td>
+                </tr>
+            `;
+        });
+
+        if (htmlLR === "") {
+            htmlLR = `<tr><td colspan="3" class="p-4 text-center text-slate-400">Tidak ada data laba rugi pada periode ini.</td></tr>`;
+        }
+
+        const totalLabaBersih = totalPendapatan - totalBeban;
+        ['Desktop', 'Mobile'].forEach(s => {
+            const tb = document.getElementById(`tabelLabaRugi${s}`);
+            const tot = document.getElementById(`totalLabaRugiVal${s}`);
+            if (tb) tb.innerHTML = htmlLR;
+            if (tot) tot.innerText = formatRupiah(totalLabaBersih);
+        });
+    }
+
+    async function initApp() {
+        await loadMasterDataPendukung();
+        const q = query(collection(db, "kasRt"), orderBy("tanggal", "asc"));
+        onSnapshot(q, (snapshot) => {
+            masterDataTransaksi = [];
+            snapshot.forEach((docSnap) => masterDataTransaksi.push(docSnap.data()));
+            renderAktifTab();
+        });
+    }
+
+    initApp();
+
+    ['Desktop', 'Mobile'].forEach(s => {
+        document.getElementById(`filterBulan${s}`)?.addEventListener('change', (e) => {
+            syncFilters(`filterBulan${s}`, e.target.value);
+            renderAktifTab();
+        });
+        document.getElementById(`filterTahun${s}`)?.addEventListener('change', (e) => {
+            syncFilters(`filterTahun${s}`, e.target.value);
+            renderAktifTab();
+        });
+    });
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) window.location.href = "../index.html";
+    });
+</script>

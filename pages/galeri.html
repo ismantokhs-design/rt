@@ -1,0 +1,278 @@
+<!-- KONTEN UTAMA HALAMAN GALERI (DESKTOP) -->
+<div id="spaAppContainer" class="space-y-6 pb-20">
+    <div class="bg-white dark:bg-slate-800 p-5 rounded-none shadow-sm border border-slate-200 dark:border-slate-700">
+        <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100 mb-1">Galeri Kegiatan RT (Desktop)</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400">Kumpulan dokumentasi foto dan arsip kegiatan warga RT dari waktu ke waktu.</p>
+    </div>
+
+    <div class="bg-white dark:bg-slate-800 p-4 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
+        <!-- Filter Pencarian & Dropdown -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 text-xs">
+                    <i class="fa-solid fa-search"></i>
+                </span>
+                <input type="text" id="searchGaleriDesktop" placeholder="Cari kegiatan..." class="w-full pl-9 pr-3 py-2 rounded-none border border-slate-200 dark:border-slate-600 text-xs focus:outline-none focus:border-emerald-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100">
+            </div>
+            <div class="flex items-center space-x-2">
+                <div class="w-9 h-9 rounded-none bg-emerald-50 dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs shrink-0 border border-emerald-100 dark:border-slate-600">
+                    <i class="fa-solid fa-calendar-days"></i>
+                </div>
+                <select id="filterBulanDesktop" class="w-full px-3 py-2 rounded-none border border-slate-200 dark:border-slate-600 text-xs focus:outline-none focus:border-emerald-600 bg-white dark:bg-slate-700 font-medium text-slate-700 dark:text-slate-200 cursor-pointer">
+                    <option value="all">Semua Bulan</option>
+                    <option value="01">Januari</option>
+                    <option value="02">Februari</option>
+                    <option value="03">Maret</option>
+                    <option value="04">April</option>
+                    <option value="05">Mei</option>
+                    <option value="06">Juni</option>
+                    <option value="07">Juli</option>
+                    <option value="08">Agustus</option>
+                    <option value="09">September</option>
+                    <option value="10">Oktober</option>
+                    <option value="11">November</option>
+                    <option value="12">Desember</option>
+                </select>
+            </div>
+            <div class="flex items-center space-x-2">
+                <div class="w-9 h-9 rounded-none bg-emerald-50 dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs shrink-0 border border-emerald-100 dark:border-slate-600">
+                    <i class="fa-solid fa-calendar"></i>
+                </div>
+                <select id="filterTahunDesktop" class="w-full px-3 py-2 rounded-none border border-slate-200 dark:border-slate-600 text-xs focus:outline-none focus:border-emerald-600 bg-white dark:bg-slate-700 font-medium text-slate-700 dark:text-slate-200 cursor-pointer">
+                </select>
+            </div>
+        </div>
+
+        <!-- Container Hasil Galeri Desktop -->
+        <div id="galeriContainerDesktop" class="space-y-4 pt-2">
+            <div class="text-center py-10 text-slate-400 text-xs">Memuat galeri dari database...</div>
+        </div>
+    </div>
+</div>
+
+<!-- KONTEN UTAMA HALAMAN GALERI (MOBILE) -->
+<div id="spaAppContainerMobile" class="space-y-4 pb-28">
+    <div class="bg-white dark:bg-slate-800 p-4 rounded-none shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
+        <h3 class="font-bold text-xs text-slate-800 dark:text-slate-100 tracking-wide uppercase flex items-center space-x-2">
+            <i class="fa-solid fa-images text-emerald-600 dark:text-emerald-400"></i>
+            <span>Galeri Kegiatan RT (HP)</span>
+        </h3>
+
+        <!-- Filter Pencarian & Dropdown Mobile -->
+        <div class="space-y-2.5">
+            <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 text-xs">
+                    <i class="fa-solid fa-search"></i>
+                </span>
+                <input type="text" id="searchGaleriMobile" placeholder="Cari kegiatan..." class="w-full pl-9 pr-3 py-2.5 rounded-none border border-slate-200 dark:border-slate-600 text-xs focus:outline-none focus:border-emerald-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100">
+            </div>
+            <div class="flex items-center space-x-2">
+                <div class="w-9 h-9 rounded-none bg-emerald-50 dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs shrink-0 border border-emerald-100 dark:border-slate-600">
+                    <i class="fa-solid fa-calendar-days"></i>
+                </div>
+                <select id="filterBulanMobile" class="w-full px-3 py-2.5 rounded-none border border-slate-200 dark:border-slate-600 text-xs focus:outline-none focus:border-emerald-600 bg-white dark:bg-slate-700 font-medium text-slate-700 dark:text-slate-200 cursor-pointer">
+                    <option value="all">Semua Bulan</option>
+                    <option value="01">Januari</option>
+                    <option value="02">Februari</option>
+                    <option value="03">Maret</option>
+                    <option value="04">April</option>
+                    <option value="05">Mei</option>
+                    <option value="06">Juni</option>
+                    <option value="07">Juli</option>
+                    <option value="08">Agustus</option>
+                    <option value="09">September</option>
+                    <option value="10">Oktober</option>
+                    <option value="11">November</option>
+                    <option value="12">Desember</option>
+                </select>
+            </div>
+            <div class="flex items-center space-x-2">
+                <div class="w-9 h-9 rounded-none bg-emerald-50 dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs shrink-0 border border-emerald-100 dark:border-slate-600">
+                    <i class="fa-solid fa-calendar"></i>
+                </div>
+                <select id="filterTahunMobile" class="w-full px-3 py-2.5 rounded-none border border-slate-200 dark:border-slate-600 text-xs focus:outline-none focus:border-emerald-600 bg-white dark:bg-slate-700 font-medium text-slate-700 dark:text-slate-200 cursor-pointer">
+                </select>
+            </div>
+        </div>
+
+        <!-- Container Hasil Galeri Mobile -->
+        <div id="galeriContainerMobile" class="space-y-4 pt-1">
+            <div class="text-center py-10 text-slate-400 text-xs">Memuat galeri dari database...</div>
+        </div>
+    </div>
+</div>
+
+<!-- Skrip Utama Firebase & Render -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+        authDomain: "erte-979ca.firebaseapp.com",
+        projectId: "erte-979ca",
+        storageBucket: "erte-979ca.firebasestorage.app",
+        messagingSenderId: "329513636032",
+        appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let allGaleriData = [];
+    let isInitialLoad = true;
+
+    function formatDate(dateString) {
+        if (!dateString) return "Tanggal Tidak Diketahui";
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const date = new Date(dateString);
+        return isNaN(date) ? dateString : date.toLocaleDateString('id-ID', options);
+    }
+
+    function updateYearFilterOptions(dataList) {
+        const yearsSet = new Set();
+        dataList.forEach(item => {
+            if (item.activityDate) {
+                const year = item.activityDate.substring(0, 4);
+                if (year) yearsSet.add(year);
+            }
+        });
+
+        const currentYearStr = new Date().getFullYear().toString();
+        yearsSet.add(currentYearStr);
+        const sortedYears = Array.from(yearsSet).sort().reverse();
+
+        let optionsHtml = '<option value="all">Semua Tahun</option>';
+        sortedYears.forEach(year => {
+            optionsHtml += `<option value="${year}">${year}</option>`;
+        });
+
+        ['Desktop', 'Mobile'].forEach(suffix => {
+            const filterTahunEl = document.getElementById(`filterTahun${suffix}`);
+            if (filterTahunEl) {
+                const currentSelected = filterTahunEl.value;
+                filterTahunEl.innerHTML = optionsHtml;
+                if (isInitialLoad) {
+                    filterTahunEl.value = currentYearStr;
+                } else if (currentSelected) {
+                    filterTahunEl.value = currentSelected;
+                }
+            }
+        });
+        isInitialLoad = false;
+    }
+
+    function renderGaleriToContainer(containerId, isDesktop) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        const suffix = isDesktop ? 'Desktop' : 'Mobile';
+        const selectedMonth = document.getElementById(`filterBulan${suffix}`)?.value || 'all';
+        const selectedYear = document.getElementById(`filterTahun${suffix}`)?.value || 'all';
+        const keyword = document.getElementById(`searchGaleri${suffix}`)?.value.toLowerCase() || '';
+
+        const activeData = allGaleriData.filter(item => item.isActive === true);
+
+        const filteredData = activeData.filter(item => {
+            let matchMonth = true;
+            let matchYear = true;
+
+            if (item.activityDate) {
+                const itemYear = item.activityDate.substring(0, 4);
+                const itemMonth = item.activityDate.substring(5, 7);
+
+                if (selectedMonth !== 'all') matchMonth = (itemMonth === selectedMonth);
+                if (selectedYear !== 'all') matchYear = (itemYear === selectedYear);
+            } else {
+                if (selectedMonth !== 'all' || selectedYear !== 'all') {
+                    matchMonth = false;
+                    matchYear = false;
+                }
+            }
+
+            const matchKeyword = !keyword || 
+                item.title.toLowerCase().includes(keyword) || 
+                (item.description && item.description.toLowerCase().includes(keyword)) ||
+                (item.activityDate && item.activityDate.includes(keyword));
+
+            return matchMonth && matchYear && matchKeyword;
+        });
+
+        if (filteredData.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-10 bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700 p-6 rounded-none shadow-sm">
+                    <i class="fa-solid fa-images text-slate-300 dark:text-slate-600 text-3xl mb-2"></i>
+                    <p class="text-slate-400 text-xs">Tidak ada galeri kegiatan pada periode ini.</p>
+                </div>
+            `;
+            return;
+        }
+
+        const grouped = {};
+        filteredData.forEach(item => {
+            const dateKey = item.activityDate || 'Lainnya';
+            if (!grouped[dateKey]) grouped[dateKey] = [];
+            grouped[dateKey].push(item);
+        });
+
+        const sortedDates = Object.keys(grouped).sort((a, b) => new Date(b) - new Date(a));
+
+        let html = "";
+        sortedDates.forEach(dateKey => {
+            const items = grouped[dateKey];
+            html += `
+                <div class="space-y-2">
+                    <div class="flex items-center space-x-2 px-1">
+                        <i class="fa-regular fa-calendar-days text-emerald-600 dark:text-emerald-400 text-xs"></i>
+                        <h3 class="font-bold text-slate-700 dark:text-slate-200 text-xs">${formatDate(dateKey)}</h3>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            `;
+
+            items.forEach(item => {
+                const safeTitle = item.title ? item.title.replace(/'/g, "\\'") : '';
+                html += `
+                    <div class="bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700 overflow-hidden rounded-none shadow-sm flex flex-col group cursor-pointer hover:shadow-md transition-all" onclick="openImageModal('${item.imageUrl}', '${safeTitle}')">
+                        <div class="w-full h-32 md:h-40 bg-slate-100 dark:bg-slate-900 overflow-hidden relative">
+                            <img src="${item.imageUrl}" alt="${item.title || ''}" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 rounded-none">
+                        </div>
+                        <div class="p-3 flex-1 flex flex-col justify-between">
+                            <h4 class="font-bold text-slate-800 dark:text-slate-100 text-xs line-clamp-1">${item.title || '-'}</h4>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 mt-1">${item.description || '-'}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+    }
+
+    function renderAll() {
+        renderGaleriToContainer('galeriContainerDesktop', true);
+        renderGaleriToContainer('galeriContainerMobile', false);
+    }
+
+    const q = query(collection(db, "galeri"), orderBy("createdAt", "desc"));
+    onSnapshot(q, (snapshot) => {
+        allGaleriData = [];
+        snapshot.forEach((docSnap) => {
+            allGaleriData.push({ id: docSnap.id, ...docSnap.data() });
+        });
+        updateYearFilterOptions(allGaleriData);
+        renderAll();
+    }, (error) => {
+        console.error("Gagal memuat galeri:", error);
+    });
+
+    ['Desktop', 'Mobile'].forEach(suffix => {
+        document.getElementById(`searchGaleri${suffix}`)?.addEventListener('input', renderAll);
+        document.getElementById(`filterBulan${suffix}`)?.addEventListener('change', renderAll);
+        document.getElementById(`filterTahun${suffix}`)?.addEventListener('change', renderAll);
+    });
+</script>

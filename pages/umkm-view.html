@@ -1,0 +1,202 @@
+<!-- KELOMPOK UTAMA DESKTOP -->
+<div id="spaAppContainer" class="space-y-6 pb-20">
+    <!-- Banner Desktop -->
+    <div class="hidden md:flex bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-none p-6 text-white shadow-sm items-center justify-between gap-4 shrink-0">
+        <div>
+            <h2 class="text-lg font-bold">Direktori UMKM Warga RT</h2>
+            <p class="text-xs text-emerald-100 mt-1">Dukung produk, kuliner, dan jasa lokal hasil karya mandiri warga RT.</p>
+        </div>
+        <div class="w-14 h-14 bg-white/10 rounded-none flex items-center justify-center shrink-0">
+            <i class="fa-solid fa-store text-xl text-white"></i>
+        </div>
+    </div>
+
+    <!-- Kotak Pencarian & Filter Kategori Desktop -->
+    <div class="bg-white dark:bg-slate-800 rounded-none p-4 shadow-sm border border-slate-200/70 dark:border-slate-700 space-y-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="relative w-full">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 text-xs">
+                    <i class="fa-solid fa-search"></i>
+                </span>
+                <input type="text" id="searchUmkmDesktop" placeholder="Cari nama usaha, produk, atau pemilik..." class="w-full pl-9 pr-3 py-2 rounded-none border border-slate-200 dark:border-slate-600 text-xs focus:outline-none focus:border-emerald-600 bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100">
+            </div>
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-none bg-emerald-50 dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs shrink-0 border border-emerald-100 dark:border-slate-600">
+                    <i class="fa-solid fa-filter"></i>
+                </div>
+                <select id="filterKategoriDesktop" class="w-full px-2.5 py-2 rounded-none border border-slate-200 dark:border-slate-600 text-xs focus:outline-none focus:border-emerald-600 bg-slate-50 dark:bg-slate-700 font-medium text-slate-700 dark:text-slate-200 cursor-pointer">
+                    <option value="all">Semua Kategori</option>
+                    <option value="makanan">Makanan</option>
+                    <option value="minuman">Minuman</option>
+                    <option value="jasa">Jasa</option>
+                    <option value="kerajinan">Kerajinan</option>
+                    <option value="lainnya">Lainnya</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid List Produk UMKM Desktop -->
+    <div id="umkmListContainerDesktop" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="text-center py-8 text-slate-400 text-xs col-span-full">Memuat data UMKM...</div>
+    </div>
+</div>
+
+<!-- KELOMPOK UTAMA MOBILE -->
+<div id="spaAppContainerMobile" class="space-y-4 pb-28">
+    <div class="bg-white dark:bg-slate-800 rounded-none p-4 shadow-sm border border-slate-200/70 dark:border-slate-700 space-y-3">
+        <h3 class="font-bold text-xs text-slate-800 dark:text-slate-100 tracking-wide uppercase flex items-center space-x-2">
+            <i class="fa-solid fa-store text-emerald-600 dark:text-emerald-400"></i>
+            <span>Direktori UMKM Warga (HP)</span>
+        </h3>
+
+        <div class="space-y-2.5">
+            <div class="relative w-full">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 text-xs">
+                    <i class="fa-solid fa-search"></i>
+                </span>
+                <input type="text" id="searchUmkmMobile" placeholder="Cari nama usaha, produk..." class="w-full pl-9 pr-3 py-2.5 rounded-none border border-slate-200 dark:border-slate-600 text-xs focus:outline-none focus:border-emerald-600 bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100">
+            </div>
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-none bg-emerald-50 dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs shrink-0 border border-emerald-100 dark:border-slate-600">
+                    <i class="fa-solid fa-filter"></i>
+                </div>
+                <select id="filterKategoriMobile" class="w-full px-2.5 py-2.5 rounded-none border border-slate-200 dark:border-slate-600 text-xs focus:outline-none focus:border-emerald-600 bg-slate-50 dark:bg-slate-700 font-medium text-slate-700 dark:text-slate-200 cursor-pointer">
+                    <option value="all">Semua Kategori</option>
+                    <option value="makanan">Makanan</option>
+                    <option value="minuman">Minuman</option>
+                    <option value="jasa">Jasa</option>
+                    <option value="kerajinan">Kerajinan</option>
+                    <option value="lainnya">Lainnya</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid List Produk UMKM Mobile -->
+    <div id="umkmListContainerMobile" class="grid grid-cols-2 gap-3">
+        <div class="text-center py-8 text-slate-400 text-xs col-span-full">Memuat data UMKM...</div>
+    </div>
+</div>
+
+<!-- Skrip Firebase & Logika UMKM View -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBx2AF0YRpOEq--q__dn39NwiNCKXvKutM",
+        authDomain: "erte-979ca.firebaseapp.com",
+        projectId: "erte-979ca",
+        storageBucket: "erte-979ca.firebasestorage.app",
+        messagingSenderId: "329513636032",
+        appId: "1:329513636032:web:25a10b627b91db2bbb5d25"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let allUmkmData = [];
+
+    function renderUmkmToContainer(containerId, isDesktop) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        const suffix = isDesktop ? 'Desktop' : 'Mobile';
+        const searchInput = document.getElementById(`searchUmkm${suffix}`);
+        const filterSelect = document.getElementById(`filterKategori${suffix}`);
+
+        const keyword = searchInput ? searchInput.value.toLowerCase() : '';
+        const selectedKat = filterSelect ? filterSelect.value.toLowerCase() : 'all';
+
+        const filtered = allUmkmData.filter(item => {
+            const namaUsaha = (item.namaUsaha || "").toLowerCase();
+            const namaPemilik = (item.namaPemilik || "").toLowerCase();
+            const deskripsi = (item.deskripsi || "").toLowerCase();
+            const kategori = (item.kategori || "").toLowerCase();
+
+            const matchKeyword = !keyword || namaUsaha.includes(keyword) || namaPemilik.includes(keyword) || deskripsi.includes(keyword);
+            const matchKat = (selectedKat === 'all' || kategori.includes(selectedKat));
+
+            return matchKeyword && matchKat;
+        });
+
+        if (filtered.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-10 bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700 p-4 col-span-full">
+                    <i class="fa-solid fa-store-slash text-slate-300 dark:text-slate-600 text-2xl mb-2"></i>
+                    <p class="text-slate-400 text-xs">Belum ada data UMKM yang ditemukan.</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = "";
+        filtered.forEach(item => {
+            let rawPhone = (item.nowa || "").replace(/\D/g, '');
+            if (rawPhone.startsWith('0')) {
+                rawPhone = '62' + rawPhone.slice(1);
+            }
+            const waMessage = encodeURIComponent(`Halo Kak ${item.namaPemilik || ''}, saya melihat produk *${item.namaUsaha || ''}* di aplikasi RT-Ku dan tertarik untuk memesan.`);
+            const waLink = rawPhone ? `https://wa.me/${rawPhone}?text=${waMessage}` : '#';
+
+            const safeTitle = item.namaUsaha ? item.namaUsaha.replace(/'/g, "\\'") : '';
+
+            html += `
+                <div class="bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700 rounded-none overflow-hidden shadow-sm flex flex-col justify-between group">
+                    <div>
+                        <div class="w-full h-32 md:h-36 bg-slate-100 dark:bg-slate-900 overflow-hidden relative border-b border-slate-100 dark:border-slate-700 cursor-pointer" onclick="openImageModal('${item.imageUrl || ''}', '${safeTitle}')" title="Klik untuk memperbesar gambar">
+                            <img src="${item.imageUrl || ''}" alt="${item.namaUsaha || 'UMKM'}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 pointer-events-none">
+                            <span class="absolute top-2 right-2 bg-emerald-600 text-white font-bold text-[9px] px-1.5 py-0.5 uppercase tracking-wider shadow">
+                                ${item.kategori || 'UMKM'}
+                            </span>
+                            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[11px] font-semibold space-x-1">
+                                <i class="fa-solid fa-magnifying-glass-plus"></i>
+                                <span>Zoom</span>
+                            </div>
+                        </div>
+                        <div class="p-3 space-y-1.5">
+                            <div class="flex items-start justify-between">
+                                <h4 class="font-bold text-slate-800 dark:text-slate-100 text-xs truncate flex-1" title="${item.namaUsaha || ''}">${item.namaUsaha || '-'}</h4>
+                                <span class="font-bold text-emerald-600 dark:text-emerald-400 text-[11px] shrink-0 ml-1">Rp ${item.harga || '0'}</span>
+                            </div>
+                            <p class="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">${item.deskripsi || '-'}</p>
+                            <div class="text-[10px] text-slate-400 flex items-center pt-0.5">
+                                <i class="fa-solid fa-user-circle mr-1 text-slate-400"></i>
+                                <span class="truncate">Pemilik: <strong class="text-slate-700 dark:text-slate-300">${item.namaPemilik || '-'}</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-2.5 bg-slate-50 dark:bg-slate-700/50 border-t border-slate-100 dark:border-slate-700">
+                        <a href="${waLink}" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-1.5 rounded-none transition-all text-[11px] flex items-center justify-center space-x-1 shadow-sm cursor-pointer">
+                            <i class="fa-brands fa-whatsapp text-xs"></i>
+                            <span>Pesan WhatsApp</span>
+                        </a>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    function renderAllUmkm() {
+        renderUmkmToContainer('umkmListContainerDesktop', true);
+        renderUmkmToContainer('umkmListContainerMobile', false);
+    }
+
+    const qUmkm = query(collection(db, "umkm"), orderBy("createdAt", "desc"));
+    onSnapshot(qUmkm, (snapshot) => {
+        allUmkmData = [];
+        snapshot.forEach(docSnap => {
+            allUmkmData.push({ id: docSnap.id, ...docSnap.data() });
+        });
+        renderAllUmkm();
+    }, (error) => {
+        console.error("Gagal memuat data UMKM:", error);
+    });
+
+    ['Desktop', 'Mobile'].forEach(suffix => {
+        document.getElementById(`searchUmkm${suffix}`)?.addEventListener('input', renderAllUmkm);
+        document.getElementById(`filterKategori${suffix}`)?.addEventListener('change', renderAllUmkm);
+    });
+</script>
